@@ -27,13 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="TestResources\**">
+    <Compile Update="TestClasses\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="CognitiveComplexity\" />
   </ItemGroup>
 
 </Project>
