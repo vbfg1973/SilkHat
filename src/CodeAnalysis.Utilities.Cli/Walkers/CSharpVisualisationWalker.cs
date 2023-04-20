@@ -11,8 +11,7 @@ namespace CodeAnalysis.Utilities.Cli.Walkers
         public override void Visit(SyntaxNode node)
         {
             _tabs++;
-            var indentation = new string('\t', _tabs);
-            Console.WriteLine($"{indentation}{node.Kind()}: {node is StatementSyntax}");
+            Console.WriteLine($"{new string('\t', _tabs)}{node.Kind()}: IsStatement={node is StatementSyntax}");
             base.Visit(node);
             _tabs--;
         }
