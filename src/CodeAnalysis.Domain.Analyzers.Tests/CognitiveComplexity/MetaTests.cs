@@ -10,6 +10,7 @@ namespace CodeAnalysis.Domain.Analyzers.Tests.CognitiveComplexity
         [Theory]
         [InlineData("CSharpIfElseClass.cs", nameof(CSharpIfElseClass.BasicMethod), nameof(CSharpIfElseClass))]
         [InlineData("CSharpIfElseClass.cs", nameof(CSharpIfElseClass.Method_IfElseStatement), nameof(CSharpIfElseClass))]
+        [InlineData("CSharpLogicalExpressionClass.cs", nameof(CSharpLogicalExpressionClass.BasicLogic), nameof(CSharpLogicalExpressionClass))]
         public void GivenClassFileWithNamedMethodsIdentifiesClassName(string fileName, string methodName, string expectedClassName)
         {
             var treeRoot = Helpers.ParseCSharpSyntaxTreeRoot(Path.Combine("TestClasses", fileName));
@@ -30,6 +31,7 @@ namespace CodeAnalysis.Domain.Analyzers.Tests.CognitiveComplexity
         [Theory]
         [InlineData("CSharpIfElseClass.cs", nameof(CSharpIfElseClass.BasicMethod), "CodeAnalysis.Domain.Analyzers.Tests.TestClasses")]
         [InlineData("CSharpIfElseClass.cs", nameof(CSharpIfElseClass.Method_IfElseStatement), "CodeAnalysis.Domain.Analyzers.Tests.TestClasses")]
+        [InlineData("CSharpLogicalExpressionClass.cs", nameof(CSharpLogicalExpressionClass.BasicLogic), "CodeAnalysis.Domain.Analyzers.Tests.TestClasses")]
         public void GivenClassFileWithNamedMethodsIdentifiesNamespaceName(string fileName, string methodName, string expectedNamespaceName)
         {
             var treeRoot = Helpers.ParseCSharpSyntaxTreeRoot(Path.Combine("TestClasses", fileName));
