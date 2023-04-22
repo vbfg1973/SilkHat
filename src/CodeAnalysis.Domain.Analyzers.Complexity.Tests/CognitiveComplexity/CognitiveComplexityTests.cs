@@ -11,8 +11,13 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
     public class CognitiveComplexityTests
     {
         [Theory]
+        #region If/Else
         [ClassData(typeof(IfElseCSharp))]
         [ClassData(typeof(IfElseDataVisualBasic))]
+        #endregion
+        #region For
+        [ClassData(typeof(ForCSharp))]
+        #endregion
         public void GivenClassMethodHasCorrectCognitiveComplexity(string fileName, string methodName,
             int expectedComplexityScore, Language language)
         {
