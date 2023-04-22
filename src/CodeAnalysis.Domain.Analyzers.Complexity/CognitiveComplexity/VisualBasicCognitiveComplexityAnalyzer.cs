@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 {
-    public class VisualBasicCognitiveComplexityAnalyzer : VisualBasicSyntaxWalker, IComplexityAnalyzer
+    public class VisualBasicCognitiveComplexityAnalyzer : VisualBasicSyntaxWalker, IDotnetComplexityAnalyzer
     {
         private readonly MethodBlockSyntax _methodBlockSyntax;
         private int _nesting;

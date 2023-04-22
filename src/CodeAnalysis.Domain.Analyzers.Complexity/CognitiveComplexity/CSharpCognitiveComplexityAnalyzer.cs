@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 {
-    public class CSharpCognitiveComplexityAnalyzer : CSharpSyntaxWalker, IComplexityAnalyzer
+    public class CSharpCognitiveComplexityAnalyzer : CSharpSyntaxWalker, IDotnetComplexityAnalyzer
     {
         private readonly MethodDeclarationSyntax _methodDeclarationSyntax;
         private int _nesting;

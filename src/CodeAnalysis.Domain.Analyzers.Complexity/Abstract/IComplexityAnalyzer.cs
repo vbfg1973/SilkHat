@@ -4,10 +4,14 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Abstract
 {
     public interface IComplexityAnalyzer
     {
+        int ComplexityScore { get; }
+    }
+
+    public interface IDotnetComplexityAnalyzer : IComplexityAnalyzer
+    {
         string Name { get; }
         string ContainingClassName { get; }
         string ContainingNamespace { get; }
-        int ComplexityScore { get; }
         Location Location { get; }
         List<Location> Locations { get; }
     }
