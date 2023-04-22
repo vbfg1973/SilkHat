@@ -48,7 +48,48 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             base.Visit(node);
         }
 
+        #region ForeachLoops
+
+        public override void VisitForEachBlock(ForEachBlockSyntax node)
+        {
+            IncreaseComplexityByNesting(node.ForEachStatement.ForKeyword);
+            VisitWithNesting(node, base.VisitForEachBlock);
+        }
+
+        #endregion
+
+        #region For Loops
+
+        public override void VisitForBlock(ForBlockSyntax node)
+        {
+            IncreaseComplexityByNesting(node.ForStatement.ForKeyword);
+            VisitWithNesting(node, base.VisitForBlock);
+        }
+
+        #endregion
+
+        #region While Loops
+
+        public override void VisitWhileBlock(WhileBlockSyntax node)
+        {
+            IncreaseComplexityByNesting(node.WhileStatement.WhileKeyword);
+            VisitWithNesting(node, base.VisitWhileBlock);
+        }
+
+        #endregion
+
+        #region DoWhile Loops
+
+        public override void VisitDoLoopBlock(DoLoopBlockSyntax node)
+        {
+            IncreaseComplexityByNesting(node.DoStatement.DoKeyword);
+            VisitWithNesting(node, base.VisitDoLoopBlock);
+        }
+
+        #endregion
+
         #region Complexity Modifiers
+
         private void IncreaseComplexity(SyntaxToken syntaxToken, int increment = 1)
         {
             ComplexityScore += increment;
@@ -66,9 +107,10 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             visitMethod(syntaxNode);
             _nesting--;
         }
+
         #endregion
 
-        #region If/Else Conditions 
+        #region If/Else Conditions
 
         public override void VisitSingleLineIfStatement(SingleLineIfStatementSyntax node)
         {
@@ -92,46 +134,6 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         {
             IncreaseComplexity(node.ElseKeyword);
             base.VisitElseStatement(node);
-        }
-
-        #endregion
-        
-        #region  ForeachLoops
-
-        public override void VisitForEachBlock(ForEachBlockSyntax node)
-        {
-            IncreaseComplexityByNesting(node.ForEachStatement.ForKeyword);
-            VisitWithNesting(node, base.VisitForEachBlock);
-        }
-
-        #endregion
-        
-        #region For Loops
-
-        public override void VisitForBlock(ForBlockSyntax node)
-        {
-            IncreaseComplexityByNesting(node.ForStatement.ForKeyword);
-            VisitWithNesting(node, base.VisitForBlock);
-        }
-
-        #endregion
-        
-        #region While Loops
-
-        public override void VisitWhileBlock(WhileBlockSyntax node)
-        {
-            IncreaseComplexityByNesting(node.WhileStatement.WhileKeyword);
-            VisitWithNesting(node, base.VisitWhileBlock);
-        }
-
-        #endregion
-        
-        #region DoWhile Loops
-
-        public override void VisitDoLoopBlock(DoLoopBlockSyntax node)
-        {
-            IncreaseComplexityByNesting(node.DoStatement.DoKeyword);
-            VisitWithNesting(node, base.VisitDoLoopBlock);
         }
 
         #endregion

@@ -19,7 +19,10 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity.Cla
             yield return new object[] { FileName, "Method_DoublyNestedIfElseStatement", 8, Language };
             yield return new object[] { FileName, "Method_DeeplyNestedIfElseStatement", 12, Language };
         }
-        
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

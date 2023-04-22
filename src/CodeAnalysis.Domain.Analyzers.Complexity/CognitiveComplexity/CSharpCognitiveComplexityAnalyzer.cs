@@ -69,13 +69,23 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         }
 
         #endregion
-        
+
         #region DoWhileLoops
 
         public override void VisitDoStatement(DoStatementSyntax node)
         {
             IncreaseComplexityByNesting(node.DoKeyword);
             VisitWithNesting(node, base.VisitDoStatement);
+        }
+
+        #endregion
+
+        #region ForeachLoops
+
+        public override void VisitForEachStatement(ForEachStatementSyntax node)
+        {
+            IncreaseComplexityByNesting(node.ForEachKeyword);
+            VisitWithNesting(node, base.VisitForEachStatement);
         }
 
         #endregion
@@ -99,16 +109,6 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         {
             IncreaseComplexity(syntaxNode.ElseKeyword);
             base.VisitElseClause(syntaxNode);
-        }
-
-        #endregion
-
-        #region  ForeachLoops
-
-        public override void VisitForEachStatement(ForEachStatementSyntax node)
-        {
-            IncreaseComplexityByNesting(node.ForEachKeyword);
-            VisitWithNesting(node, base.VisitForEachStatement);
         }
 
         #endregion

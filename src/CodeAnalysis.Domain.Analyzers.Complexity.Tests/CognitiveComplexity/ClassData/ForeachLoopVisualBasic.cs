@@ -16,7 +16,10 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity.Cla
             yield return new object[] { FileName, "QuadrupleForeachLoop", 10, Language };
             yield return new object[] { FileName, "QuintupleForeachLoop", 15, Language };
         }
-        
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }
