@@ -40,7 +40,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
         public int ComplexityScore { get; private set; }
 
-        public Location Location { get; }
+        public Location Location => _methodBlockSyntax.GetLocation();
         public List<Location> Locations { get; }
 
         public sealed override void Visit(SyntaxNode node)
