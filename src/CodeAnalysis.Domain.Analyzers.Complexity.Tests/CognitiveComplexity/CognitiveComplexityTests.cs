@@ -19,6 +19,8 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
         [ClassData(typeof(ForLoopVisualBasic))]
         [ClassData(typeof(IfElseCSharp))]
         [ClassData(typeof(IfElseVisualBasic))]
+        [ClassData(typeof(SwitchCSharp))]
+        [ClassData(typeof(SwitchVisualBasic))]
         [ClassData(typeof(WhileLoopCSharp))]
         [ClassData(typeof(WhileLoopVisualBasic))]
         public void GivenClassMethodHasCorrectCognitiveComplexity(string fileName, string methodName,

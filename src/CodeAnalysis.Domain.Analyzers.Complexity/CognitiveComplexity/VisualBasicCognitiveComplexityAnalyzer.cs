@@ -88,6 +88,22 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
         #endregion
 
+        #region Switch
+
+        public override void VisitSelectBlock(SelectBlockSyntax node)
+        {
+            IncreaseComplexityByNesting(node.SelectStatement.SelectKeyword);
+            VisitWithNesting(node, base.VisitSelectBlock);
+        }
+
+        public override void VisitCaseBlock(CaseBlockSyntax node)
+        {
+            IncreaseComplexity(node.CaseStatement.CaseKeyword);
+            base.VisitCaseBlock(node);
+        }
+
+        #endregion
+
         #region Complexity Modifiers
 
         private void IncreaseComplexity(SyntaxToken syntaxToken, int increment = 1)

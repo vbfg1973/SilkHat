@@ -113,6 +113,22 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
         #endregion
 
+        #region Switch
+
+        public override void VisitSwitchStatement(SwitchStatementSyntax node)
+        {
+            IncreaseComplexityByNesting(node.SwitchKeyword);
+            VisitWithNesting(node, base.VisitSwitchStatement);
+        }
+
+        public override void VisitBreakStatement(BreakStatementSyntax node)
+        {
+            IncreaseComplexity(node.BreakKeyword);
+            base.VisitBreakStatement(node);
+        }
+
+        #endregion
+
         #region Complexity modifiers
 
         private void IncreaseComplexity(SyntaxToken syntaxToken, int increment = 1)
