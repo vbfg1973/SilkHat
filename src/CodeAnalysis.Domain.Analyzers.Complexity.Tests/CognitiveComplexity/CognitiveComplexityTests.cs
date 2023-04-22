@@ -11,42 +11,16 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
     public class CognitiveComplexityTests
     {
         [Theory]
-
-        #region If/Else Conditions
-
-        [ClassData(typeof(IfElseCSharp))]
-        [ClassData(typeof(IfElseVisualBasic))]
-
-        #endregion
-
-        #region For Loops
-
-        [ClassData(typeof(ForLoopCSharp))]
-        [ClassData(typeof(ForLoopVisualBasic))]
-
-        #endregion
-
-        #region Foreach Loops
-
-        [ClassData(typeof(ForeachLoopCSharp))]
-        [ClassData(typeof(ForeachLoopVisualBasic))]
-
-        #endregion
-
-        #region While Loops
-
-        [ClassData(typeof(WhileLoopCSharp))]
-        [ClassData(typeof(WhileLoopVisualBasic))]
-
-        #endregion
-
-        #region Do/While Loops
-
         [ClassData(typeof(DoWhileLoopCSharp))]
         [ClassData(typeof(DoWhileLoopVisualBasic))]
-
-        #endregion
-
+        [ClassData(typeof(ForeachLoopCSharp))]
+        [ClassData(typeof(ForeachLoopVisualBasic))]
+        [ClassData(typeof(ForLoopCSharp))]
+        [ClassData(typeof(ForLoopVisualBasic))]
+        [ClassData(typeof(IfElseCSharp))]
+        [ClassData(typeof(IfElseVisualBasic))]
+        [ClassData(typeof(WhileLoopCSharp))]
+        [ClassData(typeof(WhileLoopVisualBasic))]
         public void GivenClassMethodHasCorrectCognitiveComplexity(string fileName, string methodName,
             int expectedComplexityScore, Language language)
         {
