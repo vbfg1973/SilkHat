@@ -15,6 +15,19 @@
 
 
         /// <summary>
+        ///     Method_IfStatement
+        /// </summary>
+        /// <remarks>
+        ///     Cognitive complexity: 1
+        /// </remarks>
+        public void Method_IfStatement()
+        {
+            var rand = new Random(100);
+            if (0 > rand.Next()) //Adds 1
+                Console.WriteLine("Do nothing");
+        }
+        
+        /// <summary>
         ///     Method_IfElseStatement
         /// </summary>
         /// <remarks>

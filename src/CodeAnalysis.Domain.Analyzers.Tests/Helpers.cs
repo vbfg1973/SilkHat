@@ -10,5 +10,10 @@ namespace CodeAnalysis.Domain.Analyzers.Tests
             var text = File.ReadAllText(path);
             return CSharpSyntaxTree.ParseText(text).GetRoot();   
         }
+
+        public static string FileNameFromClass(string className)
+        {
+            return string.Join(".", className, "cs");
+        }
     }
 }

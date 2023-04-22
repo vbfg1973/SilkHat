@@ -1,3 +1,4 @@
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeAnalysis.Domain.Analyzers.Abstract
@@ -8,6 +9,7 @@ namespace CodeAnalysis.Domain.Analyzers.Abstract
         string ContainingClassName { get; }
         string ContainingNamespace { get; }
         int ComplexityScore { get; }
-        int Analyze(MethodDeclarationSyntax methodSyntax);
+        Location Location { get; }
+        List<Location> Locations { get; }
     }
 }
