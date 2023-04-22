@@ -30,6 +30,11 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
         [ClassData(typeof(WhileLoopCSharp))]
         [ClassData(typeof(WhileLoopVisualBasic))]
         #endregion
+        
+        #region DoWhile Loops
+        [ClassData(typeof(DoWhileLoopCSharp))]
+        [ClassData(typeof(DoWhileLoopVisualBasic))]
+        #endregion
         public void GivenClassMethodHasCorrectCognitiveComplexity(string fileName, string methodName,
             int expectedComplexityScore, Language language)
         {

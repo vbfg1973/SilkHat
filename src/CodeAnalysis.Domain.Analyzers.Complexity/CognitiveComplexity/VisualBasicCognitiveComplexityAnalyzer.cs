@@ -125,5 +125,15 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         }
 
         #endregion
+        
+        #region DoWhile Loops
+
+        public override void VisitDoLoopBlock(DoLoopBlockSyntax node)
+        {
+            IncreaseComplexityByNesting(node.DoStatement.DoKeyword);
+            VisitWithNesting(node, base.VisitDoLoopBlock);
+        }
+
+        #endregion
     }
 }
