@@ -48,6 +48,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             base.Visit(node);
         }
 
+        #region Complexity Modifiers
         private void IncreaseComplexity(SyntaxToken syntaxToken, int increment = 1)
         {
             ComplexityScore += increment;
@@ -65,8 +66,9 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             visitMethod(syntaxNode);
             _nesting--;
         }
+        #endregion
 
-        #region IfElse Related
+        #region If/Else Conditions 
 
         public override void VisitSingleLineIfStatement(SingleLineIfStatementSyntax node)
         {
@@ -90,6 +92,16 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         {
             IncreaseComplexity(node.ElseKeyword);
             base.VisitElseStatement(node);
+        }
+
+        #endregion
+        
+        #region  ForeachLoops
+
+        public override void VisitForEachBlock(ForEachBlockSyntax node)
+        {
+            IncreaseComplexityByNesting(node.ForEachStatement.ForKeyword);
+            VisitWithNesting(node, base.VisitForEachBlock);
         }
 
         #endregion

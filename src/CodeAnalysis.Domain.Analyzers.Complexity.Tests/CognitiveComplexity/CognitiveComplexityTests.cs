@@ -11,15 +11,22 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
     public class CognitiveComplexityTests
     {
         [Theory]
-        #region If/Else
+        #region If/Else Conditions
         [ClassData(typeof(IfElseCSharp))]
         [ClassData(typeof(IfElseVisualBasic))]
         #endregion
-        #region For
+        
+        #region For Loops
         [ClassData(typeof(ForLoopCSharp))]
         [ClassData(typeof(ForLoopVisualBasic))]
         #endregion
-        #region While
+        
+        #region Foreach Loops
+        [ClassData(typeof(ForeachLoopCSharp))]
+        [ClassData(typeof(ForeachLoopVisualBasic))]
+        #endregion
+        
+        #region While Loops
         [ClassData(typeof(WhileLoopCSharp))]
         [ClassData(typeof(WhileLoopVisualBasic))]
         #endregion

@@ -93,6 +93,16 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
         #endregion
 
+        #region  ForeachLoops
+
+        public override void VisitForEachStatement(ForEachStatementSyntax node)
+        {
+            IncreaseComplexityByNesting(node.ForEachKeyword);
+            VisitWithNesting(node, base.VisitForEachStatement);
+        }
+
+        #endregion
+
         #region Complexity modifiers
 
         private void IncreaseComplexity(SyntaxToken syntaxToken, int increment = 1)
