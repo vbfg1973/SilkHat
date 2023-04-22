@@ -18,6 +18,19 @@
                     break;
             }
         }
+                
+        public int SwitchPattern()
+        {
+            var i = Random.Shared.Next(1, 3);
+
+            return i switch
+            {
+                1 => 1,
+                2 => 2,
+                3 => 3,
+                _ => throw new ArgumentOutOfRangeException(nameof(i), i, null)
+            };
+        }
 
         public void DoubleSwitch()
         {

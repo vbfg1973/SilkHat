@@ -10,6 +10,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity.Cla
 
         public IEnumerator<object[]> GetEnumerator()
         {
+            yield return new object[] { FileName, "SwitchPattern", 0, Language };
             yield return new object[] { FileName, "SingleSwitch", 5, Language };
             yield return new object[] { FileName, "DoubleSwitch", 23, Language };
         }
