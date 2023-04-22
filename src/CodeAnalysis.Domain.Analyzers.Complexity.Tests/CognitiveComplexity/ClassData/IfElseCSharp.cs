@@ -5,7 +5,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity.Cla
 {
     public class IfElseCSharp : IEnumerable<object[]>
     {
-        private const string FileName = "CSharpIfElseClass.CSharp";
+        private const string FileName = "IfElseClass.CSharp";
         private const Language Language = Utilities.Language.CSharp;
 
         public IEnumerator<object[]> GetEnumerator()

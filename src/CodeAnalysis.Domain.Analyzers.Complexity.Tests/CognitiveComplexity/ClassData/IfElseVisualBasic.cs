@@ -3,9 +3,9 @@ using CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity.ClassData
 {
-    public class IfElseDataVisualBasic : IEnumerable<object[]>
+    public class IfElseVisualBasic : IEnumerable<object[]>
     {
-        private const string FileName = "VisualBasicIfElseClass.VisualBasic";
+        private const string FileName = "IfElseClass.VisualBasic";
         private const Language Language = Utilities.Language.VisualBasic;
 
         public IEnumerator<object[]> GetEnumerator()
