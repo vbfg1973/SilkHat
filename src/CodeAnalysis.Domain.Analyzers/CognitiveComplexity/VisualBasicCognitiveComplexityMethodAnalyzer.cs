@@ -1,0 +1,97 @@
+﻿using CodeAnalysis.Domain.Analyzers.Abstract;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.VisualBasic;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+
+namespace CodeAnalysis.Domain.Analyzers.CognitiveComplexity
+{
+    public class VisualBasicCognitiveComplexityMethodAnalyzer : VisualBasicSyntaxWalker, IMethodAnalyzer
+    {
+        private readonly MethodBlockSyntax _methodBlockSyntax;
+        private int _nesting;
+
+        public VisualBasicCognitiveComplexityMethodAnalyzer(MethodBlockSyntax methodBlockSyntax)
+        {
+            _methodBlockSyntax = methodBlockSyntax;
+            Locations = new List<Location>();
+            Visit(_methodBlockSyntax);
+        }
+
+        public string Name => _methodBlockSyntax
+            .SubOrFunctionStatement
+            .Identifier
+            .ToString();
+
+        public string ContainingClassName => _methodBlockSyntax
+            .Ancestors()
+            .OfType<ClassBlockSyntax>()
+            .First()
+            .ClassStatement
+            .Identifier
+            .ToString();
+
+        public string ContainingNamespace => _methodBlockSyntax
+            .Ancestors()
+            .OfType<NamespaceBlockSyntax>()
+            .First()
+            .NamespaceStatement
+            .Name
+            .ToString();
+
+        public int ComplexityScore { get; private set; }
+
+        public Location Location { get; }
+        public List<Location> Locations { get; }
+
+        public sealed override void Visit(SyntaxNode node)
+        {
+            base.Visit(node);
+        }
+
+        private void IncreaseComplexity(SyntaxToken syntaxToken, int increment = 1)
+        {
+            ComplexityScore += increment;
+            Locations.Add(syntaxToken.GetLocation());
+        }
+
+        private void IncreaseComplexityByNesting(SyntaxToken syntaxToken)
+        {
+            IncreaseComplexity(syntaxToken, _nesting + 1);
+        }
+
+        private void VisitWithNesting<TSyntaxNode>(TSyntaxNode syntaxNode, Action<TSyntaxNode> visitMethod)
+        {
+            _nesting++;
+            visitMethod(syntaxNode);
+            _nesting--;
+        }
+
+        #region IfElse Related
+
+        public override void VisitSingleLineIfStatement(SingleLineIfStatementSyntax node)
+        {
+            IncreaseComplexity(node.IfKeyword, _nesting + 1);
+            VisitWithNesting(node, base.VisitSingleLineIfStatement);
+        }
+
+        public override void VisitMultiLineIfBlock(MultiLineIfBlockSyntax node)
+        {
+            IncreaseComplexity(node.IfStatement.IfKeyword, _nesting + 1);
+            VisitWithNesting(node, base.VisitMultiLineIfBlock);
+        }
+
+        public override void VisitElseIfStatement(ElseIfStatementSyntax node)
+        {
+            IncreaseComplexity(node.ElseIfKeyword);
+            base.VisitElseIfStatement(node);
+        }
+
+        public override void VisitElseStatement(ElseStatementSyntax node)
+        {
+            IncreaseComplexity(node.ElseKeyword);
+            base.VisitElseStatement(node);
+        }
+
+        #endregion
+    }
+}

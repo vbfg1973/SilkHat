@@ -27,9 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="TestClasses\**">
+    <None Update="TestClasses\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
+    </None>
   </ItemGroup>
 
 </Project>
