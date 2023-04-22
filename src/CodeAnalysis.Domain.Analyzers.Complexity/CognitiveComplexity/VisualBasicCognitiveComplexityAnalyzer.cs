@@ -93,5 +93,15 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         }
 
         #endregion
+        
+        #region For Loops
+
+        public override void VisitForBlock(ForBlockSyntax node)
+        {
+            IncreaseComplexityByNesting(node.ForStatement.ForKeyword);
+            VisitWithNesting(node, base.VisitForBlock);
+        }
+
+        #endregion
     }
 }
