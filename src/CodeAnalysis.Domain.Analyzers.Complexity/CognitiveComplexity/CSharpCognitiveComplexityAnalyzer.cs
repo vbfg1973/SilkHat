@@ -50,7 +50,28 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             base.Visit(node);
         }
 
-        #region If/Else
+        #region ForLoops
+
+        public override void VisitForStatement(ForStatementSyntax node)
+        {
+            IncreaseComplexityByNesting(node.ForKeyword);
+            VisitWithNesting(node, base.VisitForStatement);
+        }
+
+        #endregion
+
+        #region WhileLoops
+
+        public override void VisitWhileStatement(WhileStatementSyntax node)
+        {
+            IncreaseComplexityByNesting(node.WhileKeyword);
+            VisitWithNesting(node, base.VisitWhileStatement);
+        }
+
+        #endregion
+
+        #region If/Else Conditions
+
         public override void VisitIfStatement(IfStatementSyntax syntaxNode)
         {
             if (syntaxNode.Parent.IsKind(SyntaxKind.ElseClause))
@@ -69,18 +90,11 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             IncreaseComplexity(syntaxNode.ElseKeyword);
             base.VisitElseClause(syntaxNode);
         }
-        #endregion
-
-        #region ForLoops
-
-        public override void VisitForStatement(ForStatementSyntax node)
-        {
-            IncreaseComplexityByNesting(node.ForKeyword);
-            VisitWithNesting(node, base.VisitForStatement);
-        }
 
         #endregion
-        
+
+        #region Complexity modifiers
+
         private void IncreaseComplexity(SyntaxToken syntaxToken, int increment = 1)
         {
             ComplexityScore += increment;
@@ -98,5 +112,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             visitMethod(syntaxNode);
             _nesting--;
         }
+
+        #endregion
     }
 }

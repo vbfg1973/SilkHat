@@ -19,6 +19,10 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
         [ClassData(typeof(ForLoopCSharp))]
         [ClassData(typeof(ForLoopVisualBasic))]
         #endregion
+        #region While
+        [ClassData(typeof(WhileLoopCSharp))]
+        [ClassData(typeof(WhileLoopVisualBasic))]
+        #endregion
         public void GivenClassMethodHasCorrectCognitiveComplexity(string fileName, string methodName,
             int expectedComplexityScore, Language language)
         {

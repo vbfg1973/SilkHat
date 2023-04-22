@@ -103,5 +103,15 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         }
 
         #endregion
+        
+        #region While Loops
+
+        public override void VisitWhileBlock(WhileBlockSyntax node)
+        {
+            IncreaseComplexityByNesting(node.WhileStatement.WhileKeyword);
+            VisitWithNesting(node, base.VisitWhileBlock);
+        }
+
+        #endregion
     }
 }
