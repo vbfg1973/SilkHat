@@ -1,4 +1,5 @@
 ﻿using CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity;
+using CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity.ClassData;
 using CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
@@ -10,24 +11,8 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
     public class CognitiveComplexityTests
     {
         [Theory]
-        [InlineData("CSharpIfElseClass.CSharp", "BasicMethod", 0, Language.CSharp)]
-        [InlineData("CSharpIfElseClass.CSharp", "Method_CoalescedIfElse", 0, Language.CSharp)]
-        [InlineData("CSharpIfElseClass.CSharp", "Method_IfStatement", 1, Language.CSharp)]
-        [InlineData("CSharpIfElseClass.CSharp", "Method_IfElseStatement", 2, Language.CSharp)]
-        [InlineData("CSharpIfElseClass.CSharp", "Method_IfElseIfStatement", 3, Language.CSharp)]
-        [InlineData("CSharpIfElseClass.CSharp", "Method_NestedIfElseStatement", 5, Language.CSharp)]
-        [InlineData("CSharpIfElseClass.CSharp", "Method_DoublyNestedIfElseStatement", 8, Language.CSharp)]
-        [InlineData("CSharpIfElseClass.CSharp", "Method_DeeplyNestedIfElseStatement", 12, Language.CSharp)]
-        [InlineData("VisualBasicIfElseClass.VisualBasic", "BasicMethod", 0, Language.VisualBasic)]
-        [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_CoalescedIfElse", 0, Language.VisualBasic)]
-        [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_IfStatement", 1, Language.VisualBasic)]
-        [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_IfElseStatement", 2, Language.VisualBasic)]
-        [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_IfElseIfStatement", 3, Language.VisualBasic)]
-        [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_NestedIfElseStatement", 5, Language.VisualBasic)]
-        [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_DoublyNestedIfElseStatement", 8,
-            Language.VisualBasic)]
-        [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_DeeplyNestedIfElseStatement", 12,
-            Language.VisualBasic)]
+        [ClassData(typeof(IfElseCSharp))]
+        [ClassData(typeof(IfElseDataVisualBasic))]
         public void GivenClassMethodHasCorrectCognitiveComplexity(string fileName, string methodName,
             int expectedComplexityScore, Language language)
         {
@@ -41,7 +26,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
                 .Be(expectedComplexityScore);
         }
 
-        private int GetComplexityScore(SyntaxNode syntaxNode, string methodName, Language language)
+        private static int GetComplexityScore(SyntaxNode syntaxNode, string methodName, Language language)
         {
             return language switch
             {
