@@ -1,16 +1,16 @@
-﻿using CodeAnalysis.Domain.Analyzers.Abstract;
+﻿using CodeAnalysis.Domain.Analyzers.Complexity.Abstract;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.VisualBasic;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
-namespace CodeAnalysis.Domain.Analyzers.CognitiveComplexity
+namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 {
-    public class VisualBasicCognitiveComplexityMethodAnalyzer : VisualBasicSyntaxWalker, IMethodAnalyzer
+    public class VisualBasicCognitiveComplexityAnalyzer : VisualBasicSyntaxWalker, IComplexityAnalyzer
     {
         private readonly MethodBlockSyntax _methodBlockSyntax;
         private int _nesting;
 
-        public VisualBasicCognitiveComplexityMethodAnalyzer(MethodBlockSyntax methodBlockSyntax)
+        public VisualBasicCognitiveComplexityAnalyzer(MethodBlockSyntax methodBlockSyntax)
         {
             _methodBlockSyntax = methodBlockSyntax;
             Locations = new List<Location>();

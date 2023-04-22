@@ -6,7 +6,7 @@ namespace CodeAnalysis.Utilities.Cli.Walkers
 {
     public class CSharpVisualisationWalker : CSharpSyntaxWalker
     {
-        private static int _tabs = 0;
+        private static int _tabs;
 
         public override void Visit(SyntaxNode node)
         {

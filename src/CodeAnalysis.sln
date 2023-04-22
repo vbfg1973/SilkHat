@@ -12,11 +12,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis", "CodeAnalysi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Domain", "CodeAnalysis.Domain\CodeAnalysis.Domain.csproj", "{85E9E9A6-BCA6-47C6-905F-B84887F4383D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Domain.Analyzers", "CodeAnalysis.Domain.Analyzers\CodeAnalysis.Domain.Analyzers.csproj", "{B3A430AE-5B93-453D-AD85-AFEBBC341F5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Domain.Analyzers.Complexity", "CodeAnalysis.Domain.Analyzers.Complexity\CodeAnalysis.Domain.Analyzers.Complexity.csproj", "{B3A430AE-5B93-453D-AD85-AFEBBC341F5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FA44282F-8795-49BA-9ABE-4928E8BC9AC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Domain.Analyzers.Tests", "CodeAnalysis.Domain.Analyzers.Tests\CodeAnalysis.Domain.Analyzers.Tests.csproj", "{2A5FBDA3-B906-40EB-ADF8-537C5F8AD9BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Domain.Analyzers.Complexity.Tests", "CodeAnalysis.Domain.Analyzers.Complexity.Tests\CodeAnalysis.Domain.Analyzers.Complexity.Tests.csproj", "{2A5FBDA3-B906-40EB-ADF8-537C5F8AD9BC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{53D2597F-4E56-4E8E-9D9C-CFFCB65C2F7E}"
 EndProject

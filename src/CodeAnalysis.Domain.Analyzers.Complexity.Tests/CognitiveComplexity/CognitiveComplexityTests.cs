@@ -1,11 +1,11 @@
-﻿using CodeAnalysis.Domain.Analyzers.CognitiveComplexity;
-using CodeAnalysis.Domain.Analyzers.Tests.Utilities;
+﻿using CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity;
+using CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
-namespace CodeAnalysis.Domain.Analyzers.Tests.CognitiveComplexity
+namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
 {
     public class CognitiveComplexityTests
     {
@@ -24,8 +24,10 @@ namespace CodeAnalysis.Domain.Analyzers.Tests.CognitiveComplexity
         [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_IfElseStatement", 2, Language.VisualBasic)]
         [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_IfElseIfStatement", 3, Language.VisualBasic)]
         [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_NestedIfElseStatement", 5, Language.VisualBasic)]
-        [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_DoublyNestedIfElseStatement", 8, Language.VisualBasic)]
-        [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_DeeplyNestedIfElseStatement", 12, Language.VisualBasic)]
+        [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_DoublyNestedIfElseStatement", 8,
+            Language.VisualBasic)]
+        [InlineData("VisualBasicIfElseClass.VisualBasic", "Method_DeeplyNestedIfElseStatement", 12,
+            Language.VisualBasic)]
         public void GivenClassMethodHasCorrectCognitiveComplexity(string fileName, string methodName,
             int expectedComplexityScore, Language language)
         {
@@ -56,11 +58,11 @@ namespace CodeAnalysis.Domain.Analyzers.Tests.CognitiveComplexity
                 .OfType<MethodDeclarationSyntax>()
                 .First(x => x.Identifier.ToString() == methodName);
 
-            var analyzer = new CSharpCognitiveComplexityMethodAnalyzer(methodDeclarationSyntax);
+            var analyzer = new CSharpCognitiveComplexityAnalyzer(methodDeclarationSyntax);
 
             return analyzer.ComplexityScore;
         }
-        
+
         private static int GetVisualBasicComplexityScore(SyntaxNode syntaxNode, string methodName)
         {
             var methodDeclarationSyntax = syntaxNode
@@ -68,7 +70,7 @@ namespace CodeAnalysis.Domain.Analyzers.Tests.CognitiveComplexity
                 .OfType<MethodBlockSyntax>()
                 .First(x => x.SubOrFunctionStatement.Identifier.ToString() == methodName);
 
-            var analyzer = new VisualBasicCognitiveComplexityMethodAnalyzer(methodDeclarationSyntax);
+            var analyzer = new VisualBasicCognitiveComplexityAnalyzer(methodDeclarationSyntax);
 
             return analyzer.ComplexityScore;
         }

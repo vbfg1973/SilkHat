@@ -1,5 +1,6 @@
-﻿namespace CodeAnalysis.Domain;
-public class Class1
+﻿namespace CodeAnalysis.Domain
 {
-
+    public class Class1
+    {
+    }
 }

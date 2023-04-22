@@ -1,9 +1,8 @@
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CodeAnalysis.Domain.Analyzers.Abstract
+namespace CodeAnalysis.Domain.Analyzers.Complexity.Abstract
 {
-    public interface IMethodAnalyzer
+    public interface IComplexityAnalyzer
     {
         string Name { get; }
         string ContainingClassName { get; }

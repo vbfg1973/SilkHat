@@ -1,16 +1,16 @@
-﻿using CodeAnalysis.Domain.Analyzers.Abstract;
+﻿using CodeAnalysis.Domain.Analyzers.Complexity.Abstract;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CodeAnalysis.Domain.Analyzers.CognitiveComplexity
+namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 {
-    public class CSharpCognitiveComplexityMethodAnalyzer : CSharpSyntaxWalker, IMethodAnalyzer
+    public class CSharpCognitiveComplexityAnalyzer : CSharpSyntaxWalker, IComplexityAnalyzer
     {
-        private int _nesting;
         private readonly MethodDeclarationSyntax _methodDeclarationSyntax;
+        private int _nesting;
 
-        public CSharpCognitiveComplexityMethodAnalyzer(MethodDeclarationSyntax methodDeclarationSyntax)
+        public CSharpCognitiveComplexityAnalyzer(MethodDeclarationSyntax methodDeclarationSyntax)
         {
             _nesting = 0;
             _methodDeclarationSyntax = methodDeclarationSyntax;
@@ -65,7 +65,7 @@ namespace CodeAnalysis.Domain.Analyzers.CognitiveComplexity
 
         public override void VisitElseClause(ElseClauseSyntax syntaxNode)
         {
-            IncreaseComplexity(syntaxNode.ElseKeyword, 1);
+            IncreaseComplexity(syntaxNode.ElseKeyword);
             base.VisitElseClause(syntaxNode);
         }
 

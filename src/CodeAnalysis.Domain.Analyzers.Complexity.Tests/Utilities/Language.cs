@@ -1,4 +1,4 @@
-﻿namespace CodeAnalysis.Domain.Analyzers.Tests.Utilities
+﻿namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities
 {
     public enum Language
     {

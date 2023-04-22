@@ -1,10 +1,10 @@
-﻿// using CodeAnalysis.Domain.Analyzers.CognitiveComplexity;
-// using CodeAnalysis.Domain.Analyzers.Tests.TestClasses;
-// using CodeAnalysis.Domain.Analyzers.Tests.Utilities;
+﻿// using CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity;
+// using CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses;
+// using CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities;
 // using FluentAssertions;
 // using Microsoft.CodeAnalysis.CSharp.Syntax;
 //
-// namespace CodeAnalysis.Domain.Analyzers.Tests.CognitiveComplexity
+// namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
 // {
 //     public class MetaTests
 //     {
@@ -33,9 +33,9 @@
 //
 //         [Theory]
 //         [InlineData("CSharpIfElseClass.cs", nameof(CSharpIfElseClass.BasicMethod),
-//             "CodeAnalysis.Domain.Analyzers.Tests.TestClasses", Language.CSharp)]
+//             "CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses", Language.CSharp)]
 //         [InlineData("CSharpIfElseClass.cs", nameof(CSharpIfElseClass.Method_IfElseStatement),
-//             "CodeAnalysis.Domain.Analyzers.Tests.TestClasses", Language.CSharp)]
+//             "CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses", Language.CSharp)]
 //         public void GivenClassFileWithNamedMethodsIdentifiesNamespaceName(string fileName, string methodName,
 //             string expectedNamespaceName, Language language)
 //         {
@@ -55,3 +55,4 @@
 //         }
 //     }
 // }
+
