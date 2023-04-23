@@ -19,6 +19,8 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
         [ClassData(typeof(ForeachLoopVisualBasic))]
         [ClassData(typeof(ForLoopCSharp))]
         [ClassData(typeof(ForLoopVisualBasic))]
+        [ClassData(typeof(GotoCSharp))]
+        [ClassData(typeof(GotoVisualBasic))]
         [ClassData(typeof(IfElseCSharp))]
         [ClassData(typeof(IfElseVisualBasic))]
         [ClassData(typeof(SwitchCSharp))]

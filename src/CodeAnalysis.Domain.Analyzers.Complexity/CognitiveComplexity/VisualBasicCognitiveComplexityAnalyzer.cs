@@ -114,6 +114,16 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
         #endregion
         
+        #region Goto (Considered harmful, ho ho ho)
+
+        public override void VisitGoToStatement(GoToStatementSyntax node)
+        {
+            IncreaseComplexityByNesting(node.GoToKeyword);
+            base.VisitGoToStatement(node);
+        }
+
+        #endregion
+        
         #region Complexity Modifiers
 
         private void IncreaseComplexity(SyntaxToken syntaxToken, int increment = 1)
