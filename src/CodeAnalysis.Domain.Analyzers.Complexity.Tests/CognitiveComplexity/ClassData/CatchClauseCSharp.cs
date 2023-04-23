@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities;
 using CodeAnalysis.Domain.Extensions;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity.ClassData
