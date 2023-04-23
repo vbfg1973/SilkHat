@@ -128,7 +128,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         }
 
         #endregion
-        
+
         #region Catch Clause
 
         public override void VisitCatchClause(CatchClauseSyntax node)
@@ -138,7 +138,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         }
 
         #endregion
-        
+
         #region Goto Statement (Harmful, etc)
 
         public override void VisitGotoStatement(GotoStatementSyntax node)
@@ -146,6 +146,16 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             IncreaseComplexityByNesting(node.GotoKeyword);
             base.VisitGotoStatement(node);
         }
+
+        #endregion
+
+        #region Lambda
+
+        public override void VisitSimpleLambdaExpression(SimpleLambdaExpressionSyntax node) =>
+            VisitWithNesting(node, base.VisitSimpleLambdaExpression);
+
+        public override void VisitParenthesizedLambdaExpression(ParenthesizedLambdaExpressionSyntax node) =>
+            VisitWithNesting(node, base.VisitParenthesizedLambdaExpression);
 
         #endregion
 

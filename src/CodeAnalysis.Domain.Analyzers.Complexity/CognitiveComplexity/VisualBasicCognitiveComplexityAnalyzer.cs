@@ -123,6 +123,16 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         }
 
         #endregion
+
+        #region Lambada
+
+        public override void VisitSingleLineLambdaExpression(SingleLineLambdaExpressionSyntax node) =>
+            VisitWithNesting(node, base.VisitSingleLineLambdaExpression);
+
+        public override void VisitMultiLineLambdaExpression(MultiLineLambdaExpressionSyntax node) =>
+            VisitWithNesting(node, base.VisitMultiLineLambdaExpression);
+
+        #endregion
         
         #region Complexity Modifiers
 
