@@ -4,17 +4,15 @@ namespace CodeAnalysis.Domain.Extensions
 {
     public static class FileUtilities
     {
-        public static IEnumerable<string> FindFiles(string directoryPath, string pattern)
+        public static IEnumerable<string> FindFiles(string directoryPath, string[] extensions)
         {
-            var regex = new Regex(pattern);
-
             var paths = FindFiles(directoryPath).ToList();
-            
+
             foreach (var filePath in FindFiles(directoryPath))
             {
                 var fileName = Path.GetFileName(filePath);
-                
-                if (regex.IsMatch(fileName))
+
+                if (extensions.Contains(Path.GetExtension(fileName)))
                 {
                     yield return filePath;
                 }
