@@ -24,6 +24,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\CodeAnalysis.Domain.Analyzers.Complexity\CodeAnalysis.Domain.Analyzers.Complexity.csproj" />
+        <ProjectReference Include="..\CodeAnalysis.Domain\CodeAnalysis.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,12 +1,12 @@
 ﻿using System.Collections;
-using CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities;
+using CodeAnalysis.Domain.Extensions;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity.ClassData
 {
     public class CatchClauseVisualBasic : IEnumerable<object[]>
     {
         private const string FileName = "CatchClass.VisualBasic";
-        private const Language Language = Utilities.Language.VisualBasic;
+        private const Language Language = Extensions.Language.VisualBasic;
 
         public IEnumerator<object[]> GetEnumerator()
         {

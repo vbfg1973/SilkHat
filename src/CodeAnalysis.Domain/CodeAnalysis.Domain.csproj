@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\CodeAnalysis.Domain.Analyzers.Complexity\CodeAnalysis.Domain.Analyzers.Complexity.csproj"/>
+        <ProjectReference Include="..\CodeAnalysis.Domain.Analyzers.Complexity\CodeAnalysis.Domain.Analyzers.Complexity.csproj" />
     </ItemGroup>
 
     <PropertyGroup>

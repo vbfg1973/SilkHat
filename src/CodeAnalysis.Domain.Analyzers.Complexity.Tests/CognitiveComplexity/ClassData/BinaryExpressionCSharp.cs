@@ -1,12 +1,12 @@
 ﻿using System.Collections;
-using CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities;
+using CodeAnalysis.Domain.Extensions;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity.ClassData
 {
     public class BinaryExpressionCSharp : IEnumerable<object[]>
     {
         private const string FileName = "BinaryExpressionClass.CSharp";
-        private const Language Language = Utilities.Language.CSharp;
+        private const Language Language = Extensions.Language.CSharp;
 
         public IEnumerator<object[]> GetEnumerator()
         {

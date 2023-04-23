@@ -24,17 +24,17 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
         public string Name => _methodDeclarationSyntax.Identifier.ToString();
 
-        public string ContainingClassName => _methodDeclarationSyntax
+        public string? ContainingClassName => _methodDeclarationSyntax
             .Ancestors()
             .OfType<ClassDeclarationSyntax>()
-            .First()
+            .FirstOrDefault()?
             .Identifier
             .ToString();
 
-        public string ContainingNamespace => _methodDeclarationSyntax
+        public string? ContainingNamespace => _methodDeclarationSyntax
             .Ancestors()
             .OfType<NamespaceDeclarationSyntax>()
-            .First()
+            .FirstOrDefault()?
             .Name
             .ToString();
 

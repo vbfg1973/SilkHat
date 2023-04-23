@@ -1,5 +1,6 @@
 ﻿using CodeAnalysis.Domain.Analyzers.Complexity.Abstract;
 using CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity;
+using CodeAnalysis.Domain.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
