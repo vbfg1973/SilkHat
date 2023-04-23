@@ -25,18 +25,18 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             .Identifier
             .ToString();
 
-        public string ContainingClassName => _methodBlockSyntax
+        public string? ContainingClassName => _methodBlockSyntax
             .Ancestors()
             .OfType<ClassBlockSyntax>()
-            .First()
+            .FirstOrDefault()?
             .ClassStatement
             .Identifier
             .ToString();
 
-        public string ContainingNamespace => _methodBlockSyntax
+        public string? ContainingNamespace => _methodBlockSyntax
             .Ancestors()
             .OfType<NamespaceBlockSyntax>()
-            .First()
+            .FirstOrDefault()?
             .NamespaceStatement
             .Name
             .ToString();

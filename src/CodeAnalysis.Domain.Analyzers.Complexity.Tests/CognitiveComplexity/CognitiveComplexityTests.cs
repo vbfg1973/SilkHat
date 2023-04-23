@@ -1,11 +1,13 @@
 ﻿using CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity;
 using CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity.ClassData;
 using CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities;
+using CodeAnalysis.Domain.Extensions;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using CognitiveComplexityHelpers = CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities.CognitiveComplexityHelpers;
+using Language = CodeAnalysis.Domain.Extensions.Language;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
 {

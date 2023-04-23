@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities;
+using CodeAnalysis.Domain.Extensions;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity.ClassData
 {
     public class LambdaCSharp : IEnumerable<object[]>
     {
         private const string FileName = "LambdaClass.CSharp";
-        private const Language Language = Utilities.Language.CSharp;
+        private const Language Language = Extensions.Language.CSharp;
 
         public IEnumerator<object[]> GetEnumerator()
         {
