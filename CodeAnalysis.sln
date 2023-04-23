@@ -5,22 +5,22 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{26D331EB-EDEE-43A1-B988-500F4BF813AF}"
 	ProjectSection(SolutionItems) = preProject
-		..\README.md = ..\README.md
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis", "CodeAnalysis\CodeAnalysis.csproj", "{264EA986-C0DD-41A8-9F2F-CF60C9486A38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis", "src\CodeAnalysis\CodeAnalysis.csproj", "{264EA986-C0DD-41A8-9F2F-CF60C9486A38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Domain", "CodeAnalysis.Domain\CodeAnalysis.Domain.csproj", "{85E9E9A6-BCA6-47C6-905F-B84887F4383D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Domain", "src\CodeAnalysis.Domain\CodeAnalysis.Domain.csproj", "{85E9E9A6-BCA6-47C6-905F-B84887F4383D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Domain.Analyzers.Complexity", "CodeAnalysis.Domain.Analyzers.Complexity\CodeAnalysis.Domain.Analyzers.Complexity.csproj", "{B3A430AE-5B93-453D-AD85-AFEBBC341F5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Domain.Analyzers.Complexity", "src\CodeAnalysis.Domain.Analyzers.Complexity\CodeAnalysis.Domain.Analyzers.Complexity.csproj", "{B3A430AE-5B93-453D-AD85-AFEBBC341F5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FA44282F-8795-49BA-9ABE-4928E8BC9AC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Domain.Analyzers.Complexity.Tests", "CodeAnalysis.Domain.Analyzers.Complexity.Tests\CodeAnalysis.Domain.Analyzers.Complexity.Tests.csproj", "{2A5FBDA3-B906-40EB-ADF8-537C5F8AD9BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Domain.Analyzers.Complexity.Tests", "src\CodeAnalysis.Domain.Analyzers.Complexity.Tests\CodeAnalysis.Domain.Analyzers.Complexity.Tests.csproj", "{2A5FBDA3-B906-40EB-ADF8-537C5F8AD9BC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{53D2597F-4E56-4E8E-9D9C-CFFCB65C2F7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Utilities.Cli", "CodeAnalysis.Utilities.Cli\CodeAnalysis.Utilities.Cli.csproj", "{6AB844CC-68CF-45D6-BC56-965629C69B51}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Utilities.Cli", "src\CodeAnalysis.Utilities.Cli\CodeAnalysis.Utilities.Cli.csproj", "{6AB844CC-68CF-45D6-BC56-965629C69B51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
