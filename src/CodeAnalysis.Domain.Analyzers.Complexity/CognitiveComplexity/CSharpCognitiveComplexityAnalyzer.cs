@@ -9,6 +9,8 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
     {
         private readonly MethodDeclarationSyntax _methodDeclarationSyntax;
         private int _nesting;
+        private IList<SyntaxNode> ToIgnore { get; } = new List<SyntaxNode>();
+
 
         public CSharpCognitiveComplexityAnalyzer(MethodDeclarationSyntax methodDeclarationSyntax)
         {
@@ -156,6 +158,31 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
         public override void VisitParenthesizedLambdaExpression(ParenthesizedLambdaExpressionSyntax node) =>
             VisitWithNesting(node, base.VisitParenthesizedLambdaExpression);
+
+        #endregion
+
+        #region Binary Expressions
+
+        public override void VisitBinaryExpression(BinaryExpressionSyntax node)
+        {
+            var nodeKind = node.Kind();
+            if ((nodeKind is SyntaxKind.LogicalAndExpression or SyntaxKind.LogicalOrExpression) && !ToIgnore.Contains(node))
+            {
+                var left = node.Left.RemoveParentheses();
+                if (!left.IsKind(nodeKind))
+                {
+                    IncreaseComplexity(node.OperatorToken);
+                }
+
+                var right = node.Right.RemoveParentheses();
+                if (right.IsKind(nodeKind))
+                {
+                    ToIgnore.Add(right);
+                }
+            }
+
+            base.VisitBinaryExpression(node);
+        }
 
         #endregion
 

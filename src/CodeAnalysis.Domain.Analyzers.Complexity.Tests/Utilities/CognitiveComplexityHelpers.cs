@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities
 {
-    public static class Helpers
+    public static class CognitiveComplexityHelpers
     {
         public static SyntaxNode ParseSyntaxTreeRoot(string path, Language language)
         {

@@ -9,6 +9,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
     {
         private readonly MethodBlockSyntax _methodBlockSyntax;
         private int _nesting;
+        private IList<SyntaxNode> ToIgnore { get; } = new List<SyntaxNode>();
 
         public VisualBasicCognitiveComplexityAnalyzer(MethodBlockSyntax methodBlockSyntax)
         {
@@ -124,13 +125,40 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
         #endregion
 
-        #region Lambada
+        #region Lambda
 
         public override void VisitSingleLineLambdaExpression(SingleLineLambdaExpressionSyntax node) =>
             VisitWithNesting(node, base.VisitSingleLineLambdaExpression);
 
         public override void VisitMultiLineLambdaExpression(MultiLineLambdaExpressionSyntax node) =>
             VisitWithNesting(node, base.VisitMultiLineLambdaExpression);
+
+        #endregion
+        
+        #region Binary Expressions
+
+        public override void VisitBinaryExpression(BinaryExpressionSyntax node)
+        {
+            var nodeKind = node.Kind();
+
+            if (!ToIgnore.Contains(node) && (nodeKind is SyntaxKind.AndExpression or SyntaxKind.AndAlsoExpression
+                    or SyntaxKind.OrExpression or SyntaxKind.OrElseExpression) )
+            {
+                var left = node.Left.RemoveParentheses();
+                if (!left.IsKind(nodeKind))
+                {
+                    IncreaseComplexity(node.OperatorToken);
+                }
+
+                var right = node.Right.RemoveParentheses();
+                if (right.IsKind(nodeKind))
+                {
+                    ToIgnore.Add(right);
+                }
+            }
+            
+            base.VisitBinaryExpression(node);
+        }
 
         #endregion
         

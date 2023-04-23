@@ -5,6 +5,7 @@ using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using CognitiveComplexityHelpers = CodeAnalysis.Domain.Analyzers.Complexity.Tests.Utilities.CognitiveComplexityHelpers;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
 {
@@ -13,6 +14,8 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
         [Theory]
         [ClassData(typeof(CatchClauseCSharp))]
         [ClassData(typeof(CatchClauseVisualBasic))]
+        [ClassData(typeof(BinaryExpressionCSharp))]
+        [ClassData(typeof(BinaryExpressionVisualBasic))]
         [ClassData(typeof(DoWhileLoopCSharp))]
         [ClassData(typeof(DoWhileLoopVisualBasic))]
         [ClassData(typeof(ForeachLoopCSharp))]
@@ -32,7 +35,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
         public void GivenClassMethodHasCorrectCognitiveComplexity(string fileName, string methodName,
             int expectedComplexityScore, Language language)
         {
-            var treeRoot = Helpers.ParseSyntaxTreeRoot(Path.Combine("TestClasses", string.Join(".", fileName)),
+            var treeRoot = CognitiveComplexityHelpers.ParseSyntaxTreeRoot(Path.Combine("TestClasses", string.Join(".", fileName)),
                 language);
 
             var complexityScore = GetComplexityScore(treeRoot, methodName, language);
