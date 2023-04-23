@@ -128,6 +128,16 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         }
 
         #endregion
+        
+        #region Catch Clause
+
+        public override void VisitCatchClause(CatchClauseSyntax node)
+        {
+            IncreaseComplexityByNesting(node.CatchKeyword);
+            VisitWithNesting(node, base.VisitCatchClause);
+        }
+
+        #endregion
 
         #region Complexity modifiers
 

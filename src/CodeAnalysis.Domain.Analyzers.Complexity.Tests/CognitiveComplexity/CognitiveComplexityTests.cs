@@ -11,6 +11,8 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
     public class CognitiveComplexityTests
     {
         [Theory]
+        [ClassData(typeof(CatchClauseCSharp))]
+        [ClassData(typeof(CatchClauseVisualBasic))]
         [ClassData(typeof(DoWhileLoopCSharp))]
         [ClassData(typeof(DoWhileLoopVisualBasic))]
         [ClassData(typeof(ForeachLoopCSharp))]
