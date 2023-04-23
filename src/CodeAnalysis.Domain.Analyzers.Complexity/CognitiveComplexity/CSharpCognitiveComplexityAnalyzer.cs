@@ -183,6 +183,12 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
             base.VisitBinaryExpression(node);
         }
+        
+        public override void VisitConditionalExpression(ConditionalExpressionSyntax node)
+        {
+            IncreaseComplexity(node.QuestionToken);
+            VisitWithNesting(node, base.VisitConditionalExpression);
+        }
 
         #endregion
 

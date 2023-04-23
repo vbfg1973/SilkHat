@@ -159,6 +159,12 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             
             base.VisitBinaryExpression(node);
         }
+        
+        public override void VisitBinaryConditionalExpression(BinaryConditionalExpressionSyntax node)
+        {
+            IncreaseComplexity(node.IfKeyword);
+            VisitWithNesting(node, base.VisitBinaryConditionalExpression);
+        }
 
         #endregion
         
@@ -208,6 +214,12 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         {
             IncreaseComplexity(node.ElseKeyword);
             base.VisitElseStatement(node);
+        }
+        
+        public override void VisitTernaryConditionalExpression(TernaryConditionalExpressionSyntax node)
+        {
+            IncreaseComplexityByNesting(node.IfKeyword);
+            VisitWithNesting(node, base.VisitTernaryConditionalExpression);
         }
 
         #endregion
