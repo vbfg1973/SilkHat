@@ -9,6 +9,8 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
     {
         private readonly MethodBlockSyntax _methodBlockSyntax;
         private int _nesting;
+        private MethodStatementSyntax? _currentMethod;
+        private bool _hasRecursion = false;
         private IList<SyntaxNode> ToIgnore { get; } = new List<SyntaxNode>();
 
         public VisualBasicCognitiveComplexityAnalyzer(MethodBlockSyntax methodBlockSyntax)
@@ -114,7 +116,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         }
 
         #endregion
-        
+
         #region Goto (Considered harmful, ho ho ho)
 
         public override void VisitGoToStatement(GoToStatementSyntax node)
@@ -134,7 +136,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             VisitWithNesting(node, base.VisitMultiLineLambdaExpression);
 
         #endregion
-        
+
         #region Binary Expressions
 
         public override void VisitBinaryExpression(BinaryExpressionSyntax node)
@@ -142,7 +144,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             var nodeKind = node.Kind();
 
             if (!ToIgnore.Contains(node) && (nodeKind is SyntaxKind.AndExpression or SyntaxKind.AndAlsoExpression
-                    or SyntaxKind.OrExpression or SyntaxKind.OrElseExpression) )
+                    or SyntaxKind.OrExpression or SyntaxKind.OrElseExpression))
             {
                 var left = node.Left.RemoveParentheses();
                 if (!left.IsKind(nodeKind))
@@ -156,10 +158,10 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
                     ToIgnore.Add(right);
                 }
             }
-            
+
             base.VisitBinaryExpression(node);
         }
-        
+
         public override void VisitBinaryConditionalExpression(BinaryConditionalExpressionSyntax node)
         {
             IncreaseComplexity(node.IfKeyword);
@@ -167,7 +169,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         }
 
         #endregion
-        
+
         #region Complexity Modifiers
 
         private void IncreaseComplexity(SyntaxToken syntaxToken, int increment = 1)
@@ -215,11 +217,59 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             IncreaseComplexity(node.ElseKeyword);
             base.VisitElseStatement(node);
         }
-        
+
         public override void VisitTernaryConditionalExpression(TernaryConditionalExpressionSyntax node)
         {
             IncreaseComplexityByNesting(node.IfKeyword);
             VisitWithNesting(node, base.VisitTernaryConditionalExpression);
+        }
+
+        #endregion
+
+        #region Methods
+
+        public override void VisitMethodBlock(MethodBlockSyntax node)
+        {
+            _currentMethod = node.SubOrFunctionStatement;
+            base.VisitMethodBlock(node);
+
+            if (!_hasRecursion) return;
+
+            _hasRecursion = false;
+            IncreaseComplexity(node.SubOrFunctionStatement.Identifier);
+        }
+
+        public override void VisitInvocationExpression(InvocationExpressionSyntax node)
+        {
+            if (node.Expression == null
+                || node.ArgumentList == null
+                || _currentMethod == null
+                || node.ArgumentList.Arguments.Count != _currentMethod.ParameterList?.Parameters.Count)
+            {
+                return;
+            }
+
+            _hasRecursion = string.Equals(GetMethodName(node.Expression), _currentMethod.Identifier.ValueText,
+                StringComparison.Ordinal);
+            base.VisitInvocationExpression(node);
+        }
+
+        private static string GetMethodName(ExpressionSyntax expression)
+        {
+            if (expression.IsKind(SyntaxKind.IdentifierName))
+            {
+                return (expression as IdentifierNameSyntax).Identifier.ValueText;
+            }
+            
+            else if (expression.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+            {
+                return (expression as MemberAccessExpressionSyntax).Name.Identifier.ValueText;
+            }
+            
+            else
+            {
+                return string.Empty;
+            }
         }
 
         #endregion

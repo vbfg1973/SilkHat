@@ -22,5 +22,10 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             }
             return current;
         }
+
+        public static bool ArgumentCountMatches(this InvocationExpressionSyntax invocationExpression, int argumentCount)
+        {
+            return invocationExpression.ArgumentList.Arguments.Count == argumentCount;
+        }
     }
 }

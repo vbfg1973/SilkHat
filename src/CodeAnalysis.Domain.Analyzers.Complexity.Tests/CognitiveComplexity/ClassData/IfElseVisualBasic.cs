@@ -11,7 +11,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity.Cla
         public IEnumerator<object[]> GetEnumerator()
         {
             yield return new object[] { FileName, "BasicMethod", 0, Language };
-            yield return new object[] { FileName, "Method_CoalescedIfElse", 1, Language };
+            yield return new object[] { FileName, "Method_CoalescedIfElse", 0, Language };
             yield return new object[] { FileName, "Method_IfStatement", 1, Language };
             yield return new object[] { FileName, "Method_IfElseStatement", 2, Language };
             yield return new object[] { FileName, "Method_IfElseIfStatement", 3, Language };

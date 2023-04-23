@@ -9,6 +9,8 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
     {
         private readonly MethodDeclarationSyntax _methodDeclarationSyntax;
         private int _nesting;
+        private MethodDeclarationSyntax? _currentMethod;
+        private bool _hasRecursion = false;
         private IList<SyntaxNode> ToIgnore { get; } = new List<SyntaxNode>();
 
 
@@ -42,16 +44,36 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
         public sealed override void Visit(SyntaxNode? node)
         {
-            // If Local Function
-
-            // else if switch
-
-            // else if binary pattern
-
-            // else 
             base.Visit(node);
         }
 
+        #region MethodsAndFunctions
+        public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
+        {
+            _currentMethod = node;
+            base.VisitMethodDeclaration(node);
+
+            if (!_hasRecursion) return;
+            
+            _hasRecursion = false;
+            IncreaseComplexity(node.Identifier);
+        }
+        
+        public override void VisitInvocationExpression(InvocationExpressionSyntax node)
+        {
+            if (_currentMethod != null
+                && node.Expression is IdentifierNameSyntax identifierNameSyntax
+                && node.ArgumentCountMatches(_currentMethod.ParameterList.Parameters.Count)
+                && string.Equals(identifierNameSyntax.Identifier.ValueText, _currentMethod.Identifier.ValueText, StringComparison.Ordinal))
+            {
+                _hasRecursion = true;
+            }
+
+            base.VisitInvocationExpression(node);
+        }
+        
+        #endregion
+        
         #region ForLoops
 
         public override void VisitForStatement(ForStatementSyntax node)

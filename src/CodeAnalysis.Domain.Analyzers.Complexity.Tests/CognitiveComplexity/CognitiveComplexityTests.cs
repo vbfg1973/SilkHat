@@ -28,6 +28,8 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.CognitiveComplexity
         [ClassData(typeof(IfElseVisualBasic))]
         [ClassData(typeof(LambdaCSharp))]
         [ClassData(typeof(LambdaVisualBasic))]
+        [ClassData(typeof(MethodCSharp))]
+        [ClassData(typeof(MethodVisualBasic))]
         [ClassData(typeof(SwitchCSharp))]
         [ClassData(typeof(SwitchVisualBasic))]
         [ClassData(typeof(WhileLoopCSharp))]
