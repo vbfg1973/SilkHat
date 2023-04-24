@@ -2,9 +2,12 @@ using Microsoft.CodeAnalysis;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.Abstract
 {
+    /// <summary>
+    ///     Generic interface for dotnet complexity analyzers based on methods
+    /// </summary>
     public interface IDotnetComplexityAnalyzer : IComplexityAnalyzer
     {
-        string Name { get; }
+        string MethodName { get; }
         string? ContainingClassName { get; }
         string? ContainingNamespace { get; }
         Location Location { get; }

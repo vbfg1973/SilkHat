@@ -5,13 +5,15 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 {
+    /// <summary>
+    ///     Visual Basic Cognitive Complexity Analysis
+    /// </summary>
     public class VisualBasicCognitiveComplexityAnalyzer : VisualBasicSyntaxWalker, IDotnetComplexityAnalyzer
     {
         private readonly MethodBlockSyntax _methodBlockSyntax;
-        private int _nesting;
         private MethodStatementSyntax? _currentMethod;
-        private bool _hasRecursion = false;
-        private IList<SyntaxNode> ToIgnore { get; } = new List<SyntaxNode>();
+        private bool _hasRecursion;
+        private int _nesting;
 
         public VisualBasicCognitiveComplexityAnalyzer(MethodBlockSyntax methodBlockSyntax)
         {
@@ -20,7 +22,9 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             Visit(_methodBlockSyntax);
         }
 
-        public string Name => _methodBlockSyntax
+        private IList<SyntaxNode> ToIgnore { get; } = new List<SyntaxNode>();
+
+        public string MethodName => _methodBlockSyntax
             .SubOrFunctionStatement
             .Identifier
             .ToString();
@@ -91,22 +95,6 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
         #endregion
 
-        #region Switch
-
-        public override void VisitSelectBlock(SelectBlockSyntax node)
-        {
-            IncreaseComplexityByNesting(node.SelectStatement.SelectKeyword);
-            VisitWithNesting(node, base.VisitSelectBlock);
-        }
-
-        public override void VisitCaseBlock(CaseBlockSyntax node)
-        {
-            IncreaseComplexity(node.CaseStatement.CaseKeyword);
-            base.VisitCaseBlock(node);
-        }
-
-        #endregion
-
         #region Catch Clause
 
         public override void VisitCatchBlock(CatchBlockSyntax node)
@@ -127,13 +115,33 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
         #endregion
 
+        #region Switch
+
+        public override void VisitSelectBlock(SelectBlockSyntax node)
+        {
+            IncreaseComplexityByNesting(node.SelectStatement.SelectKeyword);
+            VisitWithNesting(node, base.VisitSelectBlock);
+        }
+
+        public override void VisitCaseBlock(CaseBlockSyntax node)
+        {
+            IncreaseComplexity(node.CaseStatement.CaseKeyword);
+            base.VisitCaseBlock(node);
+        }
+
+        #endregion
+
         #region Lambda
 
-        public override void VisitSingleLineLambdaExpression(SingleLineLambdaExpressionSyntax node) =>
+        public override void VisitSingleLineLambdaExpression(SingleLineLambdaExpressionSyntax node)
+        {
             VisitWithNesting(node, base.VisitSingleLineLambdaExpression);
+        }
 
-        public override void VisitMultiLineLambdaExpression(MultiLineLambdaExpressionSyntax node) =>
+        public override void VisitMultiLineLambdaExpression(MultiLineLambdaExpressionSyntax node)
+        {
             VisitWithNesting(node, base.VisitMultiLineLambdaExpression);
+        }
 
         #endregion
 
@@ -143,20 +151,14 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         {
             var nodeKind = node.Kind();
 
-            if (!ToIgnore.Contains(node) && (nodeKind is SyntaxKind.AndExpression or SyntaxKind.AndAlsoExpression
-                    or SyntaxKind.OrExpression or SyntaxKind.OrElseExpression))
+            if (!ToIgnore.Contains(node) && nodeKind is SyntaxKind.AndExpression or SyntaxKind.AndAlsoExpression
+                    or SyntaxKind.OrExpression or SyntaxKind.OrElseExpression)
             {
                 var left = node.Left.RemoveParentheses();
-                if (!left.IsKind(nodeKind))
-                {
-                    IncreaseComplexity(node.OperatorToken);
-                }
+                if (!left.IsKind(nodeKind)) IncreaseComplexity(node.OperatorToken);
 
                 var right = node.Right.RemoveParentheses();
-                if (right.IsKind(nodeKind))
-                {
-                    ToIgnore.Add(right);
-                }
+                if (right.IsKind(nodeKind)) ToIgnore.Add(right);
             }
 
             base.VisitBinaryExpression(node);
@@ -245,9 +247,7 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
                 || node.ArgumentList == null
                 || _currentMethod == null
                 || node.ArgumentList.Arguments.Count != _currentMethod.ParameterList?.Parameters.Count)
-            {
                 return;
-            }
 
             _hasRecursion = string.Equals(GetMethodName(node.Expression), _currentMethod.Identifier.ValueText,
                 StringComparison.Ordinal);
@@ -257,19 +257,12 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         private static string GetMethodName(ExpressionSyntax expression)
         {
             if (expression.IsKind(SyntaxKind.IdentifierName))
-            {
                 return (expression as IdentifierNameSyntax).Identifier.ValueText;
-            }
-            
-            else if (expression.IsKind(SyntaxKind.SimpleMemberAccessExpression))
-            {
+
+            if (expression.IsKind(SyntaxKind.SimpleMemberAccessExpression))
                 return (expression as MemberAccessExpressionSyntax).Name.Identifier.ValueText;
-            }
-            
-            else
-            {
-                return string.Empty;
-            }
+
+            return string.Empty;
         }
 
         #endregion

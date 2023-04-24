@@ -1,5 +1,8 @@
 ﻿namespace CodeAnalysis.Domain.Analyzers.Complexity.IndentationComplexity
 {
+    /// <summary>
+    ///     Helpers for indentation complexity analysis
+    /// </summary>
     public static class IndentationStringExtensions
     {
         /// <summary>
