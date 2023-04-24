@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Utilities.Cli", "src\CodeAnalysis.Utilities.Cli\CodeAnalysis.Utilities.Cli.csproj", "{6AB844CC-68CF-45D6-BC56-965629C69B51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Utilities.Benchmarking", "src\CodeAnalysis.Utilities.Benchmarking\CodeAnalysis.Utilities.Benchmarking.csproj", "{09FB6E7A-F488-4F40-9B0B-49B092A5EDB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,9 +53,14 @@ Global
 		{6AB844CC-68CF-45D6-BC56-965629C69B51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AB844CC-68CF-45D6-BC56-965629C69B51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AB844CC-68CF-45D6-BC56-965629C69B51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09FB6E7A-F488-4F40-9B0B-49B092A5EDB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09FB6E7A-F488-4F40-9B0B-49B092A5EDB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09FB6E7A-F488-4F40-9B0B-49B092A5EDB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09FB6E7A-F488-4F40-9B0B-49B092A5EDB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2A5FBDA3-B906-40EB-ADF8-537C5F8AD9BC} = {FA44282F-8795-49BA-9ABE-4928E8BC9AC3}
 		{6AB844CC-68CF-45D6-BC56-965629C69B51} = {53D2597F-4E56-4E8E-9D9C-CFFCB65C2F7E}
+		{09FB6E7A-F488-4F40-9B0B-49B092A5EDB8} = {53D2597F-4E56-4E8E-9D9C-CFFCB65C2F7E}
 	EndGlobalSection
 EndGlobal
