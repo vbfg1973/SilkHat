@@ -26,26 +26,6 @@
 
             return count;
         }
-        
-        /// <summary>
-        ///     Tests if all leading whitespace is of the same type
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="whiteSpaceCharacter"></param>
-        /// <returns>
-        /// true if all whitespace is the same
-        /// false if it differs
-        /// false if no leading whitespace
-        /// </returns>
-        public static bool LeadingWhiteSpaceConformity(this string str)
-        {
-            if (!str.IsLedByWhiteSpace(out var firstWhiteSpaceCharacter)) return false;
-
-            var wsCount = str.LeadingWhitespaceCount();
-            var leadingCount = str.LeadingCharacterCount(firstWhiteSpaceCharacter);
-
-            return wsCount == leadingCount;
-        }
 
         /// <summary>
         ///     Counts from the start of a string to the point where 'c' is not seen.
@@ -72,7 +52,7 @@
         /// <param name="str"></param>
         /// <param name="firstWhiteSpaceCharacter"></param>
         /// <returns></returns>
-        private static bool IsLedByWhiteSpace(this string str, out char firstWhiteSpaceCharacter)
+        public static bool IsLedByWhiteSpace(this string str, out char firstWhiteSpaceCharacter)
         {
             if (char.IsWhiteSpace(str[0]))
             {
@@ -82,6 +62,30 @@
 
             firstWhiteSpaceCharacter = '\0';
             return false;
+        }
+
+        /// <summary>
+        ///     Tests if a string is entirely composed of whitespace
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns>false if a string contains any non-whitespace characters, otherwise returns true</returns>
+        public static bool IsAllWhiteSpace(this string str)
+        {
+            var length = str.Length;
+            for (var i = 0; i < length; i++)
+                if (!char.IsWhiteSpace(str[i]) && i < length - 1)
+                    return false;
+
+            return true;
+        }
+
+        internal static string[] CleanLinesArray(this IEnumerable<string> lines)
+        {
+            return lines
+                .Select(str => str.TrimEnd())
+                .Where(str => !string.IsNullOrEmpty(str))
+                .Where(str => !string.IsNullOrWhiteSpace(str))
+                .ToArray();
         }
     }
 }

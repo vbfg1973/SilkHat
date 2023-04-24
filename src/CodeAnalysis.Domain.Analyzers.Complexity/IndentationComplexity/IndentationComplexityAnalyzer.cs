@@ -5,29 +5,19 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.IndentationComplexity
 {
     public class IndentationComplexityAnalyzer : IIndentationComplexityAnalyzer
     {
-        public int ComplexityScore { get; }
-        
-        
-    }
-
-    public class MeasureIndentation
-    {
         private readonly string[] _linesArray;
-        private readonly int[] _indentsArray;
+        public int ComplexityScore { get; private set; }
 
-        public MeasureIndentation(IEnumerable<string> lines)
+        public IndentationComplexityAnalyzer(IEnumerable<string> lines)
         {
-            _linesArray = lines.ToArray();
-            _indentsArray = new int[_linesArray.Length];
-            Measure();
+            _linesArray = lines.CleanLinesArray();
+            ComplexityScore = _linesArray.Sum(CountLeadingWhitespaceIteration);
         }
-
-        private void Measure()
+        
+        public IndentationComplexityAnalyzer(string text)
         {
-            for (var i = 0; i < _linesArray.Length; i++)
-            {
-                _indentsArray[i] = CountLeadingWhitespaceIteration(_linesArray[i]);
-            }
+            _linesArray = text.Split("\n").CleanLinesArray();
+            ComplexityScore = _linesArray.Sum(CountLeadingWhitespaceIteration);
         }
 
         private static int CountLeadingWhitespaceIteration(string str)
