@@ -2,6 +2,9 @@
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.IndentationComplexity
 {
+    /// <summary>
+    ///     Indentation based cognitive complexity analysis
+    /// </summary>
     public class IndentationComplexityAnalyzer : IIndentationComplexityAnalyzer
     {
         public IndentationComplexityAnalyzer(IEnumerable<string> lines)

@@ -1,9 +1,16 @@
-﻿using System.Text.RegularExpressions;
-
-namespace CodeAnalysis.Domain.Extensions
+﻿namespace CodeAnalysis.Domain.Extensions
 {
+    /// <summary>
+    ///     Helper class for finding files
+    /// </summary>
     public static class FileUtilities
     {
+        /// <summary>
+        ///     Finds file paths with matching extensions
+        /// </summary>
+        /// <param name="directoryPath"></param>
+        /// <param name="extensions"></param>
+        /// <returns></returns>
         public static IEnumerable<string> FindFiles(string directoryPath, string[] extensions)
         {
             var paths = FindFiles(directoryPath).ToList();
@@ -12,13 +19,15 @@ namespace CodeAnalysis.Domain.Extensions
             {
                 var fileName = Path.GetFileName(filePath);
 
-                if (extensions.Contains(Path.GetExtension(fileName)))
-                {
-                    yield return filePath;
-                }
+                if (extensions.Contains(Path.GetExtension(fileName))) yield return filePath;
             }
         }
 
+        /// <summary>
+        ///     Finds all file paths
+        /// </summary>
+        /// <param name="directoryPath"></param>
+        /// <returns></returns>
         private static IEnumerable<string> FindFiles(string directoryPath)
         {
             if (!Directory.Exists(directoryPath)) yield break;

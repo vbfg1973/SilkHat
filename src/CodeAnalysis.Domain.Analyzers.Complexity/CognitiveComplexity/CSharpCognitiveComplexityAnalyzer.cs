@@ -5,13 +5,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 {
+    /// <summary>
+    ///     CSharp Cognitive Complexity Analysis
+    /// </summary>
     public class CSharpCognitiveComplexityAnalyzer : CSharpSyntaxWalker, IDotnetComplexityAnalyzer
     {
         private readonly MethodDeclarationSyntax _methodDeclarationSyntax;
-        private int _nesting;
         private MethodDeclarationSyntax? _currentMethod;
-        private bool _hasRecursion = false;
-        private IList<SyntaxNode> ToIgnore { get; } = new List<SyntaxNode>();
+        private bool _hasRecursion;
+        private int _nesting;
 
 
         public CSharpCognitiveComplexityAnalyzer(MethodDeclarationSyntax methodDeclarationSyntax)
@@ -22,7 +24,9 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             Visit(_methodDeclarationSyntax);
         }
 
-        public string Name => _methodDeclarationSyntax.Identifier.ToString();
+        private IList<SyntaxNode> ToIgnore { get; } = new List<SyntaxNode>();
+
+        public string MethodName => _methodDeclarationSyntax.Identifier.ToString();
 
         public string? ContainingClassName => _methodDeclarationSyntax
             .Ancestors()
@@ -47,33 +51,6 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
             base.Visit(node);
         }
 
-        #region MethodsAndFunctions
-        public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
-        {
-            _currentMethod = node;
-            base.VisitMethodDeclaration(node);
-
-            if (!_hasRecursion) return;
-            
-            _hasRecursion = false;
-            IncreaseComplexity(node.Identifier);
-        }
-        
-        public override void VisitInvocationExpression(InvocationExpressionSyntax node)
-        {
-            if (_currentMethod != null
-                && node.Expression is IdentifierNameSyntax identifierNameSyntax
-                && node.ArgumentCountMatches(_currentMethod.ParameterList.Parameters.Count)
-                && string.Equals(identifierNameSyntax.Identifier.ValueText, _currentMethod.Identifier.ValueText, StringComparison.Ordinal))
-            {
-                _hasRecursion = true;
-            }
-
-            base.VisitInvocationExpression(node);
-        }
-        
-        #endregion
-        
         #region ForLoops
 
         public override void VisitForStatement(ForStatementSyntax node)
@@ -110,6 +87,53 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         {
             IncreaseComplexityByNesting(node.ForEachKeyword);
             VisitWithNesting(node, base.VisitForEachStatement);
+        }
+
+        #endregion
+
+        #region Catch Clause
+
+        public override void VisitCatchClause(CatchClauseSyntax node)
+        {
+            IncreaseComplexityByNesting(node.CatchKeyword);
+            VisitWithNesting(node, base.VisitCatchClause);
+        }
+
+        #endregion
+
+        #region Goto Statement (Harmful, etc)
+
+        public override void VisitGotoStatement(GotoStatementSyntax node)
+        {
+            IncreaseComplexityByNesting(node.GotoKeyword);
+            base.VisitGotoStatement(node);
+        }
+
+        #endregion
+
+        #region MethodsAndFunctions
+
+        public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
+        {
+            _currentMethod = node;
+            base.VisitMethodDeclaration(node);
+
+            if (!_hasRecursion) return;
+
+            _hasRecursion = false;
+            IncreaseComplexity(node.Identifier);
+        }
+
+        public override void VisitInvocationExpression(InvocationExpressionSyntax node)
+        {
+            if (_currentMethod != null
+                && node.Expression is IdentifierNameSyntax identifierNameSyntax
+                && node.ArgumentCountMatches(_currentMethod.ParameterList.Parameters.Count)
+                && string.Equals(identifierNameSyntax.Identifier.ValueText, _currentMethod.Identifier.ValueText,
+                    StringComparison.Ordinal))
+                _hasRecursion = true;
+
+            base.VisitInvocationExpression(node);
         }
 
         #endregion
@@ -153,33 +177,17 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
 
         #endregion
 
-        #region Catch Clause
-
-        public override void VisitCatchClause(CatchClauseSyntax node)
-        {
-            IncreaseComplexityByNesting(node.CatchKeyword);
-            VisitWithNesting(node, base.VisitCatchClause);
-        }
-
-        #endregion
-
-        #region Goto Statement (Harmful, etc)
-
-        public override void VisitGotoStatement(GotoStatementSyntax node)
-        {
-            IncreaseComplexityByNesting(node.GotoKeyword);
-            base.VisitGotoStatement(node);
-        }
-
-        #endregion
-
         #region Lambda
 
-        public override void VisitSimpleLambdaExpression(SimpleLambdaExpressionSyntax node) =>
+        public override void VisitSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
+        {
             VisitWithNesting(node, base.VisitSimpleLambdaExpression);
+        }
 
-        public override void VisitParenthesizedLambdaExpression(ParenthesizedLambdaExpressionSyntax node) =>
+        public override void VisitParenthesizedLambdaExpression(ParenthesizedLambdaExpressionSyntax node)
+        {
             VisitWithNesting(node, base.VisitParenthesizedLambdaExpression);
+        }
 
         #endregion
 
@@ -188,24 +196,19 @@ namespace CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity
         public override void VisitBinaryExpression(BinaryExpressionSyntax node)
         {
             var nodeKind = node.Kind();
-            if ((nodeKind is SyntaxKind.LogicalAndExpression or SyntaxKind.LogicalOrExpression) && !ToIgnore.Contains(node))
+            if (nodeKind is SyntaxKind.LogicalAndExpression or SyntaxKind.LogicalOrExpression &&
+                !ToIgnore.Contains(node))
             {
                 var left = node.Left.RemoveParentheses();
-                if (!left.IsKind(nodeKind))
-                {
-                    IncreaseComplexity(node.OperatorToken);
-                }
+                if (!left.IsKind(nodeKind)) IncreaseComplexity(node.OperatorToken);
 
                 var right = node.Right.RemoveParentheses();
-                if (right.IsKind(nodeKind))
-                {
-                    ToIgnore.Add(right);
-                }
+                if (right.IsKind(nodeKind)) ToIgnore.Add(right);
             }
 
             base.VisitBinaryExpression(node);
         }
-        
+
         public override void VisitConditionalExpression(ConditionalExpressionSyntax node)
         {
             IncreaseComplexity(node.QuestionToken);
