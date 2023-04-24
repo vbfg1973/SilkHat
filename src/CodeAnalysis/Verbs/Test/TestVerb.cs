@@ -1,11 +1,7 @@
 ﻿using System.Text.Json;
-using CodeAnalysis.Domain.Analyzers.Complexity.Abstract;
-using CodeAnalysis.Domain.Analyzers.Complexity.CognitiveComplexity;
+using CodeAnalysis.Domain.Analyzers.Complexity.IndentationComplexity;
 using CodeAnalysis.Domain.Extensions;
 using CodeAnalysis.Verbs.Abstract;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.Extensions.Logging;
 
 namespace CodeAnalysis.Verbs.Test
@@ -13,6 +9,13 @@ namespace CodeAnalysis.Verbs.Test
     public class TestOptions : IPathBasedOptions
     {
         public string DirectoryPath { get; set; } = null!;
+        public string OutputCsv { get; set; } = null!;
+    }
+
+    public record ComplexityResult
+    {
+        public string File { get; set; }
+        public int ComplexityScore { get; set; }
     }
 
     public class TestVerb
@@ -26,89 +29,25 @@ namespace CodeAnalysis.Verbs.Test
 
         public async Task Run(IPathBasedOptions options)
         {
-            Console.WriteLine(JsonSerializer.Serialize(options));
-
-            var files = FileUtilities.FindFiles(options.DirectoryPath, new[] { ".cs", ".vb" }).ToList();
-
-            Console.WriteLine($"FileCount={files.Count}");
-
-            try
-            {
-                foreach (var file in files)
-                {
-                    var extension = Path.GetExtension(file);
-
-                    switch (extension)
-                    {
-                        case ".vb":
-                            await VisualBasicComplexity(options.DirectoryPath, file, Language.VisualBasic);
-                            break;
-                        case ".cs":
-                            await CSharpComplexity(options.DirectoryPath, file, Language.CSharp);
-                            break;
-                    }
-                }
-            }
-
-            catch (Exception e)
-            {
-                Console.Error.WriteLine(e);
-            }
+            var results = GetComplexities(options.DirectoryPath, new[] { ".vb", ".cs" }).ToList();
+            await CsvUtilities.CsvWriteAsync(options.OutputCsv, results);
         }
 
-        private async Task VisualBasicComplexity(string dir, string fileName, Language language)
+        private static IEnumerable<ComplexityResult> GetComplexities(string dirPath, string[] extensions)
         {
-            var root = SyntaxTreeHelpers.ParseSyntaxTreeRoot(fileName, language);
+            return FileUtilities.FindFiles(dirPath, new[] { ".cs", ".vb" })
+                .Select(path => FileToComplexityResult(dirPath, path));
+        }
 
-            foreach (var method in GetVisualBasicMethods(root))
+        private static ComplexityResult FileToComplexityResult(string dirPath, string path)
+        {
+            var text = File.ReadAllText(path);
+            var complexityAnalyzer = new IndentationComplexityAnalyzer(text);
+
+            return new ComplexityResult()
             {
-                var complexityAnalyzer = GetComplexityAnalyzer(Language.VisualBasic, method);
-                Console.WriteLine(string.Join("\t",
-                    Path.GetRelativePath(dir, fileName.Trim()),
-                    complexityAnalyzer.ContainingNamespace?.Trim(),
-                    complexityAnalyzer.ContainingClassName?.Trim(),
-                    complexityAnalyzer.Name?.Trim(),
-                    complexityAnalyzer.ComplexityScore));
-            }
-        }
-
-        private async Task CSharpComplexity(string dir, string fileName, Language language)
-        {
-            var root = SyntaxTreeHelpers.ParseSyntaxTreeRoot(fileName, language);
-
-            foreach (var method in GetCSharpMethods(root))
-            {
-                var complexityAnalyzer = GetComplexityAnalyzer(Language.CSharp, method);
-                Console.WriteLine(string.Join("\t",
-                    Path.GetRelativePath(dir, fileName.Trim()),
-                    complexityAnalyzer.ContainingNamespace?.Trim(),
-                    complexityAnalyzer.ContainingClassName?.Trim(),
-                    complexityAnalyzer.Name?.Trim(),
-                    complexityAnalyzer.ComplexityScore));
-            }
-        }
-
-        private IEnumerable<MethodDeclarationSyntax> GetCSharpMethods(SyntaxNode syntaxNode)
-        {
-            return syntaxNode
-                .DescendantNodes()
-                .OfType<MethodDeclarationSyntax>();
-        }
-
-        private IEnumerable<MethodBlockSyntax> GetVisualBasicMethods(SyntaxNode syntaxNode)
-        {
-            return syntaxNode
-                .DescendantNodes()
-                .OfType<MethodBlockSyntax>();
-        }
-
-        private IDotnetComplexityAnalyzer GetComplexityAnalyzer(Language language, SyntaxNode syntaxNode)
-        {
-            return language switch
-            {
-                Language.CSharp => new CSharpCognitiveComplexityAnalyzer((MethodDeclarationSyntax)syntaxNode),
-                Language.VisualBasic => new VisualBasicCognitiveComplexityAnalyzer((MethodBlockSyntax)syntaxNode),
-                _ => throw new ArgumentOutOfRangeException(language.ToString())
+                File = Path.GetRelativePath(dirPath, path),
+                ComplexityScore = complexityAnalyzer.ComplexityScore
             };
         }
     }

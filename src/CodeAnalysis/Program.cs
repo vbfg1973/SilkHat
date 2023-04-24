@@ -26,7 +26,7 @@ public static class Program
             .WithParsed<TestOptions>(options =>
             {
                 var verb = s_serviceProvider.GetService<TestVerb>();
-                verb?.Run(options);
+                verb?.Run(options).Wait();
             });
     }
     

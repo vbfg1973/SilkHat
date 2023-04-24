@@ -7,6 +7,8 @@ namespace CodeAnalysis.Verbs.Abstract
         [Option('d', nameof(DirectoryPath), HelpText = "Path to directory structure containing project", Required = true)]
         string DirectoryPath { get; set; }
         
+        [Option('o', nameof(OutputCsv), HelpText = "Path to output csv", Required = true)] 
+        string OutputCsv { get; set; }
     }
 
     public interface IOptions
