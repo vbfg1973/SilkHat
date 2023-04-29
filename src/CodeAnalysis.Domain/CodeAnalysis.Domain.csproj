@@ -2,6 +2,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\CodeAnalysis.Domain.Analyzers.Complexity\CodeAnalysis.Domain.Analyzers.Complexity.csproj" />
+        <ProjectReference Include="..\CodeAnalysis.Infrastructure.Git\CodeAnalysis.Infrastructure.Git.csproj" />
     </ItemGroup>
 
     <ItemGroup>

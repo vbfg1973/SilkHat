@@ -1,5 +1,5 @@
-﻿using CodeAnalysis;
-using CodeAnalysis.Extensions;
+﻿using CodeAnalysis.Extensions;
+using CodeAnalysis.Verbs.Git;
 using CodeAnalysis.Verbs.Test;
 using CommandLine;
 using Microsoft.Extensions.Configuration;
@@ -8,43 +8,54 @@ using Serilog;
 
 public static class Program
 {
-    private static IConfiguration s_configuration;
-    private static IServiceCollection s_serviceCollection;
-    private static IServiceProvider s_serviceProvider;
-    
+    private static IConfiguration _sConfiguration = null!;
+    private static IServiceCollection _sServiceCollection = null!;
+    private static IServiceProvider _sServiceProvider = null!;
+
     public static void Main(string[] args)
     {
         BuildConfiguration();
         Log.Logger = new LoggerConfiguration()
             .ReadFrom
-            .Configuration(s_configuration)
+            .Configuration(_sConfiguration)
             .CreateLogger();
         ConfigureServices();
-        
+
         Parser.Default
-            .ParseArguments<TestOptions>(args)
+            .ParseArguments<TestOptions, GitOptions>(args)
             .WithParsed<TestOptions>(options =>
-            {
-                var verb = s_serviceProvider.GetService<TestVerb>();
-                verb?.Run(options).Wait();
-            });
+                {
+                    var verb = _sServiceProvider.GetService<TestVerb>();
+                    verb?.Run(options).Wait();
+                }
+            )
+            .WithParsed<GitOptions>(options =>
+                {
+                    var verb = _sServiceProvider.GetService<GitVerb>();
+                    verb?.Run(options).Wait();
+                }
+            )
+            ;
     }
-    
+
     private static void ConfigureServices()
     {
-        s_serviceCollection = new ServiceCollection();
-        
-        s_serviceCollection.AddLogging(configure => configure.AddSerilog());
-        s_serviceCollection.AddCliVerbs();
+        _sServiceCollection = new ServiceCollection();
 
-        s_serviceProvider = s_serviceCollection.BuildServiceProvider();
+        _sServiceCollection.AddLogging(configure => configure.AddSerilog());
+
+        _sServiceCollection.AddCustomServices();
+
+        _sServiceCollection.AddCliVerbs();
+
+        _sServiceProvider = _sServiceCollection.BuildServiceProvider();
     }
 
     private static void BuildConfiguration()
     {
         var configuration = new ConfigurationBuilder();
-        
-        s_configuration = configuration.AddJsonFile("appsettings.json", true, true)
+
+        _sConfiguration = configuration.AddJsonFile("appsettings.json", true, true)
             .AddEnvironmentVariables()
             .Build();
     }

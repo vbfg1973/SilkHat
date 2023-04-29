@@ -14,7 +14,7 @@ namespace CodeAnalysis.Verbs.Test
 
     public record ComplexityResult
     {
-        public string File { get; set; }
+        public string File { get; set; } = null!;
         public int ComplexityScore { get; set; }
     }
 
