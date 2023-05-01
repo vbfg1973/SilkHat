@@ -1,5 +1,4 @@
-﻿using SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data;
-using FluentAssertions;
+﻿using FluentAssertions;
 using SilkHat.Infrastructure.Git.Commands;
 using SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails;
 using SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data.Authors;
@@ -46,7 +45,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests
             string authorEmail)
         {
             var gitCommitDetails = FindGitCommitDetailsByShaId(fileName, shaId);
-            
+
             var author = gitCommitDetails.Headers["Author"];
 
             author.Should().Contain(authorName);
@@ -68,7 +67,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests
                 .Should()
                 .BeEquivalentTo(dateString);
         }
-        
+
         [Theory]
         [ClassData(typeof(DotnetSdkGitCommitFileCount))]
         [ClassData(typeof(LinuxGitCommitFileCount))]
@@ -84,13 +83,14 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests
                 .Should()
                 .Be(fileCount);
         }
-        
+
         [Theory]
         [ClassData(typeof(DotnetSdkGitCommitMessages))]
         [ClassData(typeof(LinuxGitCommitMessages))]
         [ClassData(typeof(NopCommerceGitCommitMessages))]
         [ClassData(typeof(RoslynAnalysersGitCommitMessages))]
-        public void Given_GitLog_Identified_By_ShaId_Message_Body_Size_Is_Correct(string fileName, string shaId, int messageBodySize)
+        public void Given_GitLog_Identified_By_ShaId_Message_Body_Size_Is_Correct(string fileName, string shaId,
+            int messageBodySize)
         {
             var gitCommitDetails = FindGitCommitDetailsByShaId(fileName, shaId);
 
@@ -100,7 +100,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests
                 .Should()
                 .Be(messageBodySize);
         }
-        
+
         private GitCommitDetails FindGitCommitDetailsByShaId(string fileName, string shaId)
         {
             var pathToLog = GetPathToLog(fileName);

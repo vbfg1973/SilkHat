@@ -12,8 +12,14 @@ namespace SilkHat.Domain.Analyzers.Complexity.Tests.IndentationComplexity.ClassD
             yield return new object[] { new string(' ', 5) }; // All spaces
             yield return new object[] { string.Concat(new string('\t', 5), new string(' ', 5)) }; // Tabs then spaces
             yield return new object[] { string.Concat(new string(' ', 5), new string('\t', 5)) }; // Spaces then tabs
-            yield return new object[] { string.Concat(new string(' ', 5), new string('\t', 5), new string(' ', 5)) }; // Spaces, tabs, and spaces
-            yield return new object[] { string.Concat(new string('\t', 5), new string(' ', 5), new string('\t', 5)) }; // Tabs, spaces and tabs
+            yield return new object[]
+            {
+                string.Concat(new string(' ', 5), new string('\t', 5), new string(' ', 5))
+            }; // Spaces, tabs, and spaces
+            yield return new object[]
+            {
+                string.Concat(new string('\t', 5), new string(' ', 5), new string('\t', 5))
+            }; // Tabs, spaces and tabs
         }
 
         IEnumerator IEnumerable.GetEnumerator()

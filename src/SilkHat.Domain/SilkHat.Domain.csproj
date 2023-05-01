@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\SilkHat.Domain.Analyzers.Complexity\SilkHat.Domain.Analyzers.Complexity.csproj" />
-        <ProjectReference Include="..\SilkHat.Infrastructure.Git\SilkHat.Infrastructure.Git.csproj" />
+        <ProjectReference Include="..\SilkHat.Domain.Analyzers.Complexity\SilkHat.Domain.Analyzers.Complexity.csproj"/>
+        <ProjectReference Include="..\SilkHat.Infrastructure.Git\SilkHat.Infrastructure.Git.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="CsvHelper" Version="30.0.1" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+        <PackageReference Include="CsvHelper" Version="30.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0"/>
     </ItemGroup>
 
     <PropertyGroup>

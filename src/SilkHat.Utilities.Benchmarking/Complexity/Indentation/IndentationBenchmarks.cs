@@ -1,12 +1,11 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 
 namespace SilkHat.Utilities.Benchmarking.Complexity.Indentation
 {
     [MemoryDiagnoser]
     public class IndentationBenchmarks
     {
-        private string[] strings;
+        private readonly string[] strings;
 
         public IndentationBenchmarks()
         {
@@ -17,8 +16,8 @@ namespace SilkHat.Utilities.Benchmarking.Complexity.Indentation
         {
             for (var i = 0; i <= 100; i += 10)
             {
-                yield return string.Concat(new String(' ', i), "Some text");
-                yield return string.Concat(new String('\t', i), "Some text");
+                yield return string.Concat(new string(' ', i), "Some text");
+                yield return string.Concat(new string('\t', i), "Some text");
             }
         }
 
@@ -37,7 +36,6 @@ namespace SilkHat.Utilities.Benchmarking.Complexity.Indentation
         {
             for (var i = 0; i < strings.Length; i++)
             {
-
             }
         }
     }

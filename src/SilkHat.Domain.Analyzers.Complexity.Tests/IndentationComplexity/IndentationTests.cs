@@ -1,5 +1,5 @@
-﻿using SilkHat.Domain.Analyzers.Complexity.IndentationComplexity;
-using FluentAssertions;
+﻿using FluentAssertions;
+using SilkHat.Domain.Analyzers.Complexity.IndentationComplexity;
 using SilkHat.Domain.Analyzers.Complexity.Tests.IndentationComplexity.ClassData;
 
 namespace SilkHat.Domain.Analyzers.Complexity.Tests.IndentationComplexity
@@ -71,7 +71,7 @@ namespace SilkHat.Domain.Analyzers.Complexity.Tests.IndentationComplexity
                 .Should()
                 .BeFalse();
         }
-        
+
         [Theory]
         [ClassData(typeof(MixedAllWhiteSpaceStrings))]
         public void GivenStringWithAllWhiteSpaceCharactersIsTrue(string testString)

@@ -1,9 +1,9 @@
-﻿using SilkHat.Extensions;
-using SilkHat.Verbs.Test;
-using CommandLine;
+﻿using CommandLine;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using SilkHat.Extensions;
+using SilkHat.Verbs.Test;
 
 public static class Program
 {

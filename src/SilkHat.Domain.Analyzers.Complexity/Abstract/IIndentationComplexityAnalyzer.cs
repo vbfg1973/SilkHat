@@ -1,7 +1,7 @@
 ﻿namespace SilkHat.Domain.Analyzers.Complexity.Abstract
 {
     /// <summary>
-    /// An i
+    ///     An i
     /// </summary>
     public interface IIndentationComplexityAnalyzer : IComplexityAnalyzer
     {

@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SilkHat.Domain.Analyzers.Complexity.IndentationComplexity;
 using SilkHat.Domain.Extensions;
 using SilkHat.Verbs.Abstract;
@@ -44,7 +43,7 @@ namespace SilkHat.Verbs.Test
             var text = File.ReadAllText(path);
             var complexityAnalyzer = new IndentationComplexityAnalyzer(text);
 
-            return new ComplexityResult()
+            return new ComplexityResult
             {
                 File = Path.GetRelativePath(dirPath, path),
                 ComplexityScore = complexityAnalyzer.ComplexityScore

@@ -9,7 +9,7 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
     public class GitCommitDetailsCommandRunner
     {
         private readonly IProcessCommandRunner _commandRunner;
-        private bool _currentlyProcessingMessageBody = false;
+        private bool _currentlyProcessingMessageBody;
         private StringBuilder _messageBuilder = new();
 
         public GitCommitDetailsCommandRunner(IProcessCommandRunner commandRunner)
@@ -36,28 +36,18 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
                 }
 
                 // Header lines - author, date, merge, etc
-                if (line.IsHeader())
-                {
-                    ProcessHeaderLine(commit, line);
-                }
-                
+                if (line.IsHeader()) ProcessHeaderLine(commit, line);
+
                 // Commit messages
                 if (line.IsMessageLine())
-                {
                     ProcessMessageLine(commit, line);
-                }
-                
-                else if (!line.IsMessageLine())
-                {
-                    BuildGitCommitMessageIfFinishedProcessingMessageBody(commit);
-                }
+
+                else if (!line.IsMessageLine()) BuildGitCommitMessageIfFinishedProcessingMessageBody(commit);
 
                 // File and changeKind
                 if (line.IsFileStatusLine())
-                {
                     // file status
                     ExtractFileStatusLine(commit, line);
-                }
             }
 
             if (commit != null)
@@ -71,7 +61,7 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
 
             // If commit is null then we haven't really started
             if (commit == null) return;
-            
+
             commit.Message = _messageBuilder.ToString().NormaliseLineEndings();
             ResetMessageBodyProcessing();
         }
@@ -107,7 +97,8 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
         private static void ExtractFileStatusLine(GitCommitDetails? gitCommitDetails, string fileStatusLine)
         {
             var statusElements = fileStatusLine.Split('\t');
-            gitCommitDetails!.Files.Add(new GitFileStatus { Status = statusElements[0].Trim(), File = statusElements[1].Trim() });
+            gitCommitDetails!.Files.Add(new GitFileStatus
+                { Status = statusElements[0].Trim(), File = statusElements[1].Trim() });
         }
 
         private record GitCommitDetailsArguments : AbstractGitArgument

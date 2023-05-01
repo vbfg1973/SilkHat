@@ -1,9 +1,9 @@
 # SilkHat
 
 > One of the low on whom assurance sits
-> 
+>
 > As a silk hat on a Bradford millionaire.
-> 
+>
 > - T.S.Eliot
 
 [![.NET](https://github.com/vbfg1973/CodeAnalysis/actions/workflows/dotnet.yml/badge.svg)](https://github.com/vbfg1973/CodeAnalysis/actions/workflows/dotnet.yml)
