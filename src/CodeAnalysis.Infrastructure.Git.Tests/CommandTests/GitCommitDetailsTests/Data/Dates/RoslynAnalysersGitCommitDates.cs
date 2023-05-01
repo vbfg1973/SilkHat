@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.ClassData.DateData
+namespace CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data.Dates
 {
     public class RoslynAnalysersGitCommitDates : IEnumerable<object[]>
     {

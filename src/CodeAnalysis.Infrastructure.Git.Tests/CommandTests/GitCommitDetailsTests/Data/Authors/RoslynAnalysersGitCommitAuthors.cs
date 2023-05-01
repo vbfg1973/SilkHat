@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.ClassData.AuthorData
+namespace CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data.Authors
 {
     public class RoslynAnalysersGitCommitAuthors : IEnumerable<object[]>
     {

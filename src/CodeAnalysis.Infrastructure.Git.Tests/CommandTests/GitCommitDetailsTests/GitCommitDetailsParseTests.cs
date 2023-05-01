@@ -1,8 +1,8 @@
 ﻿using CodeAnalysis.Infrastructure.Git.Commands;
 using CodeAnalysis.Infrastructure.Git.Commands.Commits.CommitDetails;
-using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.ClassData;
-using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.ClassData.AuthorData;
-using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.ClassData.DateData;
+using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data;
+using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data.Authors;
+using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data.Dates;
 using CodeAnalysis.Infrastructure.Git.Tests.Helpers;
 using FluentAssertions;
 
