@@ -28,7 +28,7 @@
         /// </summary>
         /// <param name="directoryPath"></param>
         /// <returns></returns>
-        private static IEnumerable<string> FindFiles(string directoryPath)
+        public static IEnumerable<string> FindFiles(string directoryPath)
         {
             if (!Directory.Exists(directoryPath)) yield break;
 
@@ -37,6 +37,18 @@
             foreach (var directory in Directory.GetDirectories(directoryPath))
             foreach (var file in FindFiles(directory))
                 yield return file;
+        }
+
+        /// <summary>
+        ///     Read a file with carriage return characters stripped
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static async Task<string> ReadNormalisedFile(string path)
+        {
+            var fileContents = await File.ReadAllTextAsync(path);
+
+            return fileContents.NormaliseLineEndings();
         }
     }
 }

@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Utilities.Benc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Infrastructure.Git", "src\CodeAnalysis.Infrastructure.Git\CodeAnalysis.Infrastructure.Git.csproj", "{1463E2B7-1C67-4AB2-AFC2-BFEF31ECCE9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAnalysis.Infrastructure.Git.Tests", "src\CodeAnalysis.Infrastructure.Git.Tests\CodeAnalysis.Infrastructure.Git.Tests.csproj", "{D6307F8A-27E5-4066-86B8-ABB5BC39614A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,10 +65,15 @@ Global
 		{1463E2B7-1C67-4AB2-AFC2-BFEF31ECCE9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1463E2B7-1C67-4AB2-AFC2-BFEF31ECCE9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1463E2B7-1C67-4AB2-AFC2-BFEF31ECCE9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6307F8A-27E5-4066-86B8-ABB5BC39614A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6307F8A-27E5-4066-86B8-ABB5BC39614A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6307F8A-27E5-4066-86B8-ABB5BC39614A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6307F8A-27E5-4066-86B8-ABB5BC39614A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2A5FBDA3-B906-40EB-ADF8-537C5F8AD9BC} = {FA44282F-8795-49BA-9ABE-4928E8BC9AC3}
 		{6AB844CC-68CF-45D6-BC56-965629C69B51} = {53D2597F-4E56-4E8E-9D9C-CFFCB65C2F7E}
 		{09FB6E7A-F488-4F40-9B0B-49B092A5EDB8} = {53D2597F-4E56-4E8E-9D9C-CFFCB65C2F7E}
+		{D6307F8A-27E5-4066-86B8-ABB5BC39614A} = {FA44282F-8795-49BA-9ABE-4928E8BC9AC3}
 	EndGlobalSection
 EndGlobal

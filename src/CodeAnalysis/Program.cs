@@ -1,5 +1,4 @@
 ﻿using CodeAnalysis.Extensions;
-using CodeAnalysis.Verbs.Git;
 using CodeAnalysis.Verbs.Test;
 using CommandLine;
 using Microsoft.Extensions.Configuration;
@@ -22,16 +21,14 @@ public static class Program
         ConfigureServices();
 
         Parser.Default
-            .ParseArguments<TestOptions, GitOptions>(args)
-            .WithParsed<TestOptions>(options =>
+            .ParseArguments<
+                // AnalyseOptions, 
+                // GitOptions, 
+                TestOptions
+            >(args)
+            .WithParsed(options =>
                 {
                     var verb = _sServiceProvider.GetService<TestVerb>();
-                    verb?.Run(options).Wait();
-                }
-            )
-            .WithParsed<GitOptions>(options =>
-                {
-                    var verb = _sServiceProvider.GetService<GitVerb>();
                     verb?.Run(options).Wait();
                 }
             )
