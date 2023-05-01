@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SilkHat.Infrastructure.Git.Commands;
 using SilkHat.Verbs.Test;
 
 namespace SilkHat.Extensions
@@ -12,6 +13,7 @@ namespace SilkHat.Extensions
 
         public static void AddCustomServices(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddTransient<IProcessCommandRunner, ProcessCommandRunner>();
         }
     }
 }
