@@ -14,10 +14,10 @@ namespace CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetails
         };
 
         [Theory]
-        [InlineData("linux.log", 283)]
-        [InlineData("nopCommerce.log", 601)]
-        [InlineData("dotnet-sdk.log", 935)]
-        [InlineData("roslyn-analyzers.log", 789)]
+        [InlineData("linux.txt", 283)]
+        [InlineData("nopCommerce.txt", 601)]
+        [InlineData("dotnet-sdk.txt", 935)]
+        [InlineData("roslyn-analyzers.txt", 789)]
         public void GivenGitLogReturnsCorrectNumberOfCommits(string fileName, int expectedCommitCount)
         {
             var pathToLog = GetPathToLog(fileName);
