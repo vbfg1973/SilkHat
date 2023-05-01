@@ -4,6 +4,7 @@ using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.D
 using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data.Authors;
 using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data.Dates;
 using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data.FileCount;
+using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data.Messages;
 using CodeAnalysis.Infrastructure.Git.Tests.Helpers;
 using FluentAssertions;
 
@@ -82,6 +83,22 @@ namespace CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTes
                 .Count
                 .Should()
                 .Be(fileCount);
+        }
+        
+        [Theory]
+        [ClassData(typeof(DotnetSdkGitCommitMessages))]
+        [ClassData(typeof(LinuxGitCommitMessages))]
+        [ClassData(typeof(NopCommerceGitCommitMessages))]
+        [ClassData(typeof(RoslynAnalysersGitCommitMessages))]
+        public void Given_GitLog_Identified_By_ShaId_Message_Body_Size_Is_Correct(string fileName, string shaId, int messageBodySize)
+        {
+            var gitCommitDetails = FindGitCommitDetailsByShaId(fileName, shaId);
+
+            gitCommitDetails
+                .Message
+                .Length
+                .Should()
+                .Be(messageBodySize);
         }
         
         private GitCommitDetails FindGitCommitDetailsByShaId(string fileName, string shaId)

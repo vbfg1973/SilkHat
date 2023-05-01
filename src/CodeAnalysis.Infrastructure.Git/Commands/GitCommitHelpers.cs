@@ -6,6 +6,12 @@
     public static class GitCommitHelpers
     {
         private const string CommitHeader = "commit";
+        private const int MessageSpaceIndent = 4;
+
+        public static string NormaliseLineEndings(this string str)
+        {
+            return str.Replace("\\r", "", StringComparison.InvariantCulture);
+        }
 
         /// <summary>
         ///     Ensures path has a value. Either supplied value or current working directory
@@ -49,7 +55,7 @@
         /// <returns></returns>
         public static bool IsMessageLine(this string line)
         {
-            return line.Length > 0 && line[0] == '\t';
+            return line.Length > 0 && (line[0] == '\t' || line.StartsWith(new string(' ', MessageSpaceIndent)));
         }
 
         /// <summary>

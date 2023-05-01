@@ -1,4 +1,5 @@
-﻿using CodeAnalysis.Infrastructure.Git.Commands.Abstract;
+﻿using System.Text;
+using CodeAnalysis.Infrastructure.Git.Commands.Abstract;
 
 namespace CodeAnalysis.Infrastructure.Git.Commands.Commits.CommitDetails
 {
@@ -8,10 +9,13 @@ namespace CodeAnalysis.Infrastructure.Git.Commands.Commits.CommitDetails
     public class GitCommitDetailsCommandRunner
     {
         private readonly IProcessCommandRunner _commandRunner;
-        
+        private bool _currentlyProcessingMessageBody = false;
+        private StringBuilder _messageBuilder = new();
+
         public GitCommitDetailsCommandRunner(IProcessCommandRunner commandRunner)
         {
             _commandRunner = commandRunner;
+            ResetMessageBodyProcessing();
         }
 
         public IEnumerable<GitCommitDetails> Run(string path = "")
@@ -21,6 +25,7 @@ namespace CodeAnalysis.Infrastructure.Git.Commands.Commits.CommitDetails
 
             GitCommitDetails? commit = null;
             foreach (var line in _commandRunner.Runner(arguments))
+            {
                 // Commit header - must go first for object initialisation
                 if (line.IsCommitHeader())
                 {
@@ -31,26 +36,49 @@ namespace CodeAnalysis.Infrastructure.Git.Commands.Commits.CommitDetails
                 }
 
                 // Header lines - author, date, merge, etc
-                else if (line.IsHeader())
+                if (line.IsHeader())
                 {
                     ProcessHeaderLine(commit, line);
                 }
-
+                
                 // Commit messages
-                else if (line.IsMessageLine())
+                if (line.IsMessageLine())
                 {
                     ProcessMessageLine(commit, line);
                 }
+                
+                else if (!line.IsMessageLine())
+                {
+                    BuildGitCommitMessageIfFinishedProcessingMessageBody(commit);
+                }
 
                 // File and changeKind
-                else if (line.IsFileStatusLine())
+                if (line.IsFileStatusLine())
                 {
                     // file status
-                    ProcessFileStatusLine(commit, line);
+                    ExtractFileStatusLine(commit, line);
                 }
+            }
 
             if (commit != null)
                 yield return commit;
+        }
+
+        private void BuildGitCommitMessageIfFinishedProcessingMessageBody(GitCommitDetails? commit)
+        {
+            // Ignore if no message body collected or flag not set 
+            if (!_currentlyProcessingMessageBody || _messageBuilder.Length <= 0) return;
+
+            if (commit == null) return;
+            
+            commit.Message = _messageBuilder.ToString().NormaliseLineEndings();
+            ResetMessageBodyProcessing();
+        }
+
+        private void ResetMessageBodyProcessing()
+        {
+            _messageBuilder = new StringBuilder();
+            _currentlyProcessingMessageBody = false;
         }
 
         private static GitCommitDetails ProcessCommitLine(string commitLine)
@@ -75,7 +103,7 @@ namespace CodeAnalysis.Infrastructure.Git.Commands.Commits.CommitDetails
             Console.WriteLine($"Message is now {commit.Message}");
         }
 
-        private static void ProcessFileStatusLine(GitCommitDetails? gitCommitDetails, string fileStatusLine)
+        private static void ExtractFileStatusLine(GitCommitDetails? gitCommitDetails, string fileStatusLine)
         {
             var statusElements = fileStatusLine.Split('\t');
             gitCommitDetails!.Files.Add(new GitFileStatus { Status = statusElements[0], File = statusElements[1] });
