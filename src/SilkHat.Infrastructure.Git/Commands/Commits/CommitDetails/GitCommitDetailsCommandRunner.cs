@@ -100,7 +100,6 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
             if (commit == null) return;
 
             commit.Message += messageLine;
-            Console.WriteLine($"Message is now {commit.Message}");
         }
 
         private static void ExtractFileStatusLine(GitCommitDetails? gitCommitDetails, string fileStatusLine)
