@@ -2,6 +2,7 @@
 using CodeAnalysis.Infrastructure.Git.Commands.Commits.CommitDetails;
 using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.ClassData;
 using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.ClassData.AuthorData;
+using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.ClassData.DateData;
 using CodeAnalysis.Infrastructure.Git.Tests.Helpers;
 using FluentAssertions;
 
@@ -20,7 +21,7 @@ namespace CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTes
         [InlineData("nopCommerce.txt", 601)]
         [InlineData("dotnet-sdk.txt", 935)]
         [InlineData("roslyn-analyzers.txt", 789)]
-        public void Given_GitLog_Number_Of_Commits_Is_Correct(string fileName, int expectedCommitCount)
+        public void Given_GitLog_Number_Of_Commits_In_Log_Is_Correct(string fileName, int expectedCommitCount)
         {
             var pathToLog = GetPathToLog(fileName);
             IProcessCommandRunner processCommandRunner = new FileReaderProcessRunner(pathToLog);
@@ -42,11 +43,7 @@ namespace CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTes
             string authorName,
             string authorEmail)
         {
-            var pathToLog = GetPathToLog(fileName);
-            IProcessCommandRunner processCommandRunner = new FileReaderProcessRunner(pathToLog);
-            var commandRunner = new GitCommitDetailsCommandRunner(processCommandRunner);
-
-            var gitCommitDetails = FindGitCommitDetailsByShaId(commandRunner, shaId);
+            var gitCommitDetails = FindGitCommitDetailsByShaId(fileName, shaId);
             
             var author = gitCommitDetails.Headers["Author"];
 
@@ -54,8 +51,28 @@ namespace CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTes
             author.Should().Contain(authorEmail);
         }
 
-        private static GitCommitDetails FindGitCommitDetailsByShaId(GitCommitDetailsCommandRunner commandRunner, string shaId)
+        [Theory]
+        [ClassData(typeof(DotnetSdkGitCommitDates))]
+        [ClassData(typeof(LinuxGitCommitDates))]
+        [ClassData(typeof(NopCommerceGitCommitDates))]
+        [ClassData(typeof(RoslynAnalysersGitCommitDates))]
+        public void Given_GitLog_Identified_By_ShaId_Date_Is_Correct(string fileName, string shaId, string dateString)
         {
+            var gitCommitDetails = FindGitCommitDetailsByShaId(fileName, shaId);
+
+            var commitDate = gitCommitDetails.Headers["Date"];
+
+            commitDate
+                .Should()
+                .BeEquivalentTo(dateString);
+        }
+        
+        private GitCommitDetails FindGitCommitDetailsByShaId(string fileName, string shaId)
+        {
+            var pathToLog = GetPathToLog(fileName);
+            IProcessCommandRunner processCommandRunner = new FileReaderProcessRunner(pathToLog);
+            var commandRunner = new GitCommitDetailsCommandRunner(processCommandRunner);
+
             return commandRunner.Run().First(x => string.Equals(x.Sha, shaId));
         }
 
