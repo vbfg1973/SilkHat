@@ -66,9 +66,10 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
 
         private void BuildGitCommitMessageIfFinishedProcessingMessageBody(GitCommitDetails? commit)
         {
-            // Ignore if no message body collected or flag not set 
-            if (!_currentlyProcessingMessageBody || _messageBuilder.Length <= 0) return;
+            // If not currently processing then no body to collect
+            if (!_currentlyProcessingMessageBody) return;
 
+            // If commit is null then we haven't really started
             if (commit == null) return;
             
             commit.Message = _messageBuilder.ToString().NormaliseLineEndings();
@@ -85,7 +86,7 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
         {
             return new GitCommitDetails
             {
-                Sha = commitLine.Split(' ')[1]
+                Sha = commitLine.Split(' ')[1].Trim()
             };
         }
 
@@ -95,17 +96,18 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
             gitCommitDetails?.Headers.Add(elements[0], string.Join(':', elements.Skip(1)).Trim());
         }
 
-        private static void ProcessMessageLine(GitCommitDetails? commit, string messageLine)
+        private void ProcessMessageLine(GitCommitDetails? commit, string messageLine)
         {
             if (commit == null) return;
 
-            commit.Message += messageLine;
+            _currentlyProcessingMessageBody = true;
+            _messageBuilder.AppendLine(messageLine);
         }
 
         private static void ExtractFileStatusLine(GitCommitDetails? gitCommitDetails, string fileStatusLine)
         {
             var statusElements = fileStatusLine.Split('\t');
-            gitCommitDetails!.Files.Add(new GitFileStatus { Status = statusElements[0], File = statusElements[1] });
+            gitCommitDetails!.Files.Add(new GitFileStatus { Status = statusElements[0].Trim(), File = statusElements[1].Trim() });
         }
 
         private record GitCommitDetailsArguments : AbstractGitArgument
