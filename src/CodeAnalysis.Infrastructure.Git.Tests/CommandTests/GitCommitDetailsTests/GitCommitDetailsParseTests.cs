@@ -3,6 +3,7 @@ using CodeAnalysis.Infrastructure.Git.Commands.Commits.CommitDetails;
 using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data;
 using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data.Authors;
 using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data.Dates;
+using CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests.Data.FileCount;
 using CodeAnalysis.Infrastructure.Git.Tests.Helpers;
 using FluentAssertions;
 
@@ -65,6 +66,22 @@ namespace CodeAnalysis.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTes
             commitDate
                 .Should()
                 .BeEquivalentTo(dateString);
+        }
+        
+        [Theory]
+        [ClassData(typeof(DotnetSdkGitCommitFileCount))]
+        [ClassData(typeof(LinuxGitCommitFileCount))]
+        [ClassData(typeof(NopCommerceGitCommitFileCount))]
+        [ClassData(typeof(RoslynAnalysersGitCommitFileCount))]
+        public void Given_GitLog_Identified_By_ShaId_FileCount_Is_Correct(string fileName, string shaId, int fileCount)
+        {
+            var gitCommitDetails = FindGitCommitDetailsByShaId(fileName, shaId);
+
+            gitCommitDetails
+                .Files
+                .Count
+                .Should()
+                .Be(fileCount);
         }
         
         private GitCommitDetails FindGitCommitDetailsByShaId(string fileName, string shaId)
