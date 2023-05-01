@@ -64,7 +64,7 @@ namespace CodeAnalysis.Infrastructure.Git.Commands.Commits.CommitDetails
         private static void ProcessHeaderLine(GitCommitDetails? gitCommitDetails, string headerLine)
         {
             var elements = headerLine.Split(':');
-            gitCommitDetails?.Headers.Add(elements[0], string.Join(':', elements.Skip(1)).TrimEnd());
+            gitCommitDetails?.Headers.Add(elements[0], string.Join(':', elements.Skip(1)).Trim());
         }
 
         private static void ProcessMessageLine(GitCommitDetails? commit, string messageLine)
