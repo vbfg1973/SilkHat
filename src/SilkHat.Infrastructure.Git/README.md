@@ -42,4 +42,23 @@ command object itself. Example from CommitDetails:
 ```
 
 AbstractGitCommandLineArgument contains the *git* command. The arguments listed here are combined into one
-space-separated string. They are ImmutableLists so cannot be altered except pre-compilation. 
+space-separated string. They are ImmutableLists so cannot be altered except pre-compilation.
+
+## Commands Used
+
+### GitCommitDetails
+
+Retrieve as many details about commits as possible, including message body and files modified with their ChangeKind (
+Add, Delete, Modify, etc). Return all commits on the current branch.
+
+```
+    git --git-dir=$PATH/.git --work-tree=$PATH log --name-status
+```
+
+### GitCommitParents
+
+Retrieve the full list of parents from the specified commit
+
+```
+    git --git-dir=$PATH/.git --work-tree=$PATH rev-parse $SHA^@
+```

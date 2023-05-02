@@ -32,7 +32,7 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitParents
                     Path.Combine($"--git-dir={path}", ".git"),
                     $"--work-tree={path}",
                     "rev-parse",
-                    shaId
+                    $"{shaId}^@"
                 }.ToImmutableList();
             }
         }

@@ -35,7 +35,7 @@
         <None Update="Resources\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Resources\ParentCommits\ParentCommits.txt">
+        <None Update="Resources\ParentCommits\8cb0c21cfae3c83ac02a5acb6edebefc2c2e0e77">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
