@@ -10,7 +10,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
 
         [Theory]
         [ClassData(typeof(FileStatusLinesClassData))]
-        public void Given_FileStatus_Line_Is_True(string line)
+        public void Given_A_FileStatus_Line_Matches(string line)
         {
             line
                 .IsFileStatusLine()
@@ -20,7 +20,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
 
         [Theory]
         [ClassData(typeof(AllExceptFileStatusLinesClassData))]
-        public void Given_FileStatus_Line_Is_False(string line)
+        public void Given_A_Non_FileStatus_Line_Does_Not_Match(string line)
         {
             line
                 .IsFileStatusLine()
@@ -34,7 +34,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
 
         [Theory]
         [ClassData(typeof(HeaderLinesClassData))]
-        public void Given_Header_Line_Is_True(string line)
+        public void Given_A_Header_Line_Matches(string line)
         {
             line.IsHeader()
                 .Should()
@@ -43,7 +43,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
 
         [Theory]
         [ClassData(typeof(AllExceptHeaderLinesClassData))]
-        public void Given_Header_Line_Is_False(string line)
+        public void Given_A_Non_Header_Line_Does_Not_Match(string line)
         {
             line.IsHeader()
                 .Should()
@@ -56,7 +56,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
 
         [Theory]
         [ClassData(typeof(CommitLinesClassData))]
-        public void Given_Commit_Line_Is_True(string line)
+        public void Given_A_Commit_Line_Matches(string line)
         {
             line.IsCommitHeader()
                 .Should()
@@ -65,7 +65,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
 
         [Theory]
         [ClassData(typeof(AllExceptCommitLinesClassData))]
-        public void Given_Commit_Line_Is_False(string line)
+        public void Given_A_Non_Commit_Line_Does_Not_Match(string line)
         {
             line.IsCommitHeader()
                 .Should()
@@ -78,7 +78,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
 
         [Theory]
         [ClassData(typeof(MessageBodyLinesClassData))]
-        public void Given_MessageBody_Line_Is_True(string line)
+        public void Given_A_MessageBody_Line_Matches(string line)
         {
             line.IsMessageLine()
                 .Should()
@@ -87,7 +87,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
 
         [Theory]
         [ClassData(typeof(AllExceptMessageBodyLinesClassData))]
-        public void Given_MessageBody_Line_Is_False(string line)
+        public void Given_A_Non_MessageBody_Line_Does_Not_Match(string line)
         {
             line.IsMessageLine()
                 .Should()
