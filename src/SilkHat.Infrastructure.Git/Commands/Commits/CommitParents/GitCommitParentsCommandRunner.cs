@@ -1,4 +1,5 @@
-﻿using SilkHat.Infrastructure.Git.Commands.Abstract;
+﻿using System.Collections.Immutable;
+using SilkHat.Infrastructure.Git.Commands.Abstract;
 
 namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitParents
 {
@@ -18,21 +19,21 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitParents
             return new GitCommitParents
             {
                 Sha = shaId,
-                Parents = _processCommandRunner.Runner(new GitCommitParentsArguments(path, shaId)).ToList()
+                Parents = _processCommandRunner.Runner(new CommitParentsGitCommandLineArguments(path, shaId)).ToList()
             };
         }
 
-        private record GitCommitParentsArguments : AbstractGitArgument
+        private record CommitParentsGitCommandLineArguments : AbstractGitCommandLineArguments
         {
-            public GitCommitParentsArguments(string path, string shaId)
+            public CommitParentsGitCommandLineArguments(string path, string shaId)
             {
                 Arguments = new List<string>
                 {
                     Path.Combine($"--git-dir={path}", ".git"),
                     $"--work-tree={path}",
                     "rev-parse",
-                    shaId
-                };
+                    $"{shaId}^@"
+                }.ToImmutableList();
             }
         }
     }

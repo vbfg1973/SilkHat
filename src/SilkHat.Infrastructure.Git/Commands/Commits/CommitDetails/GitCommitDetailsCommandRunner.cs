@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using SilkHat.Infrastructure.Git.Commands.Abstract;
 
 namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
@@ -20,7 +21,7 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
 
         public IEnumerable<GitCommitDetails> Run(string path = "")
         {
-            var arguments = new GitCommitDetailsArguments(path);
+            var arguments = new CommitDetailsGitCommandLineArguments(path);
             path = GitCommitHelpers.CurrentWorkingDirectoryOrNominatedPath(path);
 
             GitCommitDetails? commit = null;
@@ -101,9 +102,9 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
                 { Status = statusElements[0].Trim(), File = statusElements[1].Trim() });
         }
 
-        private record GitCommitDetailsArguments : AbstractGitArgument
+        private record CommitDetailsGitCommandLineArguments : AbstractGitCommandLineArguments
         {
-            public GitCommitDetailsArguments(string path)
+            public CommitDetailsGitCommandLineArguments(string path)
             {
                 Arguments = new List<string>
                 {
@@ -111,7 +112,7 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
                     $"--work-tree={path}",
                     "log",
                     "--name-status"
-                };
+                }.ToImmutableList();
             }
         }
     }

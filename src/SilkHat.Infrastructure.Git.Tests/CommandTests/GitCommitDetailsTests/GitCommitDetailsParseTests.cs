@@ -9,13 +9,16 @@ using SilkHat.Infrastructure.Git.Tests.Helpers;
 
 namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests
 {
-    public class GitCommitDetailsParseTests
+    public class GitCommitDetailsParseTests : BaseCommandTests
     {
-        private readonly List<string> _dirPath = new()
+        public GitCommitDetailsParseTests()
         {
-            "Resources",
-            "GitLogOutput"
-        };
+            DirPath = new List<string>
+            {
+                "Resources",
+                "GitLogOutput"
+            };
+        }
 
         [Theory]
         [InlineData("linux.txt", 283)]
@@ -24,7 +27,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests
         [InlineData("roslyn-analyzers.txt", 789)]
         public void Given_GitLog_Number_Of_Commits_In_Log_Is_Correct(string fileName, int expectedCommitCount)
         {
-            var pathToLog = GetPathToLog(fileName);
+            var pathToLog = GetPathToTestResourceFile(fileName);
             IProcessCommandRunner processCommandRunner = new FileReaderProcessRunner(pathToLog);
             var commandRunner = new GitCommitDetailsCommandRunner(processCommandRunner);
 
@@ -103,17 +106,11 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitDetailsTests
 
         private GitCommitDetails FindGitCommitDetailsByShaId(string fileName, string shaId)
         {
-            var pathToLog = GetPathToLog(fileName);
+            var pathToLog = GetPathToTestResourceFile(fileName);
             IProcessCommandRunner processCommandRunner = new FileReaderProcessRunner(pathToLog);
             var commandRunner = new GitCommitDetailsCommandRunner(processCommandRunner);
 
             return commandRunner.Run().First(x => string.Equals(x.Sha, shaId));
-        }
-
-        private string GetPathToLog(string fileName)
-        {
-            var newList = new List<string>(_dirPath) { fileName };
-            return Path.Combine(newList.ToArray());
         }
     }
 }

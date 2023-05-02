@@ -1,4 +1,6 @@
-﻿namespace SilkHat.Infrastructure.Git.Commands
+﻿using System.Text.RegularExpressions;
+
+namespace SilkHat.Infrastructure.Git.Commands
 {
     /// <summary>
     ///     Extension methods and helpers for dealing with git commit bodies
@@ -10,7 +12,7 @@
 
         public static string NormaliseLineEndings(this string str)
         {
-            return str.Replace("\\r", "", StringComparison.InvariantCulture);
+            return str.ReplaceLineEndings('\n'.ToString());
         }
 
         /// <summary>
