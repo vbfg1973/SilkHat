@@ -22,11 +22,11 @@ namespace SilkHat.Infrastructure.Git.Commands
         ///     Run the process making output immediately available through a IEnumerable of strings. The caller is
         ///     responsible for parsing this into intended output
         /// </summary>
-        /// <param name="commandArguments"></param>
+        /// <param name="commandLineArguments"></param>
         /// <returns></returns>
-        public IEnumerable<string> Runner(AbstractCommandArguments commandArguments)
+        public IEnumerable<string> Runner(AbstractCommandLineArguments commandLineArguments)
         {
-            _process.StartInfo = BuildStartInfo(commandArguments);
+            _process.StartInfo = BuildStartInfo(commandLineArguments);
 
             var blockingCollection = new BlockingCollection<string>();
 
@@ -48,14 +48,14 @@ namespace SilkHat.Infrastructure.Git.Commands
         /// <summary>
         ///     Create a standard ProcessStartInfo object suitable for all window-less processes
         /// </summary>
-        /// <param name="commandArguments"></param>
+        /// <param name="commandLineArguments"></param>
         /// <returns></returns>
-        private static ProcessStartInfo BuildStartInfo(AbstractCommandArguments commandArguments)
+        private static ProcessStartInfo BuildStartInfo(AbstractCommandLineArguments commandLineArguments)
         {
             return new ProcessStartInfo
             {
-                FileName = commandArguments.FileName,
-                Arguments = BuildArguments(commandArguments),
+                FileName = commandLineArguments.FileName,
+                Arguments = BuildArguments(commandLineArguments),
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
@@ -66,13 +66,13 @@ namespace SilkHat.Infrastructure.Git.Commands
         /// <summary>
         ///     Build an argument string from passed in arguments object
         /// </summary>
-        /// <param name="commandArguments"></param>
+        /// <param name="commandLineArguments"></param>
         /// <returns></returns>
-        private static string BuildArguments(AbstractCommandArguments commandArguments)
+        private static string BuildArguments(AbstractCommandLineArguments commandLineArguments)
         {
             var stringBuilder = new StringBuilder();
 
-            foreach (var argument in commandArguments.Arguments) stringBuilder.Append($"{argument} ");
+            foreach (var argument in commandLineArguments.Arguments) stringBuilder.Append($"{argument} ");
 
             return stringBuilder.ToString().TrimEnd();
         }

@@ -15,7 +15,7 @@ namespace SilkHat.Infrastructure.Git.Tests.Helpers
             _path = path;
         }
 
-        public IEnumerable<string> Runner(AbstractCommandArguments commandArguments)
+        public IEnumerable<string> Runner(AbstractCommandLineArguments commandLineArguments)
         {
             return File.ReadLines(_path).Select(NormaliseLineEndings);
         }

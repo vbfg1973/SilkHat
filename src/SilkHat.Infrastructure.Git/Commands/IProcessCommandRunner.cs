@@ -8,8 +8,8 @@ namespace SilkHat.Infrastructure.Git.Commands
         ///     Run the process making output immediately available through a IEnumerable of strings. The caller is
         ///     responsible for parsing this into intended output
         /// </summary>
-        /// <param name="commandArguments"></param>
+        /// <param name="commandLineArguments"></param>
         /// <returns></returns>
-        IEnumerable<string> Runner(AbstractCommandArguments commandArguments);
+        IEnumerable<string> Runner(AbstractCommandLineArguments commandLineArguments);
     }
 }
