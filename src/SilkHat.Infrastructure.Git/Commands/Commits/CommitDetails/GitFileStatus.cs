@@ -3,18 +3,7 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
     /// <summary>
     ///     The status of the file in the current commit
     /// </summary>
-    public class GitFileStatus
-    {
-        /// <summary>
-        ///     The status of the file
-        /// </summary>
-        public string Status { get; set; } = null!;
-
-        /// <summary>
-        ///     The path to the file
-        /// </summary>
-        public string File { get; set; } = null!;
-    }
+    public record GitFileStatus(ChangeKind ChangeKind, string Path, string OldPath);
 
     /// <summary>
     ///     The kinds of changes a diff can report
