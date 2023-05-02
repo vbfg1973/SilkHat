@@ -84,7 +84,7 @@ namespace SilkHat.Infrastructure.Git.Commands
         /// <returns></returns>
         private static string NormaliseLineEnding(string str)
         {
-            return str.Replace("\\r", "");
+            return str.ReplaceLineEndings("\n");
         }
     }
 }
