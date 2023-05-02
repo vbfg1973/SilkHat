@@ -1,0 +1,100 @@
+    Link: https://lore.kernel.org/r/20230316161653.4106395-3-dmitry.baryshkov@linaro.org
+            /* forced alignments: 2 */
+    sctp_association peer and also the bit from sctp_info peer_capables,
+    tools/memory-model: Make judgelitmus.sh handle hardware verifications
+    pointer is NULL it would be fine, but if it's not NULL, it would be
+    Patch 1 lifts this restriction by adding a struct ip_tunnel_encap to
+    Add necessary functionalities for mac80211_hwsim to start PMSR request by
+    don't allow NULL-able arguments. Unlike KF_TRUSTED_ARGS which require
+      - lock_page()
+    [    0.523663]  __flush_smp_call_function_queue+0xfc/0x330
+    Link: https://lore.kernel.org/r/20230326233812.28058-5-steev@kali.org
+    Link: https://lkml.kernel.org/r/20230323105243.2807166-6-chaitanyas.prakash@arm.com
+    Add its per-SoC compatible.
+      xen/scsiback: don't call scsiback_free_translation_entry() under lock
+    the pwm_lookup is not added for it.
+    * semtech,sx9324,9360
+      As it turns out each of the conversions to move away from either of
+    Link: https://lore.kernel.org/r/20230418125737.2327972-1-maz@kernel.org
+    Merge branch 'Provide bpf_for() and bpf_for_each() by libbpf'
+    P:  Vendor=04ca ProdID=3801 Rev= 1.00
+    https://lore.kernel.org/netdev/20220816222920.1952936-3-vladimir.oltean@nxp.com/
+    before any queue is disabled. Additionally, freeing and later allocation
+    allow the pcp cache to be drained on a different rather than a local cpu
+    also not modify the tfm flags in any way once it becomes shared.
+    Message-Id: <20230214132302.39087-5-s.hemer@phytec.de>
+    Add support for the basic extended CAN controller (bxCAN) found in many
+      ARM: dts: rockchip: Add mmc aliases for rk3288-veyron devices
+    while ensuring cleanup properly even when errors occur in each test.
+    be true. Also the key usage must contain keyCertSign and the
+      very interesting so this just highlights things worth mentioning:
+      an ACPI-like data table from CXL devices is being reworked for v6.4.
+    USB: core: Fix docs warning caused by wireless_status feature
+    wifi: iwlwifi: mvm: Fix setting the rate for non station cases
+            apic_intr_mode_init+0x67/0x110
+    The combination of these two changes results in performance gains in micro
+    functions. Also clean up the client. The helpers will later
+      dt-bindings: clock: r8a7779: Add PWM module clock
+     not touch vma (exluding false positive cases of PID collisions)
+        the module name from BTF of the target and searching kallsyms of
+    arm64: dts: renesas: r8a779g0: Add iommus to MMC node
+      It doesn't need a full btrfs_bio, and goes submit_bio_wait().
+    not specify (and does not even support) speed-binning.
+    binning.
+    Add SMC for OP-TEE image loading
+      indicates a valid timestamp in the buffer descriptor entry.
+    This patch will allow admins to monitor VF diagnostic counters through
+    The RSS hash type specifies what portion of packet data NIC hardware used
+    io_uring/rsrc: extract SCM file put helper
+      #5    0x00002132da628ffe in acpi_ut_walk_aml_resources(struct acpi_walk_state*, u8*, acpi_size, acpi_walk_aml_callback, void**) ../../third_party/acpica/source/components/utilities/utresrc.c:216 <platform-bus-x86.so>+0x2f6ffe
+    v2: Fix docs build warning coming from newly including the uabi header
+     - fix up one place in pdsc_devcmd_wait() we're using the status codes where we could use the errno
+    marking functions as __maybe_unused to avoid warnings about unused
+    kfuncs, using ipip devices in collect-metadata mode.
+    locking here (and we don't have a per-host lock anyway).
+     RSP: 0018:ffff977bc397b218 EFLAGS: 00010246
+    and returns a pointer to the ordered_extent. Implement
+               |                                    Memory usage (KiB) ***A*** |
+    3) Fix a regression in veth's xdp_features which led to a broken BPF CI
+    Signed-off-by: Maher Sanalla <msanalla@nvidia.com>
+            /* bpf_cpumask_create() returns PTR_MAYBE_NULL */
+    The mailbox controller driver is tweaked to use polling, rather than
+    Reviewed-by: Trevor Wu <trevor.wu@mediatek.com>
+     - Fix oops when a PF_IO_WORKER thread tries to core dump
+    ACPICA: Add missing macro ACPI_FUNCTION_TRACE() for acpi_ns_repair_HID()
+    When jent initialisation fails for any reason other than ENOENT,
+      ip link set eth0 promisc on
+    dm: improve hash_locks sizing and hash function
+    v3->v4: Drop 'BITification' as suggested by Eric
+    5. ctx->state content cannot be altered
+    Merge tag '6.3-rc4-smb3-client-fixes' of git://git.samba.org/sfrench/cifs-2.6
+    which protects most operations such as slab shrink, registration and
+    got the following data:
+    - selftests/mm: Merge default_huge_page_size() into one
+    [    1.191354] nvme nvme0: allocated 64 MiB host memory buffer.
+      #6    0x000020c1f68efda9 in acpi_ut_walk_aml_resources(struct acpi_walk_state*, u8*, acpi_size, acpi_walk_aml_callback, void**) ../../third_party/acpica/source/components/utilities/utresrc.c:234 <platform-bus-x86.so>+0x2f6da9
+    final full path.
+    Link: https://lore.kernel.org/r/20230323112613.7550-1-cai.huoqing@linux.dev
+    documentation, to always enter these data paths:
+    net/mlx5e: TC, Remove sample and ct limitation
+    Reported-by: Stuart Axon <stuaxo2@yahoo.com>
+    Link: https://patchwork.freedesktop.org/patch/msgid/80d66ee6d7e56153a0ab25640ac2dad239b1ef6e.1678973282.git.jani.nikula@intel.com
+    Link: https://bugzilla.kernel.org/show_bug.cgi?id=217169
+    Before this fix:
+    be called once.
+    buffer is small (we detect this through log->len_max check). This
+        ISO AC 8(i) - Success
+          - enable Wi-Fi 7 (EHT) mesh support
+    Link: https://lore.kernel.org/lkml/Y+9H9otxLYPqMkUh@kroah.com/ [1]
+    - Even if the code was not dead for DSA_DB_PORT, we have the following
+    Reviewed-by: Sumit Gupta <sumitg@nvidia.com>
+    Merge tag 'linux-kselftest-next-6.4-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+            (...snipped...)
+      BLUETOOTH CORE SPECIFICATION Version 5.3 | Vol 4, Part E page 2566:
+    high retry rates on contention.
+    Link: https://lore.kernel.org/r/20230308155322.344664-13-robdclark@gmail.com
+    drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c:848:5: error: variable
+    - Remove the forward declaration
+    PHYS_OFFSET: 0xfffff76600000000
+    While we are at it, use the wildcard instead of listing each firmware
+    Link: https://lore.kernel.org/r/20230309091452.1011776-1-stephan.gerhold@kernkonzept.com

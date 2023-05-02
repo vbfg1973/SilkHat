@@ -98,8 +98,25 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
         private static void ExtractFileStatusLine(GitCommitDetails? gitCommitDetails, string fileStatusLine)
         {
             var statusElements = fileStatusLine.Split('\t');
-            gitCommitDetails!.Files.Add(new GitFileStatus
-                { Status = statusElements[0].Trim(), File = statusElements[1].Trim() });
+            var changeKind = GitCommitHelpers.MapStatusToChangeKind(statusElements[0][0]);
+           
+            FindPathsFromFileStatusLine(statusElements, out var path, out var oldPath);
+            gitCommitDetails!.Files.Add(new GitFileStatus(changeKind, path, oldPath));
+        }
+
+        private static void FindPathsFromFileStatusLine(IReadOnlyList<string> statusElements, out string path, out string oldPath)
+        {
+            if (statusElements.Count == 1)
+            {
+                path = statusElements[1];
+                oldPath = statusElements[1];
+            }
+
+            else
+            {
+                oldPath = statusElements[1];
+                path = statusElements[2];
+            }
         }
 
         private record CommitDetailsGitCommandLineArguments : AbstractGitCommandLineArguments
