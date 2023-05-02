@@ -6,6 +6,8 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
 {
     public class GitCommitHelperTests
     {
+        #region File Status Lines
+
         [Theory]
         [ClassData(typeof(FileStatusLinesClassData))]
         public void Given_FileStatus_Line_Is_True(string line)
@@ -26,7 +28,10 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
                 .BeFalse();
         }
 
-        
+        #endregion
+
+        #region Header Lines
+
         [Theory]
         [ClassData(typeof(HeaderLinesClassData))]
         public void Given_Header_Line_Is_True(string line)
@@ -35,7 +40,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
                 .Should()
                 .BeTrue();
         }
-        
+
         [Theory]
         [ClassData(typeof(AllExceptHeaderLinesClassData))]
         public void Given_Header_Line_Is_False(string line)
@@ -45,6 +50,10 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
                 .BeFalse();
         }
 
+        #endregion
+
+        #region Commit Lines
+
         [Theory]
         [ClassData(typeof(CommitLinesClassData))]
         public void Given_Commit_Line_Is_True(string line)
@@ -53,7 +62,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
                 .Should()
                 .BeTrue();
         }
-        
+
         [Theory]
         [ClassData(typeof(AllExceptCommitLinesClassData))]
         public void Given_Commit_Line_Is_False(string line)
@@ -63,6 +72,10 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
                 .BeFalse();
         }
 
+        #endregion
+
+        #region Message Body Lines
+
         [Theory]
         [ClassData(typeof(MessageBodyLinesClassData))]
         public void Given_MessageBody_Line_Is_True(string line)
@@ -71,7 +84,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
                 .Should()
                 .BeTrue();
         }
-        
+
         [Theory]
         [ClassData(typeof(AllExceptMessageBodyLinesClassData))]
         public void Given_MessageBody_Line_Is_False(string line)
@@ -80,5 +93,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
                 .Should()
                 .BeFalse();
         }
+
+        #endregion
     }
 }
