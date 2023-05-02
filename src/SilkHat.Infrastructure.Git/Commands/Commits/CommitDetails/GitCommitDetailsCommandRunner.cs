@@ -106,16 +106,21 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
 
         private static void FindPathsFromFileStatusLine(IReadOnlyList<string> statusElements, out string path, out string oldPath)
         {
-            if (statusElements.Count == 1)
+            if (statusElements.Count == 2)
             {
                 path = statusElements[1];
                 oldPath = statusElements[1];
             }
 
-            else
+            else if (statusElements.Count == 3)
             {
                 oldPath = statusElements[1];
                 path = statusElements[2];
+            }
+
+            else
+            {
+                throw new Exception();
             }
         }
 
