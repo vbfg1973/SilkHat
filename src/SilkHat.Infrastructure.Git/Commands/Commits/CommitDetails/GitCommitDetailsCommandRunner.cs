@@ -19,7 +19,12 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
             ResetMessageBodyProcessing();
         }
 
-        public IEnumerable<GitCommitDetails> Run(string path = "")
+        /// <summary>
+        ///     Extract GitCommitDetails from the specified path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public IEnumerable<GitCommitDetails> Run(string path = ".")
         {
             var arguments = new CommitDetailsGitCommandLineArguments(path);
             path = GitCommitHelpers.CurrentWorkingDirectoryOrNominatedPath(path);
@@ -28,16 +33,20 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
             foreach (var line in _commandRunner.Runner(arguments))
             {
                 // Commit header - must go first for object initialisation
-                if (line.IsCommitHeader())
+                if (line.TryParseCommitHeader(out var sha))
                 {
                     if (commit != null)
                         yield return commit;
 
-                    commit = ProcessCommitLine(line);
+                    commit = new GitCommitDetails
+                    {
+                        Sha = sha
+                    };
                 }
 
                 // Header lines - author, date, merge, etc
-                if (line.IsHeader()) ProcessHeaderLine(commit, line);
+                if (line.TryParseHeader(out var headerName, out var headerValue))
+                    commit?.Headers.Add(headerName, headerValue);
 
                 // Commit messages
                 if (line.IsMessageLine())
@@ -46,9 +55,8 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
                 else if (!line.IsMessageLine()) BuildGitCommitMessageIfFinishedProcessingMessageBody(commit);
 
                 // File and changeKind
-                if (line.IsFileStatusLine())
-                    // file status
-                    ExtractFileStatusLine(commit, line);
+                if (line.TryParseFileStatusLine(out var changeKind, out var currentPath, out var oldPath))
+                    commit?.Files.Add(new GitFileStatus(changeKind, currentPath, oldPath));
             }
 
             if (commit != null)
@@ -73,55 +81,12 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits.CommitDetails
             _currentlyProcessingMessageBody = false;
         }
 
-        private static GitCommitDetails ProcessCommitLine(string commitLine)
-        {
-            return new GitCommitDetails
-            {
-                Sha = commitLine.Split(' ')[1].Trim()
-            };
-        }
-
-        private static void ProcessHeaderLine(GitCommitDetails? gitCommitDetails, string headerLine)
-        {
-            var elements = headerLine.Split(':');
-            gitCommitDetails?.Headers.Add(elements[0], string.Join(':', elements.Skip(1)).Trim());
-        }
-
         private void ProcessMessageLine(GitCommitDetails? commit, string messageLine)
         {
             if (commit == null) return;
 
             _currentlyProcessingMessageBody = true;
             _messageBuilder.AppendLine(messageLine);
-        }
-
-        private static void ExtractFileStatusLine(GitCommitDetails? gitCommitDetails, string fileStatusLine)
-        {
-            var statusElements = fileStatusLine.Split('\t');
-            var changeKind = GitCommitHelpers.MapStatusToChangeKind(statusElements[0][0]);
-           
-            FindPathsFromFileStatusLine(statusElements, out var path, out var oldPath);
-            gitCommitDetails!.Files.Add(new GitFileStatus(changeKind, path, oldPath));
-        }
-
-        private static void FindPathsFromFileStatusLine(IReadOnlyList<string> statusElements, out string path, out string oldPath)
-        {
-            if (statusElements.Count == 2)
-            {
-                path = statusElements[1];
-                oldPath = statusElements[1];
-            }
-
-            else if (statusElements.Count == 3)
-            {
-                oldPath = statusElements[1];
-                path = statusElements[2];
-            }
-
-            else
-            {
-                throw new Exception();
-            }
         }
 
         private record CommitDetailsGitCommandLineArguments : AbstractGitCommandLineArguments

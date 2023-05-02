@@ -41,19 +41,34 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        public static bool IsCommitHeader(this string line)
+        public static bool TryParseCommitHeader(this string line, out string sha)
         {
-            return line.StartsWith(CommitHeader);
+            sha = string.Empty;
+            if (!line.StartsWith(CommitHeader)) return false;
+
+            sha = line.Split(' ')[1];
+            return true;
         }
 
         /// <summary>
         ///     Tests if the current line is a commit header other than commit shaId. Author, date, merge, etc
         /// </summary>
         /// <param name="line"></param>
+        /// <param name="headerName"></param>
+        /// <param name="headerValue"></param>
         /// <returns></returns>
-        public static bool IsHeader(this string line)
+        public static bool TryParseHeader(this string line, out string headerName, out string headerValue)
         {
-            return RegexIsHeaderLine.IsMatch(line);
+            headerName = string.Empty;
+            headerValue = string.Empty;
+
+            if (!RegexIsHeaderLine.IsMatch(line)) return false;
+
+            var elements = line.Split(':');
+            headerName = elements[0];
+            headerValue = string.Join(':', elements.Skip(1)).Trim();
+
+            return true;
         }
 
         /// <summary>
@@ -70,14 +85,40 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits
         ///     Tests if the current line is a commit file status line
         /// </summary>
         /// <param name="line"></param>
+        /// <param name="changeKind"></param>
+        /// <param name="currentPath"></param>
+        /// <param name="oldPath"></param>
         /// <returns></returns>
-        public static bool IsFileStatusLine(this string line)
+        public static bool TryParseFileStatusLine(this string line, out ChangeKind changeKind, out string currentPath,
+            out string oldPath)
         {
-            // Incorrect:
-            // Does not account for "R100" lines (indicating a rename with a 100% to the original
-            // return line.Length > 1 && char.IsLetter(line[0]) && line[1] == '\t';
+            changeKind = ChangeKind.Unmodified;
+            currentPath = string.Empty;
+            oldPath = string.Empty;
 
-            return RegexIsFileStatus.IsMatch(line);
+            if (!RegexIsFileStatus.IsMatch(line)) return false;
+
+            changeKind = MapStatusToChangeKind(line);
+
+            // The last two (of a possible three) tab seperated elements are the paths.
+            // If there's only one then 
+            var pathElements = line.Split('\t').Skip(1).ToArray();
+
+            switch (pathElements.Length)
+            {
+                case 1:
+                    currentPath = pathElements[0];
+                    oldPath = pathElements[0];
+                    break;
+                case 2:
+                    oldPath = pathElements[0];
+                    currentPath = pathElements[1];
+                    break;
+                default:
+                    throw new Exception();
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -86,9 +127,10 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits
         /// <param name="fileStatus"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static ChangeKind MapStatusToChangeKind(char fileStatus)
+        private static ChangeKind MapStatusToChangeKind(string fileStatusLine)
         {
-            return fileStatus switch
+            var c = fileStatusLine[0];
+            return c switch
             {
                 'A' => ChangeKind.Added,
                 'D' => ChangeKind.Deleted,
@@ -96,7 +138,8 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits
                 'R' => ChangeKind.Renamed,
                 'I' => ChangeKind.Ignored,
                 'T' => ChangeKind.TypeChanged,
-                _ => throw new ArgumentOutOfRangeException(nameof(fileStatus), $"Unknown fileStatus: {fileStatus}")
+                _ => throw new ArgumentOutOfRangeException(nameof(fileStatusLine),
+                    $"Unknown fileStatus: {fileStatusLine}")
             };
         }
 
@@ -109,10 +152,10 @@ namespace SilkHat.Infrastructure.Git.Commands.Commits
 
         [GeneratedRegex(@"^(?:\t|\s{4})")] // Leads with a tab or four spaces
         private static partial Regex GenerateMessageMatchLineRegex();
-        
+
         [GeneratedRegex(@"^\w+\:")] // is a header line
         private static partial Regex GenerateHeaderMatchLineRegex();
-        
+
         [GeneratedRegex(@"^commit\s")] // is a header line
         private static partial Regex GenerateCommitMatchLineRegex();
     }

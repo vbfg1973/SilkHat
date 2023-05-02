@@ -13,7 +13,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
         public void Given_A_FileStatus_Line_Matches(string line)
         {
             line
-                .IsFileStatusLine()
+                .TryParseFileStatusLine(out var changeKind, out var currentPath, out var oldPath)
                 .Should()
                 .BeTrue();
         }
@@ -23,7 +23,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
         public void Given_A_Non_FileStatus_Line_Does_Not_Match(string line)
         {
             line
-                .IsFileStatusLine()
+                .TryParseFileStatusLine(out var changeKind, out var currentPath, out var oldPath)
                 .Should()
                 .BeFalse();
         }
@@ -36,7 +36,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
         [ClassData(typeof(HeaderLinesClassData))]
         public void Given_A_Header_Line_Matches(string line)
         {
-            line.IsHeader()
+            line.TryParseHeader(out var headerName, out var headerValue)
                 .Should()
                 .BeTrue();
         }
@@ -45,7 +45,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
         [ClassData(typeof(AllExceptHeaderLinesClassData))]
         public void Given_A_Non_Header_Line_Does_Not_Match(string line)
         {
-            line.IsHeader()
+            line.TryParseHeader(out var headerName, out var headerValue)
                 .Should()
                 .BeFalse();
         }
@@ -58,7 +58,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
         [ClassData(typeof(CommitLinesClassData))]
         public void Given_A_Commit_Line_Matches(string line)
         {
-            line.IsCommitHeader()
+            line.TryParseCommitHeader(out var sha)
                 .Should()
                 .BeTrue();
         }
@@ -67,7 +67,7 @@ namespace SilkHat.Infrastructure.Git.Tests.CommandTests.GitCommitHelperTests
         [ClassData(typeof(AllExceptCommitLinesClassData))]
         public void Given_A_Non_Commit_Line_Does_Not_Match(string line)
         {
-            line.IsCommitHeader()
+            line.TryParseCommitHeader(out var sha)
                 .Should()
                 .BeFalse();
         }
