@@ -16,8 +16,11 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <StackPanel Width="200" Margin="16" Spacing="10">
-        <TextBlock Name="TextBlockName" Text="{Binding TextBlockName}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+    <StackPanel Width="500" Margin="16" Spacing="10">
+        <TextBlock Name="TextBlockName" Text="{Binding TextBlockName}" HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
         <Button HorizontalAlignment="Center" Command="{Binding BuildSolutionCommand}">Click Me</Button>
+        
+        <ListBox ItemsSource="{Binding Solutions}"/>
     </StackPanel>
 </Window>

@@ -9,22 +9,25 @@ using SilkHat.Domain.Common;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
 {
-    public class SolutionAnalyzer : ISolutionAnalyzer
+    public class SolutionAnalyser : ISolutionAnalyser
     {
-        private readonly ILogger<SolutionAnalyzer> _logger;
-        private readonly List<Project> _projects;
-        private readonly Solution _solution;
+        private readonly ILogger<SolutionAnalyser> _logger;
+        private List<Project> _projects;
+        private Solution _solution;
         private readonly SolutionAnalyserOptions _solutionAnalyserOptions;
         private ConcurrentDictionary<string, Compilation> _compilations;
 
-        public SolutionAnalyzer(SolutionAnalyserOptions solutionAnalyserOptions, ILogger<SolutionAnalyzer> logger)
+        public SolutionAnalyser(SolutionAnalyserOptions solutionAnalyserOptions, ILogger<SolutionAnalyser> logger)
         {
             _solutionAnalyserOptions = solutionAnalyserOptions;
             _logger = logger;
+        }
 
-            _solution = LoadSolution(solutionAnalyserOptions);
+        public async Task LoadSolution()
+        {
+            _solution = await ReadAndLoadSolution(_solutionAnalyserOptions);
 
-            IsLoaded = BuildResults.All(x => x.DiagnosticKind != WorkspaceDiagnosticKind.Failure);
+            IsLoaded = true;
             IsBuilt = false;
 
             _projects = _solution.Projects.ToList();
@@ -36,10 +39,12 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
         }
 
         public List<SolutionAnalyserBuildResult> BuildResults { get; } = new();
-        public bool IsLoaded { get; }
+        public bool IsLoaded { get; set; }
         public bool IsBuilt { get; private set; }
-        public SolutionModel Solution { get; init; }
-        public List<ProjectModel> Projects { get; init; }
+        public bool HasFailures => BuildResults.Any(x => x.DiagnosticKind == WorkspaceDiagnosticKind.Failure);
+        public bool HasWarnings => BuildResults.Any(x => x.DiagnosticKind == WorkspaceDiagnosticKind.Warning);
+        public SolutionModel Solution { get; private set; }
+        public List<ProjectModel> Projects { get; private set; }
 
         public async Task BuildSolution()
         {
@@ -68,7 +73,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
 
         #region Load and Build
 
-        private Solution LoadSolution(SolutionAnalyserOptions solutionAnalyserOptions)
+        private async Task<Solution> ReadAndLoadSolution(SolutionAnalyserOptions solutionAnalyserOptions)
         {
             // Setup MSBuild
             if (!MSBuildLocator.IsRegistered) MSBuildLocator.RegisterDefaults();
@@ -83,7 +88,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
                 BuildResults.Add(new SolutionAnalyserBuildResult(e.Diagnostic.Kind, e.Diagnostic.Message));
             };
 
-            return workspace.OpenSolutionAsync(solutionAnalyserOptions.SolutionPath).Result;
+            return await workspace.OpenSolutionAsync(solutionAnalyserOptions.SolutionPath);
         }
 
         private async Task<ConcurrentDictionary<string, Compilation>> BuildIt()

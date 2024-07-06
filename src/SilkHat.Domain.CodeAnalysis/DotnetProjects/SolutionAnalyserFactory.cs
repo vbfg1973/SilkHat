@@ -4,9 +4,9 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
 {
     public class SolutionAnalyserFactory(ILoggerFactory loggerFactory) : ISolutionAnalyserFactory
     {
-        public SolutionAnalyzer Create(SolutionAnalyserOptions solutionAnalyserOptions)
+        public SolutionAnalyser Create(SolutionAnalyserOptions solutionAnalyserOptions)
         {
-            return new SolutionAnalyzer(solutionAnalyserOptions, loggerFactory.CreateLogger<SolutionAnalyzer>());
+            return new SolutionAnalyser(solutionAnalyserOptions, loggerFactory.CreateLogger<SolutionAnalyser>());
         }
     }
 }

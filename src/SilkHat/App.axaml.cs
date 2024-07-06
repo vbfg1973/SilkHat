@@ -1,4 +1,3 @@
-using System.Data.Common;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -22,7 +21,7 @@ namespace SilkHat
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
                 .CreateLogger();
-            
+
             ServiceCollection collection = new();
             collection.AddTransient<MainWindowViewModel>();
             collection.ConfigureCodeAnalysisServices();

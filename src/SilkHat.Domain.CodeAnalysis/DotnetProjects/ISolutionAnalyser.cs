@@ -3,13 +3,18 @@ using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
 {
-    public interface ISolutionAnalyzer
+    public interface ISolutionAnalyser
     {
         List<SolutionAnalyserBuildResult> BuildResults { get; }
         bool IsLoaded { get; }
-        SolutionModel Solution { get; init; }
-        List<ProjectModel> Projects { get; init; }
+        bool IsBuilt { get; }
+        bool HasWarnings { get; }
+        bool HasFailures { get; }
+        SolutionModel Solution { get; }
+        List<ProjectModel> Projects { get; }
+        
 
+        Task LoadSolution();
         Task BuildSolution();
     }
 }

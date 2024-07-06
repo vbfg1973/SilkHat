@@ -18,16 +18,16 @@ namespace SilkHat.Cli.Experiments.Verbs.Solution
         {
             await Console.Error.WriteLineAsync(options.Solution);
 
-            SolutionAnalyzer solutionAnalyzer =
+            SolutionAnalyser solutionAnalyser =
                 solutionAnalyserFactory.Create(new SolutionAnalyserOptions(options.Solution));
 
-            Console.WriteLine($"Build results: {solutionAnalyzer.BuildResults.Count}");
-            foreach (SolutionAnalyserBuildResult buildResult in solutionAnalyzer.BuildResults)
+            Console.WriteLine($"Build results: {solutionAnalyser.BuildResults.Count}");
+            foreach (SolutionAnalyserBuildResult buildResult in solutionAnalyser.BuildResults)
             {
                 Console.WriteLine($"\t{buildResult.DiagnosticKind} - {buildResult.Message}");
             }
 
-            foreach (ProjectModel project in solutionAnalyzer.Projects)
+            foreach (ProjectModel project in solutionAnalyser.Projects)
             {
                 Console.WriteLine(project);
             }

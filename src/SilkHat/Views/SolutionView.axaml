@@ -1,0 +1,18 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:SilkHat.ViewModels"
+             x:DataType="viewModels:SolutionViewModel"
+             x:Class="SilkHat.Views.SolutionView">
+
+    <Expander VerticalAlignment="Top" Width="500">
+        <Expander.Header>
+            <TextBlock Text="{Binding SolutionNameFromPath}" />
+        </Expander.Header>
+        <Grid RowDefinitions="*,*" ColumnDefinitions="*, *">
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding SolutionNameFromPath}" />
+            <Button Grid.Row="1" Grid.Column="0" Command="{Binding LoadSolutionCommand}">Load Solution</Button>
+            <Button Grid.Row="1" Grid.Column="1" Command="{Binding BuildSolutionCommand}">Build Solution</Button>
+        </Grid>
+    </Expander>
+
+</UserControl>
