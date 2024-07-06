@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SilkHat.Domain.CodeAnalysis.Solutions;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects;
 
 namespace SilkHat.Domain.CodeAnalysis
 {

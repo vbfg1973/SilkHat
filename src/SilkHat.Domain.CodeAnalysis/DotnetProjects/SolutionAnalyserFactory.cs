@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 
-namespace SilkHat.Domain.CodeAnalysis.Solutions
+namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
 {
     public class SolutionAnalyserFactory(ILoggerFactory loggerFactory) : ISolutionAnalyserFactory
     {

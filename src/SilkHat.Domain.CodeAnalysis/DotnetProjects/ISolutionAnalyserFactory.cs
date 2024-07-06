@@ -1,4 +1,4 @@
-namespace SilkHat.Domain.CodeAnalysis.Solutions
+namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
 {
     public interface ISolutionAnalyserFactory
     {
