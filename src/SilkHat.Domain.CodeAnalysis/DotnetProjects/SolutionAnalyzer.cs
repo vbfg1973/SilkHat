@@ -1,18 +1,21 @@
-﻿using Microsoft.Build.Locator;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
+using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.Logging;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
+using SilkHat.Domain.Common;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
 {
     public class SolutionAnalyzer : ISolutionAnalyzer
     {
-        private readonly Dictionary<string, Compilation> _compilations;
         private readonly ILogger<SolutionAnalyzer> _logger;
         private readonly List<Project> _projects;
         private readonly Solution _solution;
         private readonly SolutionAnalyserOptions _solutionAnalyserOptions;
+        private ConcurrentDictionary<string, Compilation> _compilations;
 
         public SolutionAnalyzer(SolutionAnalyserOptions solutionAnalyserOptions, ILogger<SolutionAnalyzer> logger)
         {
@@ -22,10 +25,11 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
             _solution = LoadSolution(solutionAnalyserOptions);
 
             IsLoaded = BuildResults.All(x => x.DiagnosticKind != WorkspaceDiagnosticKind.Failure);
+            IsBuilt = false;
 
             _projects = _solution.Projects.ToList();
 
-            _compilations = IsLoaded ? BuildIt().Result : new Dictionary<string, Compilation>();
+            // _compilations = IsLoaded ? BuildIt().Result : new Dictionary<string, Compilation>();
 
             Solution = MapSolutionModel();
             Projects = _solution.Projects.Select(MapProjectModel).ToList();
@@ -33,15 +37,21 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
 
         public List<SolutionAnalyserBuildResult> BuildResults { get; } = new();
         public bool IsLoaded { get; }
+        public bool IsBuilt { get; private set; }
         public SolutionModel Solution { get; init; }
         public List<ProjectModel> Projects { get; init; }
+
+        public async Task BuildSolution()
+        {
+            _compilations = await BuildIt();
+        }
 
         #region Map to public models
 
         private SolutionModel MapSolutionModel()
         {
             return new SolutionModel(
-                Path.ChangeExtension(Path.GetFileName(_solution.FilePath!), ""),
+                PathUtilities.RemoveExtension(Path.GetFileName(_solution.FilePath!)),
                 _solution.FilePath!);
         }
 
@@ -76,20 +86,33 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
             return workspace.OpenSolutionAsync(solutionAnalyserOptions.SolutionPath).Result;
         }
 
-        private async Task<Dictionary<string, Compilation>> BuildIt()
+        private async Task<ConcurrentDictionary<string, Compilation>> BuildIt()
         {
-            Dictionary<string, Compilation> compilations = new();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            ConcurrentDictionary<string, Compilation> compilations = new();
 
-            foreach (Project project in _solution.Projects)
+            ParallelOptions parallelOptions = new()
             {
-                await Console.Error.WriteLineAsync($"Building: {project.Name}");
-                Compilation? compilation = await project.GetCompilationAsync();
+                MaxDegreeOfParallelism = 20
+            };
 
-                if (compilation == null) continue;
+            await Parallel.ForEachAsync(_solution.Projects, parallelOptions, async (project, token) =>
+            {
+                await Console.Error.WriteLineAsync($"Building: {Solution.Name} - {project.Name}");
+                Compilation? compilation = await project.GetCompilationAsync(token);
 
-                compilations[project.Name] = compilation;
-            }
+                if (compilation != null)
+                {
+                    compilations.TryAdd(project.Name, compilation);
+                    await Console.Error.WriteLineAsync($"Finished Building: {Solution.Name} - {project.Name}");
+                }
+            });
 
+            sw.Stop();
+
+            await Console.Error.WriteLineAsync($"Finished Building Solution {Solution.Name} - {sw.Elapsed}");
+            IsBuilt = true;
             return compilations;
         }
 

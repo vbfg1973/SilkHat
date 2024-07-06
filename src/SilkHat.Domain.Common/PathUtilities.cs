@@ -6,8 +6,20 @@
         {
             return GetLongestCommonPrefix((ICollection<string>)s);
         }
+        
+        public static string RemoveExtension(string fileName)
+        {
+            string newName = Path.ChangeExtension(fileName.TrimEnd(), "");
 
-        public static string GetLongestCommonPrefix(ICollection<string> paths)
+            if (newName[^1] == '.')
+            {
+                newName = newName.Remove(newName.Length - 1, 1);
+            }
+
+            return newName;
+        }
+
+        private static string GetLongestCommonPrefix(ICollection<string> paths)
         {
             if (paths == null || paths.Count == 0)
                 return null;

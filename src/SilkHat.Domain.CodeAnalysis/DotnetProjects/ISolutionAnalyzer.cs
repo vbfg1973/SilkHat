@@ -1,4 +1,5 @@
-﻿using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
+﻿using System.Collections.Immutable;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
 {
@@ -8,5 +9,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
         bool IsLoaded { get; }
         SolutionModel Solution { get; init; }
         List<ProjectModel> Projects { get; init; }
+
+        Task BuildSolution();
     }
 }

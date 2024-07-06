@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using Microsoft.Extensions.Logging;
-using SilkHat.Domain.CodeAnalysis.Solutions;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
 
 namespace SilkHat.Cli.Experiments.Verbs.Solution
 {
@@ -17,11 +18,18 @@ namespace SilkHat.Cli.Experiments.Verbs.Solution
         {
             await Console.Error.WriteLineAsync(options.Solution);
 
-            var solutionAnalyzer = solutionAnalyserFactory.Create(new SolutionAnalyserOptions(options.Solution));
+            SolutionAnalyzer solutionAnalyzer =
+                solutionAnalyserFactory.Create(new SolutionAnalyserOptions(options.Solution));
 
-            foreach (var project in solutionAnalyzer.Projects)
+            Console.WriteLine($"Build results: {solutionAnalyzer.BuildResults.Count}");
+            foreach (SolutionAnalyserBuildResult buildResult in solutionAnalyzer.BuildResults)
             {
-                Console.WriteLine(project.AssemblyName);
+                Console.WriteLine($"\t{buildResult.DiagnosticKind} - {buildResult.Message}");
+            }
+
+            foreach (ProjectModel project in solutionAnalyzer.Projects)
+            {
+                Console.WriteLine(project);
             }
         }
     }

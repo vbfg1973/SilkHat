@@ -13,6 +13,16 @@ namespace SilkHat.Domain.Common.Tests
             actualCommonParent.Should().Be(pathDataObject.Expected);
         }
 
+        [Theory]
+        [InlineData("name.sln", "name")]
+        [InlineData("thing.jpg", "thing")]
+        public void Given_FileName_Extension_Is_Removed(string fileName, string expected)
+        {
+            string actual = PathUtilities.RemoveExtension(fileName);
+
+            actual.Should().Be(expected);
+        }
+        
         public static IEnumerable<object[]> PathData()
         {
             yield return new object[]
