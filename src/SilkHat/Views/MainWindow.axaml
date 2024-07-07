@@ -19,21 +19,24 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open..." Command="{Binding MenuFileOpenCommand}" />
+                <MenuItem Header="_Open..." Command="{Binding MenuFileOpenCommand}"
+                          IsEnabled="{Binding CanLoadSolution}" />
                 <Separator />
                 <MenuItem Header="_Exit" Command="{Binding MenuFileExitCommand}" />
             </MenuItem>
         </Menu>
-        <TextBlock Text="{Binding SolutionCount}" />
-        <ListBox ItemsSource="{Binding LoadedSolutions}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="Blue" BorderThickness="1" CornerRadius="4" Padding="4">
-                        <TextBlock Text="{Binding}" />
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="{Binding SolutionCount}" />
+            <ListBox ItemsSource="{Binding LoadedSolutions}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Blue" BorderThickness="1" CornerRadius="4" Padding="4">
+                            <TextBlock Text="{Binding}" />
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
     </DockPanel>
 
 </Window>

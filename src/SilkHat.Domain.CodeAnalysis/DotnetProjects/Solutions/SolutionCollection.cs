@@ -7,18 +7,17 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
 {
     public interface ISolutionCollection
     {
+        bool IsLoading { get; }
         Task AddSolution(string solutionPath);
         bool TryGetSolutionAnalyser(string solutionName, out SolutionAnalyser solutionAnalyser);
-        Task<List<SolutionModel>> SolutionModels();
+        Task<List<SolutionModel>> SolutionsInCollection();
     }
 
-    public class SolutionCollection : 
+    public class SolutionCollection :
         IObservable<SolutionCollection.SolutionLoadedNotification>, ISolutionCollection
     {
-        private readonly ISolutionAnalyserFactory _solutionAnalyserFactory;
-
-        private bool _isLoading;
         private readonly ILogger<SolutionCollection> _logger;
+        private readonly ISolutionAnalyserFactory _solutionAnalyserFactory;
 
         private readonly ConcurrentDictionary<string, SolutionAnalyser> _solutionAnalysers = new();
 
@@ -28,19 +27,21 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
             _logger = loggerFactory.CreateLogger<SolutionCollection>();
         }
 
+        public bool IsLoading { get; private set; }
+
         public async Task AddSolution(string solutionPath)
         {
-            if (!_isLoading)
+            if (!IsLoading)
             {
-                _isLoading = true;
+                IsLoading = true;
                 SolutionAnalyser solution = _solutionAnalyserFactory.Create(new SolutionAnalyserOptions(solutionPath));
                 await solution.LoadSolution();
                 await solution.BuildSolution();
 
                 _solutionAnalysers.TryAdd(solution.Solution.Name, solution);
-                
+
                 SolutionLoadedNotify(solution.Solution);
-                _isLoading = false;
+                IsLoading = false;
             }
 
             else
@@ -49,19 +50,20 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
             }
         }
 
-        public async Task<List<SolutionModel>> SolutionModels()
+        public async Task<List<SolutionModel>> SolutionsInCollection()
         {
             return _solutionAnalysers
                 .Select(x => x.Value.Solution)
                 .OrderBy(x => x.Name)
                 .ToList();
         }
-        
+
         public bool TryGetSolutionAnalyser(string solutionName, out SolutionAnalyser solutionAnalyser)
         {
             solutionAnalyser = null!;
 
-            if (!_solutionAnalysers.TryGetValue(solutionName, out var solutionAnalyserFromDict)) return false;
+            if (!_solutionAnalysers.TryGetValue(solutionName, out SolutionAnalyser? solutionAnalyserFromDict))
+                return false;
             solutionAnalyser = solutionAnalyserFromDict;
 
             return true;

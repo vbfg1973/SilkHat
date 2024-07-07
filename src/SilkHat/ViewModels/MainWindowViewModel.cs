@@ -11,13 +11,13 @@ using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
 
 namespace SilkHat.ViewModels
 {
-    public partial class MainWindowViewModel : ViewModelBase,
-        IObserver<SolutionCollection.SolutionLoadedNotification>
+    public partial class MainWindowViewModel : ViewModelBase
     {
         private readonly ISolutionCollection _solutionCollection;
-        private int _count;
 
         [ObservableProperty] private int _solutionCount;
+
+        [ObservableProperty] private bool _canLoadSolution = true;
 
         public MainWindowViewModel(ISolutionCollection solutionCollection)
         {
@@ -25,21 +25,6 @@ namespace SilkHat.ViewModels
         }
 
         public ObservableCollection<string> LoadedSolutions { get; set; } = new();
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNext(SolutionCollection.SolutionLoadedNotification value)
-        {
-            throw new NotImplementedException();
-        }
 
         [RelayCommand]
         private async Task MenuFileOpen()
@@ -54,6 +39,8 @@ namespace SilkHat.ViewModels
 
             if (files.Count > 0)
             {
+                CanLoadSolution = false;
+                
                 IStorageFile file = files.First();
 
                 Console.WriteLine($"{file.Name} - {file.Path} - {file.Path.LocalPath}");
@@ -62,12 +49,14 @@ namespace SilkHat.ViewModels
 
                 LoadedSolutions.Clear();
 
-                foreach (SolutionModel solutionModel in await _solutionCollection.SolutionModels())
+                foreach (SolutionModel solutionModel in await _solutionCollection.SolutionsInCollection())
                 {
                     LoadedSolutions.Add(solutionModel.Name);
                 }
 
-                SolutionCount = (await _solutionCollection.SolutionModels()).Count;
+                SolutionCount = (await _solutionCollection.SolutionsInCollection()).Count;
+
+                CanLoadSolution = true;
             }
         }
 
