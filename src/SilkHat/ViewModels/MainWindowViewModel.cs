@@ -18,7 +18,10 @@ namespace SilkHat.ViewModels
         [ObservableProperty] private int _solutionCount;
 
         [ObservableProperty] private bool _canLoadSolution = true;
+        [ObservableProperty] private bool _isPaneOpen = false;
 
+        [ObservableProperty] private ViewModelBase _currentPage = new HomePageViewModel();
+        
         public MainWindowViewModel(ISolutionCollection solutionCollection)
         {
             _solutionCollection = solutionCollection;
@@ -26,6 +29,12 @@ namespace SilkHat.ViewModels
 
         public ObservableCollection<string> LoadedSolutions { get; set; } = new();
 
+        [RelayCommand]
+        private void ToggleSplitViewPane()
+        {
+            IsPaneOpen = !IsPaneOpen;
+        }
+        
         [RelayCommand]
         private async Task MenuFileOpen()
         {
