@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,10 @@ namespace SilkHat
 {
     public class App : Application
     {
+        public static TopLevel TopLevel { get; private set; }
+
+        public static MainWindowViewModel MainWindowViewModel { get; private set; }
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -40,12 +45,16 @@ namespace SilkHat
                     {
                         DataContext = mainWindowViewModel
                     };
+                    TopLevel = TopLevel.GetTopLevel(desktop.MainWindow);
+                    MainWindowViewModel = mainWindowViewModel;
                     break;
                 case ISingleViewApplicationLifetime singleViewPlatform:
                     singleViewPlatform.MainView = new MainWindow
                     {
                         DataContext = mainWindowViewModel
                     };
+                    TopLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView);
+                    MainWindowViewModel = mainWindowViewModel;
                     break;
             }
 

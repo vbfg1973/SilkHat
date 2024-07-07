@@ -7,15 +7,15 @@ using Microsoft.Extensions.Logging;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
 using SilkHat.Domain.Common;
 
-namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
+namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 {
     public class SolutionAnalyser : ISolutionAnalyser
     {
         private readonly ILogger<SolutionAnalyser> _logger;
-        private List<Project> _projects;
-        private Solution _solution;
         private readonly SolutionAnalyserOptions _solutionAnalyserOptions;
         private ConcurrentDictionary<string, Compilation> _compilations;
+        private List<Project> _projects;
+        private Solution _solution;
 
         public SolutionAnalyser(SolutionAnalyserOptions solutionAnalyserOptions, ILogger<SolutionAnalyser> logger)
         {
@@ -23,20 +23,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
             _logger = logger;
         }
 
-        public async Task LoadSolution()
-        {
-            _solution = await ReadAndLoadSolution(_solutionAnalyserOptions);
-
-            IsLoaded = true;
-            IsBuilt = false;
-
-            _projects = _solution.Projects.ToList();
-
-            // _compilations = IsLoaded ? BuildIt().Result : new Dictionary<string, Compilation>();
-
-            Solution = MapSolutionModel();
-            Projects = _solution.Projects.Select(MapProjectModel).ToList();
-        }
+        #region Properties
 
         public List<SolutionAnalyserBuildResult> BuildResults { get; } = new();
         public bool IsLoaded { get; set; }
@@ -46,10 +33,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
         public SolutionModel Solution { get; private set; }
         public List<ProjectModel> Projects { get; private set; }
 
-        public async Task BuildSolution()
-        {
-            _compilations = await BuildIt();
-        }
+        #endregion
 
         #region Map to public models
 
@@ -73,6 +57,26 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
 
         #region Load and Build
 
+        public async Task LoadSolution()
+        {
+            _solution = await ReadAndLoadSolution(_solutionAnalyserOptions);
+
+            IsLoaded = true;
+            IsBuilt = false;
+
+            _projects = _solution.Projects.ToList();
+
+            // _compilations = IsLoaded ? BuildIt().Result : new Dictionary<string, Compilation>();
+
+            Solution = MapSolutionModel();
+            Projects = _solution.Projects.Select(MapProjectModel).ToList();
+        }
+
+        public async Task BuildSolution()
+        {
+            _compilations = await BuildIt();
+        }
+
         private async Task<Solution> ReadAndLoadSolution(SolutionAnalyserOptions solutionAnalyserOptions)
         {
             // Setup MSBuild
@@ -93,7 +97,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
 
         private async Task<ConcurrentDictionary<string, Compilation>> BuildIt()
         {
-            Stopwatch sw = new Stopwatch();
+            Stopwatch sw = new();
             sw.Start();
             ConcurrentDictionary<string, Compilation> compilations = new();
 

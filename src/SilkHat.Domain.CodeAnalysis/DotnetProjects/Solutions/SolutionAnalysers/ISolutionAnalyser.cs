@@ -1,7 +1,6 @@
-﻿using System.Collections.Immutable;
-using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
+﻿using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
 
-namespace SilkHat.Domain.CodeAnalysis.DotnetProjects
+namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 {
     public interface ISolutionAnalyser
     {

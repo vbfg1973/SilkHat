@@ -1,47 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.Logging;
-using SilkHat.Domain.CodeAnalysis.DotnetProjects;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
 
 namespace SilkHat.ViewModels
 {
-    public partial class MainWindowViewModel : ViewModelBase
+    public partial class MainWindowViewModel : ViewModelBase,
+        IObserver<SolutionCollection.SolutionLoadedNotification>
     {
+        private readonly ISolutionCollection _solutionCollection;
         private int _count;
-        private readonly ISolutionAnalyser _solutionAnalyser;
 
-        [ObservableProperty] private string _textBlockName = "Initial value";
+        [ObservableProperty] private int _solutionCount;
 
-        public ObservableCollection<SolutionViewModel> Solutions { get;  } = new();
-        
-        public MainWindowViewModel(ISolutionAnalyserFactory solutionAnalyserFactory)
+        public MainWindowViewModel(ISolutionCollection solutionCollection)
         {
-            Solutions.Add(new SolutionViewModel(solutionAnalyserFactory, @"O:\data\explore\student-profiles-api\StudentProfiles.Api.sln"));
-            Solutions.Add(new SolutionViewModel(solutionAnalyserFactory, @"O:\data\explore\student-desktop\StudentDesktop.sln"));
-            Solutions.Add(new SolutionViewModel(solutionAnalyserFactory, @"O:\data\explore\explore-membership-backend\ExploreMembership-Backend.sln"));
-            
-            SolutionAnalyserOptions solutionAnalyzerOptions =
-                new SolutionAnalyserOptions(@"O:\data\explore\student-profiles-api\StudentProfiles.Api.sln");
-            _solutionAnalyser = solutionAnalyserFactory.Create(solutionAnalyzerOptions);
+            _solutionCollection = solutionCollection;
+        }
+
+        public ObservableCollection<string> LoadedSolutions { get; set; } = new();
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(SolutionCollection.SolutionLoadedNotification value)
+        {
+            throw new NotImplementedException();
         }
 
         [RelayCommand]
-        private void ButtonOnClick()
+        private async Task MenuFileOpen()
         {
-            _count++;
-            Console.Error.WriteLine($"Hello - button clicked and count set to {_count}");
-            TextBlockName = $"Clicked {_count}";
+            // Start async operation to open the dialog.
+            IReadOnlyList<IStorageFile> files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(
+                new FilePickerOpenOptions
+                {
+                    Title = "Open Text File",
+                    AllowMultiple = false
+                });
+
+            if (files.Count > 0)
+            {
+                IStorageFile file = files.First();
+
+                Console.WriteLine($"{file.Name} - {file.Path} - {file.Path.LocalPath}");
+
+                await _solutionCollection.AddSolution(file.Path.LocalPath);
+
+                LoadedSolutions.Clear();
+
+                foreach (SolutionModel solutionModel in await _solutionCollection.SolutionModels())
+                {
+                    LoadedSolutions.Add(solutionModel.Name);
+                }
+
+                SolutionCount = (await _solutionCollection.SolutionModels()).Count;
+            }
         }
 
         [RelayCommand]
-        private async Task BuildSolution()
+        private async Task MenuFileExit()
         {
-            await _solutionAnalyser.LoadSolution();
-            await _solutionAnalyser.BuildSolution();
+            Environment.Exit(0);
         }
     }
 }

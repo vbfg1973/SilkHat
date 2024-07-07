@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers;
 
 namespace SilkHat.Cli.Experiments.Verbs.Solution
 {
