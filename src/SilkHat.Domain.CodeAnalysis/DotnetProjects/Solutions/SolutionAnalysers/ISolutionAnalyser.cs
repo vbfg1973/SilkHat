@@ -11,6 +11,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
         bool HasFailures { get; }
         SolutionModel Solution { get; }
         List<ProjectModel> Projects { get; }
+        List<DocumentModel> ProjectDocuments(ProjectModel projectModel);
         
 
         Task LoadSolution();

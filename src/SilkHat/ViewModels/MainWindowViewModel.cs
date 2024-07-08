@@ -27,7 +27,7 @@ namespace SilkHat.ViewModels
             _solutionCollection = solutionCollection;
         }
 
-        public ObservableCollection<string> LoadedSolutions { get; set; } = new();
+        public ObservableCollection<SolutionTreeViewModel> LoadedSolutions { get; set; } = new();
 
         [RelayCommand]
         private void ToggleSplitViewPane()
@@ -60,7 +60,7 @@ namespace SilkHat.ViewModels
 
                 foreach (SolutionModel solutionModel in await _solutionCollection.SolutionsInCollection())
                 {
-                    LoadedSolutions.Add(solutionModel.Name);
+                    LoadedSolutions.Add(new SolutionTreeViewModel(solutionModel, _solutionCollection));
                 }
 
                 SolutionCount = (await _solutionCollection.SolutionsInCollection()).Count;

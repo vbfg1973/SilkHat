@@ -3,6 +3,7 @@
         xmlns:vm="using:SilkHat.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:SilkHat.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SilkHat.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -32,17 +33,20 @@
                    Background="#1e1e1e"
                    PaneBackground="#1e1e1e">
             <SplitView.Pane>
-                <StackPanel Spacing="5"
-                            Margin="5">
-                    <Button Command="{Binding ToggleSplitViewPaneCommand}" />
-                    <ListBox ItemsSource="{Binding LoadedSolutions}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </StackPanel>
+                <ScrollViewer>
+                    <StackPanel Spacing="5"
+                                Margin="5">
+                        <Button Command="{Binding ToggleSplitViewPaneCommand}" />
+
+                        <ListBox ItemsSource="{Binding LoadedSolutions}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <views:SolutionTreeView />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </ScrollViewer>
             </SplitView.Pane>
             <SplitView.Content>
                 <Border CornerRadius="12 0 0 0" Background="#2d2d2d">

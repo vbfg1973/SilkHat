@@ -35,6 +35,12 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 
         #endregion
 
+        public List<DocumentModel> ProjectDocuments(ProjectModel projectModel)
+        {
+            Project? project = _solution.Projects.FirstOrDefault(x => x.AssemblyName == projectModel.AssemblyName);
+            return project != null ? MapDocumentModels(project).ToList() : [];
+        }
+        
         #region Map to public models
 
         private SolutionModel MapSolutionModel()
@@ -49,8 +55,37 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
             return new ProjectModel(
                 project.Name,
                 project.FilePath!,
-                project.AssemblyName
+                project.AssemblyName,
+                MapSolutionModel()
             );
+        }
+
+        private IEnumerable<DocumentModel> MapDocumentModels(Project project)
+        {
+            List<string?> paths = project.Documents.Select(x => x.FilePath).ToList();
+            paths.Add(project.FilePath);
+            string commonParent = PathUtilities.CommonParent(paths);
+
+            foreach (Document document in project.Documents)
+            {
+                yield return new DocumentModel(
+                    document.Name,
+                    document.FilePath!,
+                    document.FilePath!.Replace(commonParent, ""),
+                    MapProjectModel(project),
+                    MapLanguage(project)
+                );
+            }
+        }
+
+        private LanguageType MapLanguage(Project project)
+        {
+            return project.Language switch
+            {
+                "C#" => LanguageType.CSharp,
+                "VisualBasic" => LanguageType.VisualBasic,
+                _ => LanguageType.NoneCode
+            };
         }
 
         #endregion
