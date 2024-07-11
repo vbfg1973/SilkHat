@@ -17,8 +17,10 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
                 .Select(path => path.Replace('/', '\\'))
                 .ToList();
 
-            string commonRoot = PathUtilities.CommonParent(filePaths);
+            // string commonRoot = PathUtilities.CommonParent(filePaths);
 
+            var commonRoot = Path.GetDirectoryName(projectModel.Path);
+            
             Console.WriteLine($"Common root: {commonRoot}");
 
             filePaths = filePaths
@@ -35,8 +37,17 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 
             foreach (string path in filePaths)
             {
+                if (path.Contains(".nuget"))
+                {
+                    continue;
+                }
+                
                 string[] parts = path.Split('\\');
-                EnsurePartExists(root, parts);
+                
+                if (parts[0] != "bin" && parts[0] != "obj")
+                {
+                    EnsurePartExists(root, parts);
+                }
             }
 
             return root;
@@ -81,7 +92,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
             return child!;
         }
 
-        private string StripLeadingPathSeparator(string path)
+        private static string StripLeadingPathSeparator(string path)
         {
             return path[0] == '\\' ? string.Join("", path.Skip(1)) : path;
         }
