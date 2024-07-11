@@ -13,17 +13,29 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
     public class SolutionAnalyser : ISolutionAnalyser
     {
         private readonly ILogger<SolutionAnalyser> _logger;
-        private readonly SolutionAnalyserOptions _solutionAnalyserOptions;
         private readonly IProjectStructureBuilder _projectStructureBuilder;
+        private readonly SolutionAnalyserOptions _solutionAnalyserOptions;
         private ConcurrentDictionary<string, Compilation> _compilations;
         private List<Project> _projects;
         private Solution _solution;
 
-        public SolutionAnalyser(SolutionAnalyserOptions solutionAnalyserOptions, IProjectStructureBuilder projectStructureBuilder, ILogger<SolutionAnalyser> logger)
+        public SolutionAnalyser(SolutionAnalyserOptions solutionAnalyserOptions,
+            IProjectStructureBuilder projectStructureBuilder, ILogger<SolutionAnalyser> logger)
         {
             _solutionAnalyserOptions = solutionAnalyserOptions;
             _projectStructureBuilder = projectStructureBuilder;
             _logger = logger;
+        }
+
+        public List<DocumentModel> ProjectDocuments(ProjectModel projectModel)
+        {
+            Project? project = _solution.Projects.FirstOrDefault(x => x.AssemblyName == projectModel.AssemblyName);
+            return project != null ? MapDocumentModels(project).ToList() : [];
+        }
+
+        public ProjectStructureModel ProjectStructure(ProjectModel projectModel)
+        {
+            return _projectStructureBuilder.ProjectStructure(projectModel, ProjectDocuments(projectModel));
         }
 
         #region Properties
@@ -38,17 +50,6 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 
         #endregion
 
-        public List<DocumentModel> ProjectDocuments(ProjectModel projectModel)
-        {
-            Project? project = _solution.Projects.FirstOrDefault(x => x.AssemblyName == projectModel.AssemblyName);
-            return project != null ? MapDocumentModels(project).ToList() : [];
-        }
-
-        public ProjectStructureModel ProjectStructure(ProjectModel projectModel)
-        {
-            return _projectStructureBuilder.ProjectStructure(projectModel, ProjectDocuments(projectModel));
-        }
-        
         #region Map to public models
 
         private SolutionModel MapSolutionModel()

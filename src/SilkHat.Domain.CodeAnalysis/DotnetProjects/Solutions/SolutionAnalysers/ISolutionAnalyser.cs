@@ -12,7 +12,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
         SolutionModel Solution { get; }
         List<ProjectModel> Projects { get; }
         List<DocumentModel> ProjectDocuments(ProjectModel projectModel);
-        
+
 
         Task LoadSolution();
         Task BuildSolution();

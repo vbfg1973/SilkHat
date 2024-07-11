@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
-using SilkHat.Domain.Common;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure
 {
@@ -19,8 +18,8 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 
             // string commonRoot = PathUtilities.CommonParent(filePaths);
 
-            var commonRoot = Path.GetDirectoryName(projectModel.Path);
-            
+            string? commonRoot = Path.GetDirectoryName(projectModel.Path);
+
             Console.WriteLine($"Common root: {commonRoot}");
 
             filePaths = filePaths
@@ -37,17 +36,11 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 
             foreach (string path in filePaths)
             {
-                if (path.Contains(".nuget"))
-                {
-                    continue;
-                }
-                
+                if (path.Contains(".nuget")) continue;
+
                 string[] parts = path.Split('\\');
-                
-                if (parts[0] != "bin" && parts[0] != "obj")
-                {
-                    EnsurePartExists(root, parts);
-                }
+
+                if (parts[0] != "bin" && parts[0] != "obj") EnsurePartExists(root, parts);
             }
 
             return root;

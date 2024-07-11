@@ -3,11 +3,13 @@ using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Pro
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 {
-    public class SolutionAnalyserFactory(IProjectStructureBuilder projectStructureBuilder, ILoggerFactory loggerFactory) : ISolutionAnalyserFactory
+    public class SolutionAnalyserFactory(IProjectStructureBuilder projectStructureBuilder, ILoggerFactory loggerFactory)
+        : ISolutionAnalyserFactory
     {
         public SolutionAnalyser Create(SolutionAnalyserOptions solutionAnalyserOptions)
         {
-            return new SolutionAnalyser(solutionAnalyserOptions, projectStructureBuilder, loggerFactory.CreateLogger<SolutionAnalyser>());
+            return new SolutionAnalyser(solutionAnalyserOptions, projectStructureBuilder,
+                loggerFactory.CreateLogger<SolutionAnalyser>());
         }
     }
 }
