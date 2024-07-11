@@ -1,8 +1,8 @@
 ﻿using CommandLine;
 using Microsoft.Extensions.Logging;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects;
-using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 
 namespace SilkHat.Cli.Experiments.Verbs.Solution
 {

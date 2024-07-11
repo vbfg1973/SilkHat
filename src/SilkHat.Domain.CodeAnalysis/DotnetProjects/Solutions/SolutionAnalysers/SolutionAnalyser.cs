@@ -4,7 +4,8 @@ using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.Logging;
-using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
 using SilkHat.Domain.Common;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
@@ -13,13 +14,15 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
     {
         private readonly ILogger<SolutionAnalyser> _logger;
         private readonly SolutionAnalyserOptions _solutionAnalyserOptions;
+        private readonly IProjectStructureBuilder _projectStructureBuilder;
         private ConcurrentDictionary<string, Compilation> _compilations;
         private List<Project> _projects;
         private Solution _solution;
 
-        public SolutionAnalyser(SolutionAnalyserOptions solutionAnalyserOptions, ILogger<SolutionAnalyser> logger)
+        public SolutionAnalyser(SolutionAnalyserOptions solutionAnalyserOptions, IProjectStructureBuilder projectStructureBuilder, ILogger<SolutionAnalyser> logger)
         {
             _solutionAnalyserOptions = solutionAnalyserOptions;
+            _projectStructureBuilder = projectStructureBuilder;
             _logger = logger;
         }
 
@@ -40,6 +43,11 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
             Project? project = _solution.Projects.FirstOrDefault(x => x.AssemblyName == projectModel.AssemblyName);
             return project != null ? MapDocumentModels(project).ToList() : [];
         }
+
+        public ProjectStructureModel ProjectStructure(ProjectModel projectModel)
+        {
+            return _projectStructureBuilder.ProjectStructure(projectModel, ProjectDocuments(projectModel));
+        }
         
         #region Map to public models
 
@@ -56,13 +64,20 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
                 project.Name,
                 project.FilePath!,
                 project.AssemblyName,
+                MapLanguage(project),
                 MapSolutionModel()
             );
         }
 
         private IEnumerable<DocumentModel> MapDocumentModels(Project project)
         {
-            List<string?> paths = project.Documents.Select(x => x.FilePath).ToList();
+            List<string?> paths = project
+                .Documents
+                .Where(doc => !doc.FilePath!.Contains("bin"))
+                .Where(doc => !doc.FilePath!.Contains("obj"))
+                .Where(doc => !doc.FilePath!.Contains(".nuget"))
+                .Select(x => x.FilePath)
+                .ToList();
             paths.Add(project.FilePath);
             string commonParent = PathUtilities.CommonParent(paths);
 

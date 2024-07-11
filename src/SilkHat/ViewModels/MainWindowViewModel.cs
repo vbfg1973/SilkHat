@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 
 namespace SilkHat.ViewModels
 {

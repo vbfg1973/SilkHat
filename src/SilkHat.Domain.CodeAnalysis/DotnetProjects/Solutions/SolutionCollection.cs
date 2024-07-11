@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
-using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
 {

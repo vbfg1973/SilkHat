@@ -1,4 +1,4 @@
-﻿using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
+﻿using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 {

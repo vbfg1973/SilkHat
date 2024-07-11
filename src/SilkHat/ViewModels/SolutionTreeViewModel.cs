@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SilkHat.Domain.CodeAnalysis.DotnetProjects.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 
 namespace SilkHat.ViewModels
 {
@@ -31,9 +33,14 @@ namespace SilkHat.ViewModels
         private ObservableCollection<SolutionTreeNodeViewModel> MapSolutionToTreeStructure(SolutionAnalyser solutionAnalyser)
         {
             ObservableCollection<SolutionTreeNodeViewModel> nodes = new();
+            
 
             foreach (ProjectModel project in solutionAnalyser.Projects.OrderBy(x => x.Name))
             {
+                var projectStructure = solutionAnalyser.ProjectStructure(project);
+
+                Console.WriteLine(JsonSerializer.Serialize(projectStructure));
+                
                 SolutionTreeNodeViewModel model = new SolutionTreeNodeViewModel
                 {
                     Name = project.Name,
