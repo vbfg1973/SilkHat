@@ -25,7 +25,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
                 projectModel.Path,
                 RelativePath(commonRoot!, projectModel.Path),
                 new List<ProjectStructureModel>(),
-                ProjectStructureType.Project);
+                ProjectStructureType.Project, projectModel);
 
             foreach (string fullPath in filePaths)
             {
@@ -35,13 +35,13 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
                 
                 string[] parts = relativePath.Split('\\', StringSplitOptions.RemoveEmptyEntries);
 
-                if (parts[0] != "bin" && parts[0] != "obj") CreateStructureIfNotExists(root, relativePath, fullPath, parts);
+                if (parts[0] != "bin" && parts[0] != "obj") CreateStructureIfNotExists(projectModel, root, relativePath, fullPath, parts);
             }
 
             return root;
         }
 
-        private static void CreateStructureIfNotExists(ProjectStructureModel projectStructureModel, string relativePath,
+        private static void CreateStructureIfNotExists(ProjectModel projectModel, ProjectStructureModel projectStructureModel, string relativePath,
             string fullPath,
             IEnumerable<string> parts)
         {
@@ -52,24 +52,24 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
                 {
                     string name = list.First();
 
-                    ProjectStructureModel? child = AddChild(projectStructureModel, relativePath, "", name,
+                    ProjectStructureModel? child = AddChild(projectModel, projectStructureModel, relativePath, "", name,
                         ProjectStructureType.Folder);
 
-                    CreateStructureIfNotExists(child, relativePath, fullPath, list.Skip(1));
+                    CreateStructureIfNotExists(projectModel, child, relativePath, fullPath, list.Skip(1));
                     break;
                 }
                 case 1:
                 {
                     string name = list.First();
 
-                    AddChild(projectStructureModel, relativePath, fullPath, name, ProjectStructureType.File);
+                    AddChild(projectModel, projectStructureModel, relativePath, fullPath, name, ProjectStructureType.File);
 
                     break;
                 }
             }
         }
 
-        private static ProjectStructureModel AddChild(ProjectStructureModel projectStructureModel, string relativePath,
+        private static ProjectStructureModel AddChild(ProjectModel projectModel, ProjectStructureModel projectStructureModel, string relativePath,
             string fullPath,
             string name, ProjectStructureType projectStructureType)
         {
@@ -77,14 +77,14 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 
             if (child != null) return child!;
 
-            child = CreateChildNode(relativePath, fullPath, name, projectStructureType, child);
+            child = CreateChildNode(projectModel, relativePath, fullPath, name, projectStructureType, child);
 
             projectStructureModel.Children.Add(child);
 
             return child!;
         }
 
-        private static ProjectStructureModel? CreateChildNode(string relativePath, string fullPath, string name,
+        private static ProjectStructureModel? CreateChildNode(ProjectModel projectModel, string relativePath, string fullPath, string name,
             ProjectStructureType projectStructureType, ProjectStructureModel? child)
         {
             return projectStructureType switch
@@ -94,14 +94,16 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
                     fullPath,
                     relativePath,
                     new List<ProjectStructureModel>(), 
-                    projectStructureType),
+                    projectStructureType, 
+                    projectModel),
                 
                 ProjectStructureType.Folder => new ProjectStructureModel(
                     name, 
                     "", 
                     "",
                     new List<ProjectStructureModel>(),
-                    projectStructureType),
+                    projectStructureType,
+                    projectModel),
                 _ => child
             };
         }
