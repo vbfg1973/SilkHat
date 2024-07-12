@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
@@ -20,6 +22,7 @@ namespace SilkHat.ViewModels
         [ObservableProperty] private bool _isPaneOpen;
 
         [ObservableProperty] private int _solutionCount;
+        [ObservableProperty] private SolutionModel? _selectedListItem;
 
         public ObservableCollection<SolutionModel> LoadedSolutions { get; set; } = new();
 
@@ -51,16 +54,30 @@ namespace SilkHat.ViewModels
                 SolutionModel solutionModel = await solutionCollection.AddSolution(file.Path.LocalPath);
                 SolutionViewModel vm = new(solutionModel, solutionCollection);
                 _solutionViewModels.TryAdd(solutionModel, vm);
-                LoadedSolutions.Add(solutionModel);
                 
                 if (!LoadedSolutions.Any())
                 {
                     CurrentPage = vm;
                 }
                 
+                LoadedSolutions.Add(solutionModel);
+                
                 SolutionCount = (await solutionCollection.SolutionsInCollection()).Count;
 
                 CanLoadSolution = true;
+            }
+        }
+
+        partial void OnSelectedListItemChanged(SolutionModel? oldValue, SolutionModel? newValue)
+        {
+            if (newValue is null)
+            {
+                return;
+            }
+            
+            if (_solutionViewModels.TryGetValue(newValue, out SolutionViewModel? vm))
+            {
+                CurrentPage = vm;
             }
         }
 
