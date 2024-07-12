@@ -34,9 +34,14 @@
                    PaneBackground="#1e1e1e">
             <SplitView.Pane>
                 <ScrollViewer>
-                    <StackPanel Spacing="5"
+                    <StackPanel Orientation="Vertical"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Top"
+                                Spacing="5"
                                 Margin="5">
-                        <Button Command="{Binding ToggleSplitViewPaneCommand}" />
+                        <Button Command="{Binding TriggerPaneCommand}">
+                            <PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
+                        </Button>
 
                         <ListBox Margin="2 0 -100 0" Padding="0" 
                                  ItemsSource="{Binding LoadedSolutions}"

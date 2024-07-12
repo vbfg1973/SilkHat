@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
@@ -17,17 +15,16 @@ namespace SilkHat.ViewModels
     {
         private readonly Dictionary<SolutionModel, SolutionViewModel> _solutionViewModels = new();
         [ObservableProperty] private bool _canLoadSolution = true;
-
         [ObservableProperty] private ViewModelBase _currentPage = new HomePageViewModel();
         [ObservableProperty] private bool _isPaneOpen;
+        [ObservableProperty] private SolutionModel? _selectedListItem;
 
         [ObservableProperty] private int _solutionCount;
-        [ObservableProperty] private SolutionModel? _selectedListItem;
 
         public ObservableCollection<SolutionModel> LoadedSolutions { get; set; } = new();
 
         [RelayCommand]
-        private void ToggleSplitViewPane()
+        private async Task TriggerPane()
         {
             IsPaneOpen = !IsPaneOpen;
         }
@@ -54,14 +51,11 @@ namespace SilkHat.ViewModels
                 SolutionModel solutionModel = await solutionCollection.AddSolution(file.Path.LocalPath);
                 SolutionViewModel vm = new(solutionModel, solutionCollection);
                 _solutionViewModels.TryAdd(solutionModel, vm);
-                
-                if (!LoadedSolutions.Any())
-                {
-                    CurrentPage = vm;
-                }
-                
+
+                if (!LoadedSolutions.Any()) CurrentPage = vm;
+
                 LoadedSolutions.Add(solutionModel);
-                
+
                 SolutionCount = (await solutionCollection.SolutionsInCollection()).Count;
 
                 CanLoadSolution = true;
@@ -70,15 +64,9 @@ namespace SilkHat.ViewModels
 
         partial void OnSelectedListItemChanged(SolutionModel? oldValue, SolutionModel? newValue)
         {
-            if (newValue is null)
-            {
-                return;
-            }
-            
-            if (_solutionViewModels.TryGetValue(newValue, out SolutionViewModel? vm))
-            {
-                CurrentPage = vm;
-            }
+            if (newValue is null) return;
+
+            if (_solutionViewModels.TryGetValue(newValue, out SolutionViewModel? vm)) CurrentPage = vm;
         }
 
         [RelayCommand]
