@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
 
-namespace SilkHat.ViewModels
+namespace SilkHat.ViewModels.SolutionTree
 {
     public class SolutionTreeNodeViewModel(ProjectStructureModel projectStructureModel) : ViewModelBase
     {

@@ -3,11 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
-using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
 
-namespace SilkHat.ViewModels
+namespace SilkHat.ViewModels.SolutionTree
 {
     public partial class SolutionTreeViewModel : ViewModelBase
     {
