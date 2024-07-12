@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
+using SilkHat.ViewModels.SolutionTree;
 
 namespace SilkHat.ViewModels
 {
@@ -15,26 +16,26 @@ namespace SilkHat.ViewModels
     {
         private readonly ISolutionCollection _solutionCollection;
 
-        [ObservableProperty] private int _solutionCount;
-
         [ObservableProperty] private bool _canLoadSolution = true;
-        [ObservableProperty] private bool _isPaneOpen = false;
 
         [ObservableProperty] private ViewModelBase _currentPage = new HomePageViewModel();
-        
+        [ObservableProperty] private bool _isPaneOpen;
+
+        [ObservableProperty] private int _solutionCount;
+
         public MainWindowViewModel(ISolutionCollection solutionCollection)
         {
             _solutionCollection = solutionCollection;
         }
 
-        public ObservableCollection<SolutionTree.SolutionTreeViewModel> LoadedSolutions { get; set; } = new();
+        public ObservableCollection<SolutionTreeViewModel> LoadedSolutions { get; set; } = new();
 
         [RelayCommand]
         private void ToggleSplitViewPane()
         {
             IsPaneOpen = !IsPaneOpen;
         }
-        
+
         [RelayCommand]
         private async Task MenuFileOpen()
         {
@@ -49,7 +50,7 @@ namespace SilkHat.ViewModels
             if (files.Count > 0)
             {
                 CanLoadSolution = false;
-                
+
                 IStorageFile file = files.First();
 
                 Console.WriteLine($"{file.Name} - {file.Path} - {file.Path.LocalPath}");
@@ -60,7 +61,7 @@ namespace SilkHat.ViewModels
 
                 foreach (SolutionModel solutionModel in await _solutionCollection.SolutionsInCollection())
                 {
-                    LoadedSolutions.Add(new SolutionTree.SolutionTreeViewModel(solutionModel, _solutionCollection));
+                    LoadedSolutions.Add(new SolutionTreeViewModel(solutionModel, _solutionCollection));
                 }
 
                 SolutionCount = (await _solutionCollection.SolutionsInCollection()).Count;

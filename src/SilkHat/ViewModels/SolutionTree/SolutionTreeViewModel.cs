@@ -10,8 +10,8 @@ namespace SilkHat.ViewModels.SolutionTree
 {
     public partial class SolutionTreeViewModel : ViewModelBase
     {
-        [ObservableProperty] private SolutionModel _solutionModel;
         private readonly ISolutionCollection _solutionCollection;
+        [ObservableProperty] private SolutionModel _solutionModel;
 
         public SolutionTreeViewModel(SolutionModel solutionModel, ISolutionCollection solutionCollection)
         {
@@ -27,7 +27,8 @@ namespace SilkHat.ViewModels.SolutionTree
 
         private async Task MapSolutionToTreeStructure()
         {
-            foreach (ProjectModel project in (await _solutionCollection.ProjectsInSolution(SolutionModel)).OrderBy(x => x.Name))
+            foreach (ProjectModel project in (await _solutionCollection.ProjectsInSolution(SolutionModel)).OrderBy(x =>
+                         x.Name))
             {
                 ProjectStructureModel projectStructure = await _solutionCollection.ProjectStructure(project);
 
