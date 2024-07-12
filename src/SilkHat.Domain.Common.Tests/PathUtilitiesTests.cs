@@ -54,6 +54,31 @@ namespace SilkHat.Domain.Common.Tests
                     Expected = @"C:"
                 }
             };
+            
+            yield return new object[]
+            {
+                new PathDataObject
+                {
+                    Paths = new List<string>
+                    {
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\Config\SqlDatabaseConfiguration.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\Migrations\20230511162934_InitialMigration.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\Migrations\20230511162934_InitialMigration.Designer.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\Migrations\ClaimsAreUsContextModelSnapshot.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\Models\Claim.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\Models\ClaimType.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\Models\Company.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\Support\DataAssemblyReference.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\TypeConfigurations\ClaimTypeConfiguration.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\TypeConfigurations\ClaimTypeTypeConfiguration.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\TypeConfigurations\CompanyTypeConfiguration.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\obj\Debug\net7.0\ClaimsAreUs.Data.GlobalUsings.g.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\obj\Debug\net7.0\.NETCoreApp,Version=v7.0.AssemblyAttributes.cs",
+                        @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data\obj\Debug\net7.0\ClaimsAreUs.Data.AssemblyInfo.cs"
+                    },
+                    Expected = @"C:\Users\44780\RiderProjects\ClaimsAreUs\src\ClaimsAreUs.Data"
+                }
+            };
         }
 
         public class PathDataObject

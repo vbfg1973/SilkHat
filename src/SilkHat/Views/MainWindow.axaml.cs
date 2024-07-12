@@ -1,6 +1,4 @@
-using System;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 
 namespace SilkHat.Views
 {
@@ -10,7 +8,5 @@ namespace SilkHat.Views
         {
             InitializeComponent();
         }
-
-
     }
 }

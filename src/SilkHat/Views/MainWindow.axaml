@@ -3,6 +3,7 @@
         xmlns:vm="using:SilkHat.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:SilkHat.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SilkHat.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -16,8 +17,43 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <StackPanel Width="200" Margin="16" Spacing="10">
-        <TextBlock Name="TextBlockName" Text="{Binding TextBlockName}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <Button HorizontalAlignment="Center" Command="{Binding BuildSolutionCommand}">Click Me</Button>
-    </StackPanel>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open..." Command="{Binding MenuFileOpenCommand}"
+                          IsEnabled="{Binding CanLoadSolution}" />
+                <Separator />
+                <MenuItem Header="_Exit" Command="{Binding MenuFileExitCommand}" />
+            </MenuItem>
+        </Menu>
+        <SplitView IsPaneOpen="{Binding IsPaneOpen}"
+                   OpenPaneLength="300"
+                   DisplayMode="CompactInline"
+                   CompactPaneLength="48"
+                   Background="#1e1e1e"
+                   PaneBackground="#1e1e1e">
+            <SplitView.Pane>
+                <ScrollViewer>
+                    <StackPanel Spacing="5"
+                                Margin="5">
+                        <Button Command="{Binding ToggleSplitViewPaneCommand}" />
+
+                        <ListBox ItemsSource="{Binding LoadedSolutions}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <views:SolutionTreeView />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Border CornerRadius="12 0 0 0" Background="#2d2d2d">
+                    <TransitioningContentControl Content="{Binding CurrentPage}" />
+                </Border>
+            </SplitView.Content>
+        </SplitView>
+    </DockPanel>
+
 </Window>

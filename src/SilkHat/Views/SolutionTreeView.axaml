@@ -1,0 +1,28 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SilkHat.ViewModels"
+             xmlns:solutionTree="clr-namespace:SilkHat.ViewModels.SolutionTree"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="solutionTree:SolutionTreeViewModel"
+             x:Class="SilkHat.Views.SolutionTreeView">
+
+    <Expander VerticalAlignment="Top">
+        <Expander.Header>
+            <TextBlock Text="{Binding SolutionModel.Name}" />
+        </Expander.Header>
+        <Expander.Content>
+            <TreeView ItemsSource="{Binding Nodes}"
+                      Width="{Binding $parent.Width}" Height="480"
+                      HorizontalAlignment="Left">
+                <TreeView.ItemTemplate>
+                    <TreeDataTemplate ItemsSource="{Binding Children}">
+                        <TextBlock Text="{Binding Name}" />
+                    </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </Expander.Content>
+    </Expander>
+
+</UserControl>
