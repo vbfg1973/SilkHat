@@ -30,13 +30,13 @@ namespace SilkHat.ViewModels
         }
 
         [RelayCommand]
-        private async Task MenuFileOpen()
+        private async Task MenuAddSolution()
         {
             // Start async operation to open the dialog.
             IReadOnlyList<IStorageFile> files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(
                 new FilePickerOpenOptions
                 {
-                    Title = "Open Text File",
+                    Title = "Add Solution",
                     AllowMultiple = false
                 });
 
