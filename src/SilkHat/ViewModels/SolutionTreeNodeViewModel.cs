@@ -12,6 +12,7 @@ namespace SilkHat.ViewModels
         }
 
         public string Name { get; set; } = null!;
+        public string RelativePath { get; set; } = null!;
         public string FullPath { get; set; } = null!;
         public ObservableCollection<SolutionTreeNodeViewModel> Children { get; } = new();
         public NodeType Type { get; set; }

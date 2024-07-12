@@ -21,7 +21,14 @@ namespace SilkHat.ViewModels
             if (solutionCollection.TryGetSolutionAnalyser(solutionModel.Name, out SolutionAnalyser solutionAnalyser))
                 Nodes = MapSolutionToTreeStructure(solutionAnalyser);
 
-            Console.WriteLine(JsonSerializer.Serialize(Nodes));
+            foreach (SolutionTreeNodeViewModel node in Nodes)
+            {
+                Console.Error.WriteLine(node.Name);
+                Console.Error.WriteLine();
+                Console.Error.WriteLine(JsonSerializer.Serialize(node));
+                Console.Error.WriteLine();
+            }
+                
         }
 
         public ObservableCollection<SolutionTreeNodeViewModel> Nodes { get; } = new();
@@ -75,7 +82,8 @@ namespace SilkHat.ViewModels
             return new SolutionTreeNodeViewModel
             {
                 Name = projectStructureModel.Name,
-                FullPath = projectStructureModel.FilePath,
+                RelativePath = projectStructureModel.RelativePath,
+                FullPath = projectStructureModel.FullPath,
                 Type = MapType(projectStructureModel.ProjectStructureType)
             };
         }

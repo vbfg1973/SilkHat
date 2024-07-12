@@ -18,29 +18,31 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
             string? commonRoot = Path.GetDirectoryName(projectModel.Path);
 
             filePaths = filePaths
-                .Select(path => path!.Replace(commonRoot, ""))
-                .Select(StripLeadingPathSeparator)
                 .ToList();
 
             ProjectStructureModel root = new(
                 projectModel.Name,
                 projectModel.Path,
+                RelativePath(commonRoot!, projectModel.Path),
                 new List<ProjectStructureModel>(),
                 ProjectStructureType.Project);
 
-            foreach (string path in filePaths)
+            foreach (string fullPath in filePaths)
             {
-                if (path.Contains(".nuget")) continue;
+                if (fullPath.Contains(".nuget")) continue;
 
-                string[] parts = path.Split('\\', StringSplitOptions.RemoveEmptyEntries);
+                string relativePath = RelativePath(commonRoot!, fullPath);
+                
+                string[] parts = relativePath.Split('\\', StringSplitOptions.RemoveEmptyEntries);
 
-                if (parts[0] != "bin" && parts[0] != "obj") CreateStructureIfNotExists(root, path, parts);
+                if (parts[0] != "bin" && parts[0] != "obj") CreateStructureIfNotExists(root, relativePath, fullPath, parts);
             }
 
             return root;
         }
 
-        private static void CreateStructureIfNotExists(ProjectStructureModel projectStructureModel, string fullPath,
+        private static void CreateStructureIfNotExists(ProjectStructureModel projectStructureModel, string relativePath,
+            string fullPath,
             IEnumerable<string> parts)
         {
             List<string> list = parts.ToList();
@@ -50,49 +52,63 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
                 {
                     string name = list.First();
 
-                    ProjectStructureModel? child = AddChild(projectStructureModel, "", name,
+                    ProjectStructureModel? child = AddChild(projectStructureModel, relativePath, "", name,
                         ProjectStructureType.Folder);
 
-                    CreateStructureIfNotExists(child, fullPath, list.Skip(1));
+                    CreateStructureIfNotExists(child, relativePath, fullPath, list.Skip(1));
                     break;
                 }
                 case 1:
                 {
                     string name = list.First();
 
-                    AddChild(projectStructureModel, fullPath, name, ProjectStructureType.File);
+                    AddChild(projectStructureModel, relativePath, fullPath, name, ProjectStructureType.File);
 
                     break;
                 }
             }
         }
 
-        private static ProjectStructureModel AddChild(ProjectStructureModel projectStructureModel, string fullPath,
+        private static ProjectStructureModel AddChild(ProjectStructureModel projectStructureModel, string relativePath,
+            string fullPath,
             string name, ProjectStructureType projectStructureType)
         {
             ProjectStructureModel? child = projectStructureModel.Children.SingleOrDefault(x => x.Name == name);
 
             if (child != null) return child!;
 
-            child = CreateChildNode(fullPath, name, projectStructureType, child);
+            child = CreateChildNode(relativePath, fullPath, name, projectStructureType, child);
 
             projectStructureModel.Children.Add(child);
 
             return child!;
         }
 
-        private static ProjectStructureModel? CreateChildNode(string fullPath, string name,
+        private static ProjectStructureModel? CreateChildNode(string relativePath, string fullPath, string name,
             ProjectStructureType projectStructureType, ProjectStructureModel? child)
         {
             return projectStructureType switch
             {
-                ProjectStructureType.File => new ProjectStructureModel(name, fullPath,
-                    new List<ProjectStructureModel>(), projectStructureType),
-                ProjectStructureType.Folder => new ProjectStructureModel(name, "",
+                ProjectStructureType.File => new ProjectStructureModel(
+                    name, 
+                    fullPath,
+                    relativePath,
+                    new List<ProjectStructureModel>(), 
+                    projectStructureType),
+                
+                ProjectStructureType.Folder => new ProjectStructureModel(
+                    name, 
+                    "", 
+                    "",
                     new List<ProjectStructureModel>(),
                     projectStructureType),
                 _ => child
             };
+        }
+
+        private static string RelativePath(string commonRoot, string fullPath)
+        {
+            return StripLeadingPathSeparator(fullPath.Replace(commonRoot, ""));
         }
 
         private static string StripLeadingPathSeparator(string path)

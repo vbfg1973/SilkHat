@@ -2,7 +2,8 @@
 {
     public record ProjectStructureModel(
         string Name,
-        string FilePath,
+        string FullPath,
+        string RelativePath,
         List<ProjectStructureModel> Children,
         ProjectStructureType ProjectStructureType);
 }
