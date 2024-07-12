@@ -16,7 +16,7 @@ namespace SilkHat.ViewModels
         {
             _solutionModel = solutionModel;
 
-            if (solutionCollection.TryGetSolutionAnalyser(solutionModel.Name, out SolutionAnalyser solutionAnalyser))
+            if (solutionCollection.TryGetSolutionAnalyser(solutionModel, out SolutionAnalyser solutionAnalyser))
                 Nodes = MapSolutionToTreeStructure(solutionAnalyser);
         }
 

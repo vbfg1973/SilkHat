@@ -9,7 +9,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
     {
         bool IsLoading { get; }
         Task AddSolution(string solutionPath);
-        bool TryGetSolutionAnalyser(string solutionName, out SolutionAnalyser solutionAnalyser);
+        bool TryGetSolutionAnalyser(SolutionModel solutionModel, out SolutionAnalyser solutionAnalyser);
         Task<List<SolutionModel>> SolutionsInCollection();
     }
 
@@ -19,7 +19,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
         private readonly ILogger<SolutionCollection> _logger;
         private readonly ISolutionAnalyserFactory _solutionAnalyserFactory;
 
-        private readonly ConcurrentDictionary<string, SolutionAnalyser> _solutionAnalysers = new();
+        private readonly ConcurrentDictionary<SolutionModel, SolutionAnalyser> _solutionAnalysers = new();
 
         public SolutionCollection(ISolutionAnalyserFactory solutionAnalyserFactory, ILoggerFactory loggerFactory)
         {
@@ -38,7 +38,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
                 await solution.LoadSolution();
                 await solution.BuildSolution();
 
-                _solutionAnalysers.TryAdd(solution.Solution.Name, solution);
+                _solutionAnalysers.TryAdd(solution.Solution, solution);
 
                 SolutionLoadedNotify(solution.Solution);
                 IsLoading = false;
@@ -58,11 +58,11 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
                 .ToList();
         }
 
-        public bool TryGetSolutionAnalyser(string solutionName, out SolutionAnalyser solutionAnalyser)
+        public bool TryGetSolutionAnalyser(SolutionModel solutionModel, out SolutionAnalyser solutionAnalyser)
         {
             solutionAnalyser = null!;
 
-            if (!_solutionAnalysers.TryGetValue(solutionName, out SolutionAnalyser? solutionAnalyserFromDict))
+            if (!_solutionAnalysers.TryGetValue(solutionModel, out SolutionAnalyser? solutionAnalyserFromDict))
                 return false;
             solutionAnalyser = solutionAnalyserFromDict;
 
