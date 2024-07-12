@@ -6,7 +6,7 @@ using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
 
-namespace SilkHat.ViewModels.SolutionTree
+namespace SilkHat.ViewModels
 {
     public partial class SolutionTreeViewModel : ViewModelBase
     {

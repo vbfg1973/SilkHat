@@ -2,9 +2,9 @@
 
 namespace SilkHat.Views
 {
-    public partial class CodeDisplay : UserControl
+    public partial class SolutionView : UserControl
     {
-        public CodeDisplay()
+        public SolutionView()
         {
             InitializeComponent();
         }

@@ -9,7 +9,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
     public interface ISolutionCollection
     {
         bool IsLoading { get; }
-        Task AddSolution(string solutionPath);
+        Task<SolutionModel> AddSolution(string solutionPath);
         Task<List<SolutionModel>> SolutionsInCollection();
         Task<List<ProjectModel>> ProjectsInSolution(SolutionModel solutionModel);
         Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel);
@@ -31,7 +31,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
 
         public bool IsLoading { get; private set; }
 
-        public async Task AddSolution(string solutionPath)
+        public async Task<SolutionModel> AddSolution(string solutionPath)
         {
             if (!IsLoading)
             {
@@ -44,11 +44,13 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
 
                 SolutionLoadedNotify(solution.Solution);
                 IsLoading = false;
+                return solution.Solution;
             }
 
             else
             {
                 _logger.LogWarning("Already loading a solution");
+                return null;
             }
         }
 
