@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
 {
@@ -9,8 +10,9 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
     {
         bool IsLoading { get; }
         Task AddSolution(string solutionPath);
-        bool TryGetSolutionAnalyser(SolutionModel solutionModel, out SolutionAnalyser solutionAnalyser);
         Task<List<SolutionModel>> SolutionsInCollection();
+        Task<List<ProjectModel>> ProjectsInSolution(SolutionModel solutionModel);
+        Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel);
     }
 
     public class SolutionCollection :
@@ -58,7 +60,19 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
                 .ToList();
         }
 
-        public bool TryGetSolutionAnalyser(SolutionModel solutionModel, out SolutionAnalyser solutionAnalyser)
+        public async Task<List<ProjectModel>> ProjectsInSolution(SolutionModel solutionModel)
+        {
+            TryGetSolutionAnalyser(solutionModel, out SolutionAnalyser solutionAnalyser);
+            return solutionAnalyser.Projects;
+        }
+
+        public async Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel)
+        {
+            TryGetSolutionAnalyser(projectModel.SolutionModel, out SolutionAnalyser solutionAnalyser);
+            return await solutionAnalyser.ProjectStructure(projectModel);
+        }
+
+        private bool TryGetSolutionAnalyser(SolutionModel solutionModel, out SolutionAnalyser solutionAnalyser)
         {
             solutionAnalyser = null!;
 

@@ -4,7 +4,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 {
     public class ProjectStructureBuilder : IProjectStructureBuilder
     {
-        public ProjectStructureModel ProjectStructure(ProjectModel projectModel,
+        public async Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel,
             IEnumerable<DocumentModel> documentModels)
         {
             List<DocumentModel> docs = documentModels.ToList();

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers;
@@ -11,34 +12,30 @@ namespace SilkHat.ViewModels
     public partial class SolutionTreeViewModel : ViewModelBase
     {
         [ObservableProperty] private SolutionModel _solutionModel;
+        private readonly ISolutionCollection _solutionCollection;
 
         public SolutionTreeViewModel(SolutionModel solutionModel, ISolutionCollection solutionCollection)
         {
             _solutionModel = solutionModel;
+            _solutionCollection = solutionCollection;
 
-            if (solutionCollection.TryGetSolutionAnalyser(solutionModel, out SolutionAnalyser solutionAnalyser))
-                Nodes = MapSolutionToTreeStructure(solutionAnalyser);
+            MapSolutionToTreeStructure().Wait();
         }
 
         public ObservableCollection<SolutionTreeNodeViewModel> Nodes { get; } = new();
 
         #region Map Solution To Tree Structure
 
-        private ObservableCollection<SolutionTreeNodeViewModel> MapSolutionToTreeStructure(
-            SolutionAnalyser solutionAnalyser)
+        private async Task MapSolutionToTreeStructure()
         {
-            ObservableCollection<SolutionTreeNodeViewModel> nodes = new();
-
-            foreach (ProjectModel project in solutionAnalyser.Projects.OrderBy(x => x.Name))
+            foreach (ProjectModel project in (await _solutionCollection.ProjectsInSolution(SolutionModel)).OrderBy(x => x.Name))
             {
-                ProjectStructureModel projectStructure = solutionAnalyser.ProjectStructure(project);
+                ProjectStructureModel projectStructure = await _solutionCollection.ProjectStructure(project);
 
                 if (TryMapStructureToTreeNode(projectStructure,
                         out SolutionTreeNodeViewModel solutionTreeNodeViewModel))
-                    nodes.Add(solutionTreeNodeViewModel);
+                    Nodes.Add(solutionTreeNodeViewModel);
             }
-
-            return nodes;
         }
 
         private bool TryMapStructureToTreeNode(ProjectStructureModel projectStructureModel,

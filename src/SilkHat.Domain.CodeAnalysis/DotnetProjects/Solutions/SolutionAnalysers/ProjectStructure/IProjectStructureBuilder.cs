@@ -4,7 +4,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 {
     public interface IProjectStructureBuilder
     {
-        ProjectStructureModel ProjectStructure(ProjectModel projectModel,
+        Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel,
             IEnumerable<DocumentModel> documentModels);
     }
 }

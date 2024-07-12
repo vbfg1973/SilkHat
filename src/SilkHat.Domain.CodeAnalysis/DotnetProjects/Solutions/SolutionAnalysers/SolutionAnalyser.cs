@@ -33,9 +33,9 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
             return project != null ? MapDocumentModels(project).ToList() : [];
         }
 
-        public ProjectStructureModel ProjectStructure(ProjectModel projectModel)
+        public async Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel)
         {
-            return _projectStructureBuilder.ProjectStructure(projectModel, ProjectDocuments(projectModel));
+            return await _projectStructureBuilder.ProjectStructure(projectModel, ProjectDocuments(projectModel));
         }
 
         #region Properties
