@@ -45,12 +45,12 @@ namespace SilkHat.ViewModels
         {
             solutionTreeNodeViewModel = new SolutionTreeNodeViewModel(projectStructureModel);
 
-            foreach (ProjectStructureModel child in projectStructureModel.Children)
+            foreach (ProjectStructureModel child in projectStructureModel.Children.OrderBy(x => x.ProjectStructureType).ThenBy(x => x.Name))
             {
                 if (TryMapStructureToTreeNode(child, out SolutionTreeNodeViewModel childNode))
                     solutionTreeNodeViewModel.Children.Add(childNode);
             }
-
+            
             return true;
         }
 

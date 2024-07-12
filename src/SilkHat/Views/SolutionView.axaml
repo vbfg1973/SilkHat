@@ -7,40 +7,30 @@
              x:DataType="viewModels:SolutionViewModel"
              x:Class="SilkHat.Views.SolutionView">
 
-    <StackPanel Orientation="Vertical"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Top"
-                Spacing="5"
-                Margin="5">
-
         <SplitView IsPaneOpen="True"
                    OpenPaneLength="300"
                    DisplayMode="CompactInline"
                    Background="#1e1e1e"
                    PaneBackground="#1e1e1e">
-
+        
             <SplitView.Pane>
-                <ScrollViewer>
-                    <TreeView ItemsSource="{Binding Nodes}"
-                              HorizontalAlignment="Left" Margin="5">
-                        <TreeView.ItemTemplate>
-                            <TreeDataTemplate ItemsSource="{Binding Children}">
-                                <TextBlock Text="{Binding Name}" FontSize="11" />
-                            </TreeDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
-                </ScrollViewer>
+                <TreeView ItemsSource="{Binding Nodes}"
+                          HorizontalAlignment="Left" Margin="5">
+                    <TreeView.ItemTemplate>
+                        <TreeDataTemplate ItemsSource="{Binding Children}">
+                            <TextBlock Text="{Binding Name}" FontSize="11" />
+                        </TreeDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
             </SplitView.Pane>
-
+        
             <SplitView.Content>
                 <StackPanel>
                     <TextBox Text="{Binding SolutionModel.Name}" />
                     <TextBox Text="{Binding SolutionModel.Path}" />
                 </StackPanel>
             </SplitView.Content>
-
+        
         </SplitView>
-
-    </StackPanel>
 
 </UserControl>

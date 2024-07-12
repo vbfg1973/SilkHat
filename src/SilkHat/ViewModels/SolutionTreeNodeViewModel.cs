@@ -9,9 +9,10 @@ namespace SilkHat.ViewModels
     {
         public enum NodeType
         {
-            Project,
-            Folder,
-            File
+            SolutionFolder = 0,
+            Project = 10,
+            Folder = 20,
+            File = 30
         }
 
         public string Name { get; } = projectStructureModel.Name;
