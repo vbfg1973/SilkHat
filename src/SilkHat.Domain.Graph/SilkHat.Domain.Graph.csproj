@@ -7,9 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="TripleDefinitions\Invocation\Nodes\" />
-    <Folder Include="TripleDefinitions\Invocation\Relationships\" />
     <Folder Include="TripleDefinitions\Relationships\Invocation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="QuikGraph" Version="2.5.0" />
   </ItemGroup>
 
 </Project>
