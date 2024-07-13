@@ -7,7 +7,8 @@
              x:DataType="viewModels:SolutionViewModel"
              x:Class="SilkHat.Views.SolutionView">
 
-    <SplitView IsPaneOpen="{Binding IsPaneOpen}"
+    <SplitView IsPaneOpen="{Binding IsSolutionFileTreePaneOpen}"
+               PanePlacement="Left"
                OpenPaneLength="300"
                DisplayMode="CompactInline"
                CompactPaneLength="48"
@@ -22,7 +23,7 @@
                             Spacing="5"
                             Margin="5">
 
-                    <Button Command="{Binding TriggerPaneCommand}">
+                    <Button Command="{Binding TriggerSolutionFileTreePaneCommand}">
                         <PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
                     </Button>
 
@@ -43,9 +44,38 @@
 
         <SplitView.Content>
             <Border CornerRadius="12 0 0 0" Background="#2d2d2d">
-                <ScrollViewer>
-                    <TextBlock Text="{Binding EnhancedDocumentModel.SourceText}" FontFamily="Consolas" FontSize="12" />
-                </ScrollViewer>
+
+                <SplitView IsPaneOpen="{Binding IsSolutionTabbedPaneOpen}"
+                           PanePlacement="Right"
+                           OpenPaneLength="300"
+                           DisplayMode="CompactInline"
+                           CompactPaneLength="48"
+                           Background="#1e1e1e"
+                           PaneBackground="#1e1e1e">
+
+                    <SplitView.Content>
+                        <ScrollViewer>
+                            <TextBlock Text="{Binding EnhancedDocumentModel.SourceText}" 
+                                       FontFamily="Consolas"
+                                       TextWrapping="Wrap"
+                                       FontSize="12" />
+                        </ScrollViewer>
+                    </SplitView.Content>
+
+                    <SplitView.Pane>
+                        <StackPanel Orientation="Vertical"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Top"
+                                    Spacing="5"
+                                    Margin="5">
+
+                            <Button Command="{Binding TriggerSolutionTabbedPaneCommand}" HorizontalAlignment="Right">
+                                <PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
+                            </Button>
+                        </StackPanel>
+                    </SplitView.Pane>
+                </SplitView>
+
             </Border>
         </SplitView.Content>
 

@@ -14,7 +14,8 @@ namespace SilkHat.ViewModels
     {
         private readonly ISolutionCollection _solutionCollection;
 
-        [ObservableProperty] private bool _isPaneOpen = true;
+        [ObservableProperty] private bool _isSolutionFileTreePaneOpen = true;
+        [ObservableProperty] private bool _isSolutionTabbedPaneOpen = false;
         
         [ObservableProperty] private SolutionModel _solutionModel;
 
@@ -33,9 +34,15 @@ namespace SilkHat.ViewModels
         [ObservableProperty] private SolutionTreeNodeViewModel _selectedNode;
 
         [RelayCommand]
-        private async Task TriggerPane()
+        private async Task TriggerSolutionFileTreePane()
         {
-            IsPaneOpen = !IsPaneOpen;
+            IsSolutionFileTreePaneOpen = !IsSolutionFileTreePaneOpen;
+        }
+
+        [RelayCommand]
+        public async Task TriggerSolutionTabbedPane()
+        {
+            IsSolutionTabbedPaneOpen = !IsSolutionTabbedPaneOpen;
         }
         
         #region Map Solution To Tree Structure
