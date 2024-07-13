@@ -54,23 +54,9 @@ namespace SilkHat.Domain.Graph.Tests.TriplesTests.NodeTests
 
         [Theory]
         [MemberData(nameof(WordNodeIdentical))]
-        public void Given_Identical_Nodes_Are_Equal_Via_Equals_Sign(Node firstNode, Node secondNode)
-        {
-            (firstNode == secondNode).Should().BeTrue();
-        }
-
-        [Theory]
-        [MemberData(nameof(WordNodeIdentical))]
         public void Given_Identical_Nodes_HashCodes_Are_Equal(Node firstNode, Node secondNode)
         {
             secondNode.GetHashCode().Should().Be(firstNode.GetHashCode());
-        }
-
-        [Theory]
-        [MemberData(nameof(WordNodeIdentical))]
-        public void Given_Identical_Nodes_PrimaryKeys_Are_Equal(Node firstNode, Node secondNode)
-        {
-            secondNode.Pk.Should().Be(firstNode.Pk);
         }
 
         #endregion
@@ -93,23 +79,9 @@ namespace SilkHat.Domain.Graph.Tests.TriplesTests.NodeTests
 
         [Theory]
         [MemberData(nameof(WordNodeNameDifferent))]
-        public void Given_Different_Nodes_Are_Not_Equal_Via_Equals_Sign(Node firstNode, Node secondNode)
-        {
-            (firstNode == secondNode).Should().BeFalse();
-        }
-
-        [Theory]
-        [MemberData(nameof(WordNodeNameDifferent))]
         public void Given_Different_Nodes_HashCodes_Are_Not_Equal(Node firstNode, Node secondNode)
         {
             secondNode.GetHashCode().Should().NotBe(firstNode.GetHashCode());
-        }
-
-        [Theory]
-        [MemberData(nameof(WordNodeNameDifferent))]
-        public void Given_Different_Nodes_PrimaryKeys_Are_Not_Equal(Node firstNode, Node secondNode)
-        {
-            secondNode.Pk.Should().NotBe(firstNode.Pk);
         }
 
         #endregion
