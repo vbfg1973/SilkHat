@@ -26,7 +26,10 @@
                 </Button>
 
                 <TreeView ItemsSource="{Binding Nodes}"
-                          HorizontalAlignment="Left" Margin="5">
+                          HorizontalAlignment="Left" 
+                          Margin="5"
+                          SelectionMode="Single"
+                          SelectedItem="{Binding SelectedNode}">
                     <TreeView.ItemTemplate>
                         <TreeDataTemplate ItemsSource="{Binding Children}">
                             <TextBlock Text="{Binding Name}" FontSize="11" />
@@ -38,8 +41,7 @@
 
         <SplitView.Content>
             <StackPanel>
-                <TextBox Text="{Binding SolutionModel.Name}" />
-                <TextBox Text="{Binding SolutionModel.Path}" />
+                <TextBlock Text="{Binding EnhancedDocumentModel.SourceText}" />
             </StackPanel>
         </SplitView.Content>
 

@@ -13,6 +13,8 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
         Task<List<SolutionModel>> SolutionsInCollection();
         Task<List<ProjectModel>> ProjectsInSolution(SolutionModel solutionModel);
         Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel);
+        Task<DocumentModel> GetDocument(ProjectModel projectModel, string fullPath);
+        Task<EnhancedDocumentModel> GetEnhancedDocument(ProjectModel projectModel, string fullPath);
     }
 
     public class SolutionCollection :
@@ -21,7 +23,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
         private readonly ILogger<SolutionCollection> _logger;
         private readonly ISolutionAnalyserFactory _solutionAnalyserFactory;
 
-        private readonly ConcurrentDictionary<SolutionModel, SolutionAnalyser> _solutionAnalysers = new();
+        private readonly ConcurrentDictionary<SolutionModel, ISolutionAnalyser> _solutionAnalysers = new();
 
         public SolutionCollection(ISolutionAnalyserFactory solutionAnalyserFactory, ILoggerFactory loggerFactory)
         {
@@ -64,21 +66,33 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
 
         public async Task<List<ProjectModel>> ProjectsInSolution(SolutionModel solutionModel)
         {
-            TryGetSolutionAnalyser(solutionModel, out SolutionAnalyser solutionAnalyser);
+            TryGetSolutionAnalyser(solutionModel, out ISolutionAnalyser solutionAnalyser);
             return solutionAnalyser.Projects;
         }
 
         public async Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel)
         {
-            TryGetSolutionAnalyser(projectModel.SolutionModel, out SolutionAnalyser solutionAnalyser);
+            TryGetSolutionAnalyser(projectModel.SolutionModel, out ISolutionAnalyser solutionAnalyser);
             return await solutionAnalyser.ProjectStructure(projectModel);
         }
 
-        private bool TryGetSolutionAnalyser(SolutionModel solutionModel, out SolutionAnalyser solutionAnalyser)
+        public async Task<DocumentModel> GetDocument(ProjectModel projectModel, string fullPath)
+        {
+            TryGetSolutionAnalyser(projectModel.SolutionModel, out ISolutionAnalyser solutionAnalyser);
+            return await solutionAnalyser.DocumentModel(projectModel, fullPath);
+        }
+
+        public async Task<EnhancedDocumentModel> GetEnhancedDocument(ProjectModel projectModel, string fullPath)
+        {
+            TryGetSolutionAnalyser(projectModel.SolutionModel, out ISolutionAnalyser solutionAnalyser);
+            return await solutionAnalyser.EnhancedDocumentModel(projectModel, fullPath);
+        }
+
+        private bool TryGetSolutionAnalyser(SolutionModel solutionModel, out ISolutionAnalyser solutionAnalyser)
         {
             solutionAnalyser = null!;
 
-            if (!_solutionAnalysers.TryGetValue(solutionModel, out SolutionAnalyser? solutionAnalyserFromDict))
+            if (!_solutionAnalysers.TryGetValue(solutionModel, out ISolutionAnalyser? solutionAnalyserFromDict))
                 return false;
             solutionAnalyser = solutionAnalyserFromDict;
 

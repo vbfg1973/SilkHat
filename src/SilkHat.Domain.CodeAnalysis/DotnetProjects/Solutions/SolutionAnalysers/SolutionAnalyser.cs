@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
+using Microsoft.CodeAnalysis.Text;
 using Microsoft.Extensions.Logging;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
@@ -10,6 +11,26 @@ using SilkHat.Domain.Common;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 {
+    public interface ISolutionAnalyser
+    {
+        List<SolutionAnalyserBuildResult> BuildResults { get; }
+        bool IsLoaded { get; }
+        bool IsBuilt { get; }
+        bool HasWarnings { get; }
+        bool HasFailures { get; }
+        SolutionModel Solution { get; }
+        List<ProjectModel> Projects { get; }
+        List<DocumentModel> ProjectDocuments(ProjectModel projectModel);
+
+        Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel);
+        Task<EnhancedDocumentModel> EnhancedDocumentModel(ProjectModel projectModel, string fullPath);
+        Task<DocumentModel> DocumentModel(ProjectModel projectModel, string fullPath);
+
+
+        Task LoadSolution();
+        Task BuildSolution();
+    }
+    
     public class SolutionAnalyser : ISolutionAnalyser
     {
         private readonly ILogger<SolutionAnalyser> _logger;
@@ -29,8 +50,31 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 
         public List<DocumentModel> ProjectDocuments(ProjectModel projectModel)
         {
-            Project? project = _solution.Projects.FirstOrDefault(x => x.AssemblyName == projectModel.AssemblyName);
+            Project? project = GetProject(projectModel);
             return project != null ? MapDocumentModels(project).ToList() : [];
+        }
+
+        private Project? GetProject(ProjectModel projectModel)
+        {
+            return _solution.Projects.FirstOrDefault(x => x.AssemblyName == projectModel.AssemblyName);
+        }
+
+        public async Task<EnhancedDocumentModel> EnhancedDocumentModel(ProjectModel projectModel, string fullPath)
+        {
+            Project? project = GetProject(projectModel);
+
+            Document? document = project!.Documents.SingleOrDefault(x => x.FilePath == fullPath);
+
+            return await MapEnhancedDocumentModel(projectModel, document!);
+        }
+
+        public async Task<DocumentModel> DocumentModel(ProjectModel projectModel, string fullPath)
+        {
+            Project? project = GetProject(projectModel);
+
+            Document? document = project!.Documents.SingleOrDefault(x => x.FilePath == fullPath);
+
+            return await MapDocumentModel(projectModel, document!);
         }
 
         public async Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel)
@@ -38,6 +82,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
             return await _projectStructureBuilder.ProjectStructure(projectModel, ProjectDocuments(projectModel));
         }
 
+        
         #region Properties
 
         public List<SolutionAnalyserBuildResult> BuildResults { get; } = new();
@@ -70,6 +115,37 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
             );
         }
 
+        private async Task<DocumentModel> MapDocumentModel(ProjectModel projectModel, Document document)
+        {
+            return new DocumentModel(
+                document.Name, 
+                document.FilePath!, 
+                document.FilePath!.Replace(GetCommonDocumentRoot(projectModel), ""), 
+                projectModel, 
+                projectModel.LanguageType);
+        }
+        
+        private async Task<EnhancedDocumentModel> MapEnhancedDocumentModel(ProjectModel projectModel, Document document)
+        {
+            document.TryGetText(out SourceText? sourceTextObject);
+            string sourceText = sourceTextObject!.ToString();
+
+            return new EnhancedDocumentModel(
+                document.Name, 
+                document.FilePath!, 
+                document.FilePath!.Replace(GetCommonDocumentRoot(projectModel), ""), 
+                sourceText, 
+                projectModel, 
+                projectModel.LanguageType);
+        }
+
+        private string GetCommonDocumentRoot(ProjectModel projectModel)
+        {
+            Project? project = GetProject(projectModel);
+            List<string> filePaths = project!.Documents.Select(x => x.FilePath!).ToList();
+            return PathUtilities.CommonParent(filePaths);
+        }
+        
         private IEnumerable<DocumentModel> MapDocumentModels(Project project)
         {
             List<string?> paths = project

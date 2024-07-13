@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -17,6 +18,8 @@ namespace SilkHat.ViewModels
         
         [ObservableProperty] private SolutionModel _solutionModel;
 
+        [ObservableProperty] private EnhancedDocumentModel _enhancedDocumentModel;
+
         public SolutionViewModel(SolutionModel solutionModel, ISolutionCollection solutionCollection)
         {
             _solutionCollection = solutionCollection;
@@ -26,6 +29,8 @@ namespace SilkHat.ViewModels
         }
 
         public ObservableCollection<SolutionTreeNodeViewModel> Nodes { get; } = new();
+
+        [ObservableProperty] private SolutionTreeNodeViewModel _selectedNode;
 
         [RelayCommand]
         private async Task TriggerPane()
@@ -60,6 +65,14 @@ namespace SilkHat.ViewModels
             }
             
             return true;
+        }
+
+        partial void OnSelectedNodeChanged(SolutionTreeNodeViewModel value)
+        {
+            if (value.Type == SolutionTreeNodeViewModel.NodeType.File)
+            {
+                EnhancedDocumentModel = _solutionCollection.GetEnhancedDocument(value.ProjectModel, value.FullPath).Result;
+            }
         }
 
         #endregion
