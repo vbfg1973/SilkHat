@@ -10,10 +10,6 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             ComplexityScore = complexityScore;
         }
 
-        public CognitiveComplexityNode() : base(string.Empty, string.Empty)
-        {
-        }
-
         public int ComplexityScore { get; }
 
         public override string Label { get; } = "CognitiveComplexity";

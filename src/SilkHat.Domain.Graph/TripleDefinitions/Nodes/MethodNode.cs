@@ -12,10 +12,6 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             ReturnType = returnType;
             SetPrimaryKey();
         }
-
-        public MethodNode() : base(string.Empty, string.Empty, new[] { "" })
-        {
-        }
         
         public override string Label { get; } = "Method";
 

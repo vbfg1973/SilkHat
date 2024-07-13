@@ -9,10 +9,6 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
         {
         }
 
-        public RecordNode() : base(string.Empty, string.Empty)
-        {
-        }
-
         public override string Label { get; } = "Record";
 
         public bool Equals(RecordNode? other)

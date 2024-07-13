@@ -4,17 +4,13 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
 {
     public class InvocationNode : Node, IEquatable<InvocationNode>
     {
-        public InvocationNode(MethodNode parentMethodNode, MethodNode methodNode, int location) : base(
-            $"{parentMethodNode.FullName}->{methodNode.FullName}",
-            $"{parentMethodNode.FullName}->{methodNode.FullName}")
+        public InvocationNode(MethodNode callingMethodNode, MethodNode targetMethodNode, int location) : base(
+            $"{callingMethodNode.FullName}->{targetMethodNode.FullName}",
+            $"{callingMethodNode.FullName}->{targetMethodNode.FullName}")
         {
             Location = location;
-            Arguments = methodNode.Arguments;
-            ReturnType = methodNode.ReturnType;
-        }
-
-        public InvocationNode() : base(string.Empty, string.Empty)
-        {
+            Arguments = targetMethodNode.Arguments;
+            ReturnType = targetMethodNode.ReturnType;
         }
 
         public int Location { get; }

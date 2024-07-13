@@ -10,10 +10,6 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             Version = version;
         }
 
-        public PackageNode() : base(string.Empty, string.Empty)
-        {
-        }
-
         public override string Label { get; } = "Package";
 
         public string Version { get; }

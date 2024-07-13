@@ -14,10 +14,6 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
         {
         }
 
-        public ProjectNode() : base(string.Empty, string.Empty)
-        {
-        }
-
         public override string Label { get; } = "Project";
 
         public bool Equals(ProjectNode? other)

@@ -9,10 +9,6 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             Location = location;
         }
 
-        public InvocationLocationNode() : base(string.Empty, string.Empty)
-        {
-        }
-
         public int Location { get; }
 
         public override string Label { get; } = "InvocationLocation";
