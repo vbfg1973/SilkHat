@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
@@ -12,6 +13,8 @@ namespace SilkHat.ViewModels
     {
         private readonly ISolutionCollection _solutionCollection;
 
+        [ObservableProperty] private bool _isPaneOpen = true;
+        
         [ObservableProperty] private SolutionModel _solutionModel;
 
         public SolutionViewModel(SolutionModel solutionModel, ISolutionCollection solutionCollection)
@@ -24,7 +27,12 @@ namespace SilkHat.ViewModels
 
         public ObservableCollection<SolutionTreeNodeViewModel> Nodes { get; } = new();
 
-
+        [RelayCommand]
+        private async Task TriggerPane()
+        {
+            IsPaneOpen = !IsPaneOpen;
+        }
+        
         #region Map Solution To Tree Structure
 
         private async Task MapSolutionToTreeStructure()

@@ -39,7 +39,8 @@
                                 VerticalAlignment="Top"
                                 Spacing="5"
                                 Margin="5">
-                        <Button Command="{Binding TriggerPaneCommand}">
+
+                        <Button Command="{Binding TriggerPaneCommand}" Background="#1e1e1e">
                             <PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
                         </Button>
 

@@ -7,13 +7,24 @@
              x:DataType="viewModels:SolutionViewModel"
              x:Class="SilkHat.Views.SolutionView">
 
-        <SplitView IsPaneOpen="True"
-                   OpenPaneLength="300"
-                   DisplayMode="CompactInline"
-                   Background="#1e1e1e"
-                   PaneBackground="#1e1e1e">
-        
-            <SplitView.Pane>
+    <SplitView IsPaneOpen="{Binding IsPaneOpen}"
+               OpenPaneLength="300"
+               DisplayMode="CompactInline"
+               CompactPaneLength="48"
+               Background="#1e1e1e"
+               PaneBackground="#1e1e1e">
+
+        <SplitView.Pane>
+            <StackPanel Orientation="Vertical"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Spacing="5"
+                        Margin="5">
+
+                <Button Command="{Binding TriggerPaneCommand}">
+                    <PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
+                </Button>
+
                 <TreeView ItemsSource="{Binding Nodes}"
                           HorizontalAlignment="Left" Margin="5">
                     <TreeView.ItemTemplate>
@@ -22,15 +33,16 @@
                         </TreeDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
-            </SplitView.Pane>
-        
-            <SplitView.Content>
-                <StackPanel>
-                    <TextBox Text="{Binding SolutionModel.Name}" />
-                    <TextBox Text="{Binding SolutionModel.Path}" />
-                </StackPanel>
-            </SplitView.Content>
-        
-        </SplitView>
+            </StackPanel>
+        </SplitView.Pane>
+
+        <SplitView.Content>
+            <StackPanel>
+                <TextBox Text="{Binding SolutionModel.Name}" />
+                <TextBox Text="{Binding SolutionModel.Path}" />
+            </StackPanel>
+        </SplitView.Content>
+
+    </SplitView>
 
 </UserControl>
