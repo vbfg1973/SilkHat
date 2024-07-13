@@ -9,6 +9,7 @@
     <ItemGroup>
         <ProjectReference Include="..\SilkHat.Domain.CodeAnalysis\SilkHat.Domain.CodeAnalysis.csproj"/>
         <ProjectReference Include="..\SilkHat.Domain.GitAnalysis\SilkHat.Domain.GitAnalysis.csproj"/>
+        <ProjectReference Include="..\SilkHat.Domain.Graph\SilkHat.Domain.Graph.csproj" />
     </ItemGroup>
 
 </Project>

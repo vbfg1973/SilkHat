@@ -5,9 +5,15 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.Extensions.Logging;
+using SilkHat.Domain.CodeAnalysis.Abstract;
+using SilkHat.Domain.CodeAnalysis.Analysis.FileSystem;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
+using SilkHat.Domain.CodeAnalysis.Walkers.CSharp;
 using SilkHat.Domain.Common;
+using SilkHat.Domain.Graph.TripleDefinitions.Nodes;
+using SilkHat.Domain.Graph.TripleDefinitions.Triples;
+using SilkHat.Domain.Graph.TripleDefinitions.Triples.Abstract;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 {
@@ -20,23 +26,26 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
         bool HasFailures { get; }
         SolutionModel Solution { get; }
         List<ProjectModel> Projects { get; }
+        ConcurrentBag<Triple> Triples { get; }
+        
         List<DocumentModel> ProjectDocuments(ProjectModel projectModel);
 
         Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel);
         Task<EnhancedDocumentModel> EnhancedDocumentModel(ProjectModel projectModel, string fullPath);
         Task<DocumentModel> DocumentModel(ProjectModel projectModel, string fullPath);
 
+        Task CodeAnalysis(ProjectModel projectModel);
 
         Task LoadSolution();
         Task BuildSolution();
     }
-    
+
     public class SolutionAnalyser : ISolutionAnalyser
     {
         private readonly ILogger<SolutionAnalyser> _logger;
         private readonly IProjectStructureBuilder _projectStructureBuilder;
         private readonly SolutionAnalyserOptions _solutionAnalyserOptions;
-        private ConcurrentDictionary<string, Compilation> _compilations;
+        private readonly ConcurrentDictionary<string, Compilation> _compilations = new();
         private List<Project> _projects;
         private Solution _solution;
 
@@ -52,11 +61,6 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
         {
             Project? project = GetProject(projectModel);
             return project != null ? MapDocumentModels(project).ToList() : [];
-        }
-
-        private Project? GetProject(ProjectModel projectModel)
-        {
-            return _solution.Projects.FirstOrDefault(x => x.AssemblyName == projectModel.AssemblyName);
         }
 
         public async Task<EnhancedDocumentModel> EnhancedDocumentModel(ProjectModel projectModel, string fullPath)
@@ -82,7 +86,59 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
             return await _projectStructureBuilder.ProjectStructure(projectModel, ProjectDocuments(projectModel));
         }
 
-        
+        private Project? GetProject(ProjectModel projectModel)
+        {
+            return _solution.Projects.FirstOrDefault(x => x.AssemblyName == projectModel.AssemblyName);
+        }
+
+        #region Analysis
+
+        public async Task CodeAnalysis(ProjectModel projectModel)
+        {
+            Project? project = GetProject(projectModel);
+
+            _logger.LogTrace("{Method} {ProjectName}", nameof(CodeAnalysis), project!.Name);
+
+            await Console.Error.WriteLineAsync($"Code analysis: {project!.Name}");
+            Compilation? compilation = await project.GetCompilationAsync();
+
+            if (compilation == null) return;
+
+            IEnumerable<SyntaxTree> syntaxTrees =
+                compilation
+                    .SyntaxTrees
+                    .Where(x => !x.FilePath.Contains("obj"));
+
+            FileSystemAnalyzer fileSystemAnalyzer = new();
+            foreach (SyntaxTree syntaxTree in syntaxTrees)
+            {
+                IList<Triple> fileSystemTriples = await fileSystemAnalyzer.GetFileSystemChain(syntaxTree.FilePath);
+                FileNode fileNode = fileSystemTriples
+                    .OfType<TripleIncludedIn>()
+                    .Where(x => x.NodeA is FileNode)
+                    .Select(x => x.NodeA as FileNode)
+                    .First()!;
+
+                foreach (Triple triple in fileSystemTriples.Distinct())
+                {
+                    Triples.Add(triple);
+                }
+
+                SemanticModel semanticModel = compilation.GetSemanticModel(syntaxTree);
+
+                WalkerOptions walkerOptions = new(new DotnetOptions(syntaxTree, semanticModel, project), true);
+                CSharpTypeDiscoveryWalker walker = new(fileNode!, new ProjectNode(project.Name), walkerOptions);
+
+                foreach (Triple triple in walker.Walk().Distinct())
+                {
+                    Triples.Add(triple);
+                }
+            }
+        }
+
+        #endregion
+
+
         #region Properties
 
         public List<SolutionAnalyserBuildResult> BuildResults { get; } = new();
@@ -92,6 +148,8 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
         public bool HasWarnings => BuildResults.Any(x => x.DiagnosticKind == WorkspaceDiagnosticKind.Warning);
         public SolutionModel Solution { get; private set; }
         public List<ProjectModel> Projects { get; private set; }
+
+        public ConcurrentBag<Triple> Triples { get; } = new();
 
         #endregion
 
@@ -118,24 +176,24 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
         private async Task<DocumentModel> MapDocumentModel(ProjectModel projectModel, Document document)
         {
             return new DocumentModel(
-                document.Name, 
-                document.FilePath!, 
-                document.FilePath!.Replace(GetCommonDocumentRoot(projectModel), ""), 
-                projectModel, 
+                document.Name,
+                document.FilePath!,
+                document.FilePath!.Replace(GetCommonDocumentRoot(projectModel), ""),
+                projectModel,
                 projectModel.LanguageType);
         }
-        
+
         private async Task<EnhancedDocumentModel> MapEnhancedDocumentModel(ProjectModel projectModel, Document document)
         {
             document.TryGetText(out SourceText? sourceTextObject);
             string sourceText = sourceTextObject!.ToString();
 
             return new EnhancedDocumentModel(
-                document.Name, 
-                document.FilePath!, 
-                document.FilePath!.Replace(GetCommonDocumentRoot(projectModel), ""), 
-                sourceText, 
-                projectModel, 
+                document.Name,
+                document.FilePath!,
+                document.FilePath!.Replace(GetCommonDocumentRoot(projectModel), ""),
+                sourceText,
+                projectModel,
                 projectModel.LanguageType);
         }
 
@@ -145,7 +203,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
             List<string> filePaths = project!.Documents.Select(x => x.FilePath!).ToList();
             return PathUtilities.CommonParent(filePaths);
         }
-        
+
         private IEnumerable<DocumentModel> MapDocumentModels(Project project)
         {
             List<string?> paths = project
@@ -201,7 +259,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 
         public async Task BuildSolution()
         {
-            _compilations = await BuildIt();
+            await BuildIt();
         }
 
         private async Task<Solution> ReadAndLoadSolution(SolutionAnalyserOptions solutionAnalyserOptions)
@@ -222,11 +280,10 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
             return await workspace.OpenSolutionAsync(solutionAnalyserOptions.SolutionPath);
         }
 
-        private async Task<ConcurrentDictionary<string, Compilation>> BuildIt()
+        private async Task BuildIt()
         {
             Stopwatch sw = new();
             sw.Start();
-            ConcurrentDictionary<string, Compilation> compilations = new();
 
             ParallelOptions parallelOptions = new()
             {
@@ -240,7 +297,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 
                 if (compilation != null)
                 {
-                    compilations.TryAdd(project.Name, compilation);
+                    _compilations.TryAdd(project.Name, compilation);
                     await Console.Error.WriteLineAsync($"Finished Building: {Solution.Name} - {project.Name}");
                 }
             });
@@ -249,7 +306,6 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 
             await Console.Error.WriteLineAsync($"Finished Building Solution {Solution.Name} - {sw.Elapsed}");
             IsBuilt = true;
-            return compilations;
         }
 
         #endregion

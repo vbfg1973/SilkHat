@@ -55,7 +55,7 @@
 
                     <SplitView.Content>
                         <ScrollViewer>
-                            <TextBlock Text="{Binding EnhancedDocumentModel.SourceText}" 
+                            <TextBlock Text="{Binding EnhancedDocumentModel.SourceText}"
                                        FontFamily="Consolas"
                                        TextWrapping="Wrap"
                                        FontSize="12" />

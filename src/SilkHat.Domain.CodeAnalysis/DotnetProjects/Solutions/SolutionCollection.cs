@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
@@ -38,10 +39,20 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
             if (!IsLoading)
             {
                 IsLoading = true;
+                var stopWatch = new Stopwatch();
+                stopWatch.Start();
                 SolutionAnalyser solution = _solutionAnalyserFactory.Create(new SolutionAnalyserOptions(solutionPath));
                 await solution.LoadSolution();
                 await solution.BuildSolution();
 
+                Parallel.ForEach(solution.Projects, projectModel =>
+                {
+                    solution.CodeAnalysis(projectModel).Wait();
+                });
+
+                stopWatch.Stop();
+                await Console.Error.WriteLineAsync($"Loaded {solution.Triples.Count} triples for {solution.Solution.Name} in {stopWatch.Elapsed}");
+                
                 _solutionAnalysers.TryAdd(solution.Solution, solution);
 
                 SolutionLoadedNotify(solution.Solution);
@@ -49,11 +60,8 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
                 return solution.Solution;
             }
 
-            else
-            {
-                _logger.LogWarning("Already loading a solution");
-                return null;
-            }
+            _logger.LogWarning("Already loading a solution");
+            return null!;
         }
 
         public async Task<List<SolutionModel>> SolutionsInCollection()
