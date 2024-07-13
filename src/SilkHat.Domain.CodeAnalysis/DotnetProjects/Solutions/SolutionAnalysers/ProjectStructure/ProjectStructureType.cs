@@ -2,8 +2,9 @@
 {
     public enum ProjectStructureType
     {
-        Project,
-        File,
-        Folder
+        SolutionFolder = 0,
+        Folder = 10,
+        File = 20,
+        Project = 30,
     }
 }

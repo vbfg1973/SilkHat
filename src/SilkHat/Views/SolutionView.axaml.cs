@@ -2,9 +2,9 @@
 
 namespace SilkHat.Views
 {
-    public partial class HomePageView : UserControl
+    public partial class SolutionView : UserControl
     {
-        public HomePageView()
+        public SolutionView()
         {
             InitializeComponent();
         }

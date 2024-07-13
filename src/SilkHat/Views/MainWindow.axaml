@@ -3,12 +3,12 @@
         xmlns:vm="using:SilkHat.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:SilkHat.Views"
+        xmlns:models="clr-namespace:SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;assembly=SilkHat.Domain.CodeAnalysis"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SilkHat.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Width="800" Height="450"
+        Width="1600" Height="900"
         Title="SilkHat">
 
     <Design.DataContext>
@@ -20,7 +20,7 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open..." Command="{Binding MenuFileOpenCommand}"
+                <MenuItem Header="_Add Solution..." Command="{Binding MenuAddSolutionCommand}"
                           IsEnabled="{Binding CanLoadSolution}" />
                 <Separator />
                 <MenuItem Header="_Exit" Command="{Binding MenuFileExitCommand}" />
@@ -34,17 +34,33 @@
                    PaneBackground="#1e1e1e">
             <SplitView.Pane>
                 <ScrollViewer>
-                    <StackPanel Spacing="5"
+                    <StackPanel Orientation="Vertical"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Top"
+                                Spacing="5"
                                 Margin="5">
-                        <Button Command="{Binding ToggleSplitViewPaneCommand}" />
 
-                        <ListBox ItemsSource="{Binding LoadedSolutions}">
+                        <Button Command="{Binding TriggerPaneCommand}" Background="#1e1e1e">
+                            <PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
+                        </Button>
+
+                        <ListBox Margin="2 0 -100 0" Padding="0"
+                                 ItemsSource="{Binding LoadedSolutions}"
+                                 SelectedItem="{Binding SelectedListItem}">
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="Padding" Value="12 8" />
+                                </Style>
+                            </ListBox.Styles>
                             <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <views:SolutionTreeView />
+                                <DataTemplate DataType="{x:Type models:SolutionModel}">
+                                    <StackPanel Spacing="17">
+                                        <TextBlock Text="{Binding Name}" />
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
+
                     </StackPanel>
                 </ScrollViewer>
             </SplitView.Pane>

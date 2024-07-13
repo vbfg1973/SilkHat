@@ -3,15 +3,16 @@ using System.Collections.ObjectModel;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
 
-namespace SilkHat.ViewModels.SolutionTree
+namespace SilkHat.ViewModels
 {
     public class SolutionTreeNodeViewModel(ProjectStructureModel projectStructureModel) : ViewModelBase
     {
         public enum NodeType
         {
-            Project,
-            Folder,
-            File
+            SolutionFolder = 0,
+            Project = 10,
+            Folder = 20,
+            File = 30
         }
 
         public string Name { get; } = projectStructureModel.Name;
