@@ -9,6 +9,8 @@
 
         public string Modifiers { get; }
 
+        public override string Label => "Code";
+
         public bool Equals(CodeNode? other)
         {
             if (ReferenceEquals(null, other)) return false;

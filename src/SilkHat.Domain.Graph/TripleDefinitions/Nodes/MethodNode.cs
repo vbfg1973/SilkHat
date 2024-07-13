@@ -16,7 +16,7 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
         public MethodNode() : base(string.Empty, string.Empty, new[] { "" })
         {
         }
-
+        
         public override string Label { get; } = "Method";
 
         public string Arguments { get; }
@@ -36,11 +36,6 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             return $"{base.Set(node)}, {node}.arguments = \"{Arguments}\", {node}.returnType = \"{ReturnType}\"";
         }
 
-        protected sealed override void SetPrimaryKey()
-        {
-            Pk = $"{FullName}{Arguments}{ReturnType}".GetHashCode().ToString();
-        }
-
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -50,7 +45,7 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Label, Arguments, ReturnType);
+            return HashCode.Combine(base.GetHashCode(), Arguments, ReturnType);
         }
 
         public static bool operator ==(MethodNode? left, MethodNode? right)

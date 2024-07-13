@@ -27,7 +27,7 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             if (ReferenceEquals(this, obj)) return true;
             return obj.GetType() == GetType() && Equals((WordNode)obj);
         }
-
+        
         public override int GetHashCode()
         {
             return HashCode.Combine(base.GetHashCode(), Label);

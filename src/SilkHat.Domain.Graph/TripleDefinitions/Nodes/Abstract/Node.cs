@@ -25,9 +25,10 @@
             return Label == other.Label && FullName == other.FullName && Name == other.Name && Pk == other.Pk;
         }
 
-        protected virtual void SetPrimaryKey()
+        protected void SetPrimaryKey()
         {
-            Pk = FullName.GetHashCode().ToString();
+            Console.WriteLine($"{GetType().ToString()} - Primary Key");
+            Pk = GetHashCode().ToString();
         }
 
         public virtual string Set(string node)
@@ -44,7 +45,7 @@
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Label, FullName, Name, Pk);
+            return HashCode.Combine(Label, FullName, Name);
         }
 
         public static bool operator ==(Node? left, Node? right)

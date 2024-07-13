@@ -8,7 +8,6 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             : base(fullName, name)
         {
             Version = version;
-            SetPrimaryKey();
         }
 
         public PackageNode() : base(string.Empty, string.Empty)
@@ -31,11 +30,6 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             return $"{base.Set(node)}, {node}.version = \"{Version}\"";
         }
 
-        protected override void SetPrimaryKey()
-        {
-            Pk = $"{FullName}{Version}".GetHashCode().ToString();
-        }
-
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -45,7 +39,7 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Label, Version);
+            return HashCode.Combine(base.GetHashCode(), Version);
         }
 
         public static bool operator ==(PackageNode? left, PackageNode? right)

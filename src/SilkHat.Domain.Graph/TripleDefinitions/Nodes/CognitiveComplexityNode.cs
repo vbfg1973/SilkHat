@@ -18,6 +18,7 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
 
         public override string Label { get; } = "CognitiveComplexity";
 
+       
         public bool Equals(CognitiveComplexityNode? other)
         {
             if (ReferenceEquals(null, other)) return false;

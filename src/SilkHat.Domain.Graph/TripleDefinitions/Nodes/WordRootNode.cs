@@ -20,7 +20,7 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             if (ReferenceEquals(this, other)) return true;
             return base.Equals(other) && Label == other.Label;
         }
-
+        
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;

@@ -31,10 +31,10 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             if (obj.GetType() != this.GetType()) return false;
             return Equals((InvocationLocationNode)obj);
         }
-
+        
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Location, Label);
+            return HashCode.Combine(base.GetHashCode(), Location);
         }
 
         public static bool operator ==(InvocationLocationNode? left, InvocationLocationNode? right)

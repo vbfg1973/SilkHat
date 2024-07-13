@@ -12,7 +12,7 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
         public InterfaceNode() : base(string.Empty, string.Empty)
         {
         }
-
+        
         public override string Label { get; } = "Interface";
 
         public bool Equals(InterfaceNode? other)

@@ -15,6 +15,7 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
 
         public override string Label { get; } = "Class";
 
+       
         public bool Equals(ClassNode? other)
         {
             if (ReferenceEquals(null, other)) return false;

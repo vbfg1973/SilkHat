@@ -35,7 +35,7 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), ReturnType, Label);
+            return HashCode.Combine(base.GetHashCode(), ReturnType);
         }
 
         public static bool operator ==(PropertyNode? left, PropertyNode? right)

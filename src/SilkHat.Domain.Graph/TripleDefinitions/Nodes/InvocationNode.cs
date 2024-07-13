@@ -30,14 +30,9 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             return $"{base.Set(node)}, {node}.location = \"{Location}\"";
         }
 
-        protected sealed override void SetPrimaryKey()
-        {
-            Pk = $"{FullName}{Arguments}{ReturnType}{Location}".GetHashCode().ToString();
-        }
-
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Location, Arguments, ReturnType, Label);
+           return HashCode.Combine(base.GetHashCode(), Location, Arguments, ReturnType);
         }
 
         public bool Equals(InvocationNode? other)

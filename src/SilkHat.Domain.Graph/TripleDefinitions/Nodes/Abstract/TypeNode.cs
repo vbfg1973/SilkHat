@@ -7,6 +7,8 @@
         {
         }
 
+        public override string Label => "Type";
+        
         public bool Equals(TypeNode? other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -23,7 +25,7 @@
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Label);
+            return HashCode.Combine(base.GetHashCode());
         }
 
         public static bool operator ==(TypeNode? left, TypeNode? right)
