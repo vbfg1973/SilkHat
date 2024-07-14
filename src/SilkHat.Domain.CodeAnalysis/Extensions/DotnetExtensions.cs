@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
-using SilkHat.Domain.Graph.TripleDefinitions.Nodes;
+using SilkHat.Domain.Graph.SemanticTriples.Nodes;
 
 namespace SilkHat.Domain.CodeAnalysis.Extensions
 {

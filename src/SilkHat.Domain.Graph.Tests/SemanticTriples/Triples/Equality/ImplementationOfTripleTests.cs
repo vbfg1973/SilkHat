@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using SilkHat.Domain.Graph.TripleDefinitions.Nodes;
-using SilkHat.Domain.Graph.TripleDefinitions.Triples;
+using SilkHat.Domain.Graph.SemanticTriples.Nodes;
+using SilkHat.Domain.Graph.SemanticTriples.Triples;
 
 namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Triples.Equality
 {

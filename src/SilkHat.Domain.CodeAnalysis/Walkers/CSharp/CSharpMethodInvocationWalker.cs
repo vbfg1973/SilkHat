@@ -3,9 +3,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using SilkHat.Domain.CodeAnalysis.Abstract;
 using SilkHat.Domain.CodeAnalysis.Extensions;
-using SilkHat.Domain.Graph.TripleDefinitions.Nodes;
-using SilkHat.Domain.Graph.TripleDefinitions.Triples;
-using SilkHat.Domain.Graph.TripleDefinitions.Triples.Abstract;
+using SilkHat.Domain.Graph.SemanticTriples.Nodes;
+using SilkHat.Domain.Graph.SemanticTriples.Triples;
+using SilkHat.Domain.Graph.SemanticTriples.Triples.Abstract;
 
 namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
 {

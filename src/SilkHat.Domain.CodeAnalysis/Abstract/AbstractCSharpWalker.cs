@@ -1,5 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
-using SilkHat.Domain.Graph.TripleDefinitions.Triples.Abstract;
+using SilkHat.Domain.Graph.SemanticTriples.Triples.Abstract;
 
 namespace SilkHat.Domain.CodeAnalysis.Abstract
 {

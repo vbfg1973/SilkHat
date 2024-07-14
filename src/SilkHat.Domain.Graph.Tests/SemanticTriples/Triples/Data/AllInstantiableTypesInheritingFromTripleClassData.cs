@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Reflection;
+using SilkHat.Domain.Graph.SemanticTriples.Triples.Abstract;
 using SilkHat.Domain.Graph.Support;
-using SilkHat.Domain.Graph.TripleDefinitions.Triples.Abstract;
 
 namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Triples.Data
 {

@@ -1,8 +1,8 @@
 ﻿using Buildalyzer;
 using Microsoft.CodeAnalysis;
-using SilkHat.Domain.Graph.TripleDefinitions.Nodes;
-using SilkHat.Domain.Graph.TripleDefinitions.Triples;
-using SilkHat.Domain.Graph.TripleDefinitions.Triples.Abstract;
+using SilkHat.Domain.Graph.SemanticTriples.Nodes;
+using SilkHat.Domain.Graph.SemanticTriples.Triples;
+using SilkHat.Domain.Graph.SemanticTriples.Triples.Abstract;
 
 namespace SilkHat.Domain.CodeAnalysis.Analysis.FileSystem
 {

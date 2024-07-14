@@ -7,9 +7,9 @@ using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
 using SilkHat.Domain.Graph.GraphEngine;
-using SilkHat.Domain.Graph.TripleDefinitions.Nodes;
-using SilkHat.Domain.Graph.TripleDefinitions.Triples;
-using SilkHat.Domain.Graph.TripleDefinitions.Triples.Abstract;
+using SilkHat.Domain.Graph.SemanticTriples.Nodes;
+using SilkHat.Domain.Graph.SemanticTriples.Triples;
+using SilkHat.Domain.Graph.SemanticTriples.Triples.Abstract;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
 {

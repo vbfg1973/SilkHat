@@ -1,7 +1,7 @@
 ﻿using AutoBogus;
 using Bogus;
-using SilkHat.Domain.Graph.TripleDefinitions.Nodes.Abstract;
-using SilkHat.Domain.Graph.TripleDefinitions.Triples.Abstract;
+using SilkHat.Domain.Graph.SemanticTriples.Nodes.Abstract;
+using SilkHat.Domain.Graph.SemanticTriples.Triples.Abstract;
 
 namespace SilkHat.Domain.Graph.Tests.SemanticTriples
 {
