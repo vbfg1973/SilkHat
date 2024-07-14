@@ -11,7 +11,7 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Relationships
         {
             t.Name.Should().EndWith("Relationship");
         }
-        
+
         [Theory]
         [ClassData(typeof(AllInstantiableTypesInheritingFromRelationshipClassData))]
         public void Given_Type_Inheriting_From_Relationship_Implements_IEquatable(Type t)

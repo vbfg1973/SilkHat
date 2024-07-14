@@ -11,7 +11,7 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Triples
         {
             t.Name.Should().EndWith("Triple");
         }
-        
+
         [Theory]
         [ClassData(typeof(AllInstantiableTypesInheritingFromTripleClassData))]
         public void Given_Type_Inheriting_From_Triple_Implements_IEquatable(Type t)

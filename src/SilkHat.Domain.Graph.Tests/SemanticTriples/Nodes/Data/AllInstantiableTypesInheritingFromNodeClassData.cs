@@ -15,7 +15,7 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes.Data
             Type[] types = _assembly.GetExportedTypes();
 
             // Only types that inherit from Node
-            foreach (Type type in types.Where(x => x.IsSubclassOf(typeof(Node))  && !x.IsAbstract))
+            foreach (Type type in types.Where(x => x.IsSubclassOf(typeof(Node)) && !x.IsAbstract))
             {
                 yield return new object[]
                 {

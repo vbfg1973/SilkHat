@@ -13,14 +13,14 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Triples
             NodeA = nodeA;
             NodeB = nodeB;
         }
-
+        
         public OfTypeTriple(RecordNode nodeA, TypeNode nodeB)
         {
             NodeA = nodeA;
             NodeB = nodeB;
         }
 
-        public OfTypeTriple(InterfaceNode nodeA, InterfaceNode nodeB)
+        public OfTypeTriple(InterfaceNode nodeA, TypeNode nodeB)
         {
             NodeA = nodeA;
             NodeB = nodeB;

@@ -6,23 +6,10 @@ using SilkHat.Domain.Graph.TripleDefinitions.Triples.Abstract;
 
 namespace SilkHat.Domain.Graph.TripleDefinitions.Triples
 {
-    public class ConstructsTriple : Triple, IEquatable<ConstructsTriple>
+    public class ConstructsTriple(MethodNode nodeA, ClassNode nodeB) : Triple, IEquatable<ConstructsTriple>
     {
-        public ConstructsTriple(ClassNode nodeA, ClassNode nodeB)
-        {
-            NodeA = nodeA;
-            NodeB = nodeB;
-        }
-
-        public ConstructsTriple(MethodNode nodeA, ClassNode nodeB)
-
-        {
-            NodeA = nodeA;
-            NodeB = nodeB;
-        }
-
-        public override CodeNode NodeA { get; }
-        public override TypeNode NodeB { get; }
+        public override CodeNode NodeA { get; } = nodeA;
+        public override TypeNode NodeB { get; } = nodeB;
         public override Relationship Relationship { get; } = new ConstructRelationship();
 
         public bool Equals(ConstructsTriple? other)

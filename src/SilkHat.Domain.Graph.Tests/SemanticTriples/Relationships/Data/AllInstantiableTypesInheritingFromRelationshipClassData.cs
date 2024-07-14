@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Reflection;
 using SilkHat.Domain.Graph.Support;
-using SilkHat.Domain.Graph.TripleDefinitions.Nodes.Abstract;
 using SilkHat.Domain.Graph.TripleDefinitions.Relationships.Abstract;
 
 namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Relationships.Data

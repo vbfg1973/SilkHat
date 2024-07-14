@@ -8,8 +8,8 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Triples
 {
     public class InvokeTriple(MethodNode nodeA, InvocationNode nodeB) : Triple, IEquatable<InvokeTriple>
     {
-        public override Node NodeA { get; } = nodeA;
-        public override Node NodeB { get; } = nodeB;
+        public override MethodNode NodeA { get; } = nodeA;
+        public override InvocationNode NodeB { get; } = nodeB;
         public override Relationship Relationship { get; } = new InvokesRelationship();
 
         public bool Equals(InvokeTriple? other)

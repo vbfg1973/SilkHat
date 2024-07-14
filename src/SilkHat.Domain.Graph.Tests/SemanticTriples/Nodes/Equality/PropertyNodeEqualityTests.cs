@@ -29,15 +29,15 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes.Equality
 
             yield return new[]
             {
-                new PropertyNode(fullName, name,  returnType, modifiers),
-                new PropertyNode(fullName, name + "modifiers",  returnType, modifiers)
+                new PropertyNode(fullName, name, returnType, modifiers),
+                new PropertyNode(fullName, name + "modifiers", returnType, modifiers)
             };
 
 
             yield return new[]
             {
-                new PropertyNode(fullName, name,  returnType, modifiers),
-                new PropertyNode(fullName + "modifiers", name,  returnType, modifiers)
+                new PropertyNode(fullName, name, returnType, modifiers),
+                new PropertyNode(fullName + "modifiers", name, returnType, modifiers)
             };
         }
 
@@ -49,15 +49,15 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes.Equality
 
             yield return new[]
             {
-                new PropertyNode(fullName, name,  "int", modifiers),
-                new PropertyNode(fullName, name + "modifiers",  "string", modifiers)
+                new PropertyNode(fullName, name, "int", modifiers),
+                new PropertyNode(fullName, name + "modifiers", "string", modifiers)
             };
 
 
             yield return new[]
             {
-                new PropertyNode(fullName, name,  "bool", modifiers),
-                new PropertyNode(fullName + "modifiers", name,  "float", modifiers)
+                new PropertyNode(fullName, name, "bool", modifiers),
+                new PropertyNode(fullName + "modifiers", name, "float", modifiers)
             };
         }
 
@@ -73,20 +73,20 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes.Equality
 
             yield return new[]
             {
-                new PropertyNode(fullName, name,  returnType, modifiersOne),
-                new PropertyNode(fullName, name,  returnType, modifiersTwo)
+                new PropertyNode(fullName, name, returnType, modifiersOne),
+                new PropertyNode(fullName, name, returnType, modifiersTwo)
             };
 
             yield return new[]
             {
-                new PropertyNode(fullName, name,  returnType, modifiersTwo),
-                new PropertyNode(fullName, name,  returnType, modifiersThree)
+                new PropertyNode(fullName, name, returnType, modifiersTwo),
+                new PropertyNode(fullName, name, returnType, modifiersThree)
             };
 
             yield return new[]
             {
-                new PropertyNode(fullName, name,  returnType, modifiersOne),
-                new PropertyNode(fullName, name,  returnType, modifiersThree)
+                new PropertyNode(fullName, name, returnType, modifiersOne),
+                new PropertyNode(fullName, name, returnType, modifiersThree)
             };
         }
 

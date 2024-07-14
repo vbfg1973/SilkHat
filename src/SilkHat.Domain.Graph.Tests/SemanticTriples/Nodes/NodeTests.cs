@@ -11,7 +11,7 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes
         {
             t.Name.Should().EndWith("Node");
         }
-        
+
         [Theory]
         [ClassData(typeof(AllInstantiableTypesInheritingFromNodeClassData))]
         public void Given_Type_Inheriting_From_Node_Implements_IEquatable(Type t)

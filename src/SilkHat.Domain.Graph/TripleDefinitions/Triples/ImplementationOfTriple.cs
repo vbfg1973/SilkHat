@@ -6,10 +6,22 @@ using SilkHat.Domain.Graph.TripleDefinitions.Triples.Abstract;
 
 namespace SilkHat.Domain.Graph.TripleDefinitions.Triples
 {
-    public class ImplementationOfTriple(MethodNode nodeA, MethodNode nodeB) : Triple, IEquatable<ImplementationOfTriple>
+    public class ImplementationOfTriple : Triple, IEquatable<ImplementationOfTriple>
     {
-        public override CodeNode NodeA { get; } = nodeA;
-        public override CodeNode NodeB { get; } = nodeB;
+        public ImplementationOfTriple(MethodNode nodeA, MethodNode nodeB)
+        {
+            NodeA = nodeA;
+            NodeB = nodeB;
+        }
+        
+        public ImplementationOfTriple(PropertyNode nodeA, PropertyNode nodeB)
+        {
+            NodeA = nodeA;
+            NodeB = nodeB;
+        }
+        
+        public override CodeNode NodeA { get; }
+        public override CodeNode NodeB { get; }
         public override Relationship Relationship { get; } = new ImplementsRelationship();
 
         public bool Equals(ImplementationOfTriple? other)
