@@ -13,7 +13,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Triples
             NodeA = nodeA;
             NodeB = nodeB;
         }
-        
+
         public InvocationOfTriple(InvocationNode nodeA, PropertyNode nodeB)
         {
             NodeA = nodeA;
@@ -35,7 +35,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Triples
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((InvocationOfTriple)obj);
         }
 
@@ -45,4 +45,3 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Triples
         }
     }
 }
-

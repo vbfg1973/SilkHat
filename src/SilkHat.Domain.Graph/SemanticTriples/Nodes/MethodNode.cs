@@ -5,18 +5,19 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
 {
     public class MethodNode : CodeNode, IEquatable<MethodNode>
     {
-        public MethodNode(string fullName, string name, (string name, string type)[] args, string returnType, string[]? modifiers = null)
+        public MethodNode(string fullName, string name, (string name, string type)[] args, string returnType,
+            string[]? modifiers = null)
         {
             FullName = fullName;
             Name = name;
             Args = new ArgumentList();
             ReturnType = returnType;
             Modifiers = EmptyOrJoined(modifiers);
-            
+
             Args.AddRange(args.Select(x => new Argument(x.name, x.type)));
         }
 
-        public override string Label =>  "Method";
+        public override string Label => "Method";
         public override string FullName { get; }
         public override string Name { get; }
         public ArgumentList Args { get; }
@@ -27,11 +28,11 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Label == other.Label && 
-                   FullName == other.FullName && 
-                   Name == other.Name && 
-                   Args.Equals(other.Args) && 
-                   ReturnType == other.ReturnType && 
+            return Label == other.Label &&
+                   FullName == other.FullName &&
+                   Name == other.Name &&
+                   Args.Equals(other.Args) &&
+                   ReturnType == other.ReturnType &&
                    Modifiers == other.Modifiers;
         }
 
@@ -39,7 +40,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((MethodNode)obj);
         }
 
@@ -59,4 +60,3 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
         }
     }
 }
-

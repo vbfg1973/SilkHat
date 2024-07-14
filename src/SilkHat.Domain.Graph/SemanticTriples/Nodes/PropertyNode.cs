@@ -4,7 +4,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
 {
     public class PropertyNode : CodeNode, IEquatable<PropertyNode>
     {
-        public PropertyNode(string fullName, string name,  string returnType, string[]? modifiers = null)
+        public PropertyNode(string fullName, string name, string returnType, string[]? modifiers = null)
         {
             FullName = fullName;
             Name = name;
@@ -12,7 +12,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
             Modifiers = EmptyOrJoined(modifiers);
         }
 
-        public override string Label =>  "Property";
+        public override string Label => "Property";
         public override string FullName { get; }
         public override string Name { get; }
         public string ReturnType { get; }
@@ -22,10 +22,10 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Label == other.Label && 
-                   FullName == other.FullName && 
-                   Name == other.Name && 
-                   ReturnType == other.ReturnType && 
+            return Label == other.Label &&
+                   FullName == other.FullName &&
+                   Name == other.Name &&
+                   ReturnType == other.ReturnType &&
                    Modifiers == other.Modifiers;
         }
 
@@ -33,7 +33,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((PropertyNode)obj);
         }
 
@@ -53,4 +53,3 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
         }
     }
 }
-

@@ -5,8 +5,8 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
     public class WordRootNode(string fullName, string name) : Node, IEquatable<WordRootNode>
     {
         public override string Label => "WordRoot";
-        public override string FullName =>  fullName;
-        public override string Name =>  name;
+        public override string FullName => fullName;
+        public override string Name => name;
 
         public bool Equals(WordRootNode? other)
         {

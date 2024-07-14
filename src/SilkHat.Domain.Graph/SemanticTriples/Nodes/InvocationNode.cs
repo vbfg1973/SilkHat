@@ -16,8 +16,8 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return FullName == other.FullName && 
-                   Name == other.Name && 
+            return FullName == other.FullName &&
+                   Name == other.Name &&
                    Location == other.Location &&
                    Source == other.Source &&
                    Target == other.Target;

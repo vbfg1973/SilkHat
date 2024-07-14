@@ -1,6 +1,6 @@
 ﻿namespace SilkHat.Domain.Graph.SemanticTriples.Nodes.Lists
 {
-    public class ArgumentList : List<Argument>, IEquatable<ArgumentList> 
+    public class ArgumentList : List<Argument>, IEquatable<ArgumentList>
     {
         public bool Equals(ArgumentList? other)
         {
@@ -13,7 +13,7 @@
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((ArgumentList)obj);
         }
 
@@ -35,7 +35,7 @@
             return !Equals(left, right);
         }
     }
-    
+
     public class Argument : IEquatable<Argument>
     {
         public Argument(string type, string name)
@@ -58,7 +58,7 @@
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((Argument)obj);
         }
 
