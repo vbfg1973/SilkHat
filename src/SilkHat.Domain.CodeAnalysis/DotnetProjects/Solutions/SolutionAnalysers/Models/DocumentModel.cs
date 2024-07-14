@@ -6,7 +6,7 @@
         string RelativePath,
         ProjectModel ProjectModel,
         LanguageType LanguageType);
-    
+
     public record EnhancedDocumentModel(
         string Name,
         string Path,

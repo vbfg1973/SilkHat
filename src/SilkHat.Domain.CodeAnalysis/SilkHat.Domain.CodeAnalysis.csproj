@@ -7,6 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Annytab.Stemmer" Version="1.2.4" />
+        <PackageReference Include="Buildalyzer" Version="6.0.4" />
         <PackageReference Include="Microsoft.Build.Locator" Version="1.7.8"/>
         <PackageReference Include="Microsoft.CodeAnalysis" Version="3.8.0"/>
         <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.8.0"/>
@@ -19,6 +21,12 @@
 
     <ItemGroup>
         <ProjectReference Include="..\SilkHat.Domain.Common\SilkHat.Domain.Common.csproj"/>
+        <ProjectReference Include="..\SilkHat.Domain.Graph\SilkHat.Domain.Graph.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="DotnetProjects\" />
+      <Folder Include="Walkers\" />
     </ItemGroup>
 
 </Project>

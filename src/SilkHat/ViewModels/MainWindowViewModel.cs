@@ -62,11 +62,11 @@ namespace SilkHat.ViewModels
             }
         }
 
-        partial void OnSelectedListItemChanged(SolutionModel? oldValue, SolutionModel? newValue)
+        partial void OnSelectedListItemChanged(SolutionModel? value)
         {
-            if (newValue is null) return;
+            if (value is null) return;
 
-            if (_solutionViewModels.TryGetValue(newValue, out SolutionViewModel? vm)) CurrentPage = vm;
+            if (_solutionViewModels.TryGetValue(value, out SolutionViewModel? vm)) CurrentPage = vm;
         }
 
         [RelayCommand]

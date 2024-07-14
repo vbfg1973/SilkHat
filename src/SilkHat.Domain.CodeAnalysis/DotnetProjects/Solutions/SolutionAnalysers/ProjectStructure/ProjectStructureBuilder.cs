@@ -32,16 +32,18 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
                 if (fullPath.Contains(".nuget")) continue;
 
                 string relativePath = RelativePath(commonRoot!, fullPath);
-                
+
                 string[] parts = relativePath.Split('\\', StringSplitOptions.RemoveEmptyEntries);
 
-                if (parts[0] != "bin" && parts[0] != "obj") CreateStructureIfNotExists(projectModel, root, relativePath, fullPath, parts);
+                if (parts[0] != "bin" && parts[0] != "obj")
+                    CreateStructureIfNotExists(projectModel, root, relativePath, fullPath, parts);
             }
 
             return root;
         }
 
-        private static void CreateStructureIfNotExists(ProjectModel projectModel, ProjectStructureModel projectStructureModel, string relativePath,
+        private static void CreateStructureIfNotExists(ProjectModel projectModel,
+            ProjectStructureModel projectStructureModel, string relativePath,
             string fullPath,
             IEnumerable<string> parts)
         {
@@ -62,14 +64,16 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
                 {
                     string name = list.First();
 
-                    AddChild(projectModel, projectStructureModel, relativePath, fullPath, name, ProjectStructureType.File);
+                    AddChild(projectModel, projectStructureModel, relativePath, fullPath, name,
+                        ProjectStructureType.File);
 
                     break;
                 }
             }
         }
 
-        private static ProjectStructureModel AddChild(ProjectModel projectModel, ProjectStructureModel projectStructureModel, string relativePath,
+        private static ProjectStructureModel AddChild(ProjectModel projectModel,
+            ProjectStructureModel projectStructureModel, string relativePath,
             string fullPath,
             string name, ProjectStructureType projectStructureType)
         {
@@ -84,22 +88,23 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
             return child!;
         }
 
-        private static ProjectStructureModel? CreateChildNode(ProjectModel projectModel, string relativePath, string fullPath, string name,
+        private static ProjectStructureModel? CreateChildNode(ProjectModel projectModel, string relativePath,
+            string fullPath, string name,
             ProjectStructureType projectStructureType, ProjectStructureModel? child)
         {
             return projectStructureType switch
             {
                 ProjectStructureType.File => new ProjectStructureModel(
-                    name, 
+                    name,
                     fullPath,
                     relativePath,
-                    new List<ProjectStructureModel>(), 
-                    projectStructureType, 
+                    new List<ProjectStructureModel>(),
+                    projectStructureType,
                     projectModel),
-                
+
                 ProjectStructureType.Folder => new ProjectStructureModel(
-                    name, 
-                    "", 
+                    name,
+                    "",
                     "",
                     new List<ProjectStructureModel>(),
                     projectStructureType,

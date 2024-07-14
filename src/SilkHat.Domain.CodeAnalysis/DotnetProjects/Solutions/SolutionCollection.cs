@@ -1,8 +1,15 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using QuikGraph;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
+using SilkHat.Domain.Graph.GraphEngine;
+using SilkHat.Domain.Graph.SemanticTriples.Nodes;
+using SilkHat.Domain.Graph.SemanticTriples.Triples;
+using SilkHat.Domain.Graph.SemanticTriples.Triples.Abstract;
 
 namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
 {
@@ -14,6 +21,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
         Task<List<ProjectModel>> ProjectsInSolution(SolutionModel solutionModel);
         Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel);
         Task<DocumentModel> GetDocument(ProjectModel projectModel, string fullPath);
+        Task<List<Triple>> GetPathTriples(ProjectModel projectModel, string fullPath);
         Task<EnhancedDocumentModel> GetEnhancedDocument(ProjectModel projectModel, string fullPath);
     }
 
@@ -22,12 +30,14 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
     {
         private readonly ILogger<SolutionCollection> _logger;
         private readonly ISolutionAnalyserFactory _solutionAnalyserFactory;
+        private readonly ITripleGraph _tripleGraph;
 
         private readonly ConcurrentDictionary<SolutionModel, ISolutionAnalyser> _solutionAnalysers = new();
 
-        public SolutionCollection(ISolutionAnalyserFactory solutionAnalyserFactory, ILoggerFactory loggerFactory)
+        public SolutionCollection(ISolutionAnalyserFactory solutionAnalyserFactory, ITripleGraph tripleGraph, ILoggerFactory loggerFactory)
         {
             _solutionAnalyserFactory = solutionAnalyserFactory;
+            _tripleGraph = tripleGraph;
             _logger = loggerFactory.CreateLogger<SolutionCollection>();
         }
 
@@ -38,10 +48,22 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
             if (!IsLoading)
             {
                 IsLoading = true;
+                var stopWatch = new Stopwatch();
+                stopWatch.Start();
                 SolutionAnalyser solution = _solutionAnalyserFactory.Create(new SolutionAnalyserOptions(solutionPath));
                 await solution.LoadSolution();
                 await solution.BuildSolution();
 
+                Parallel.ForEach(solution.Projects, projectModel =>
+                {
+                    solution.CodeAnalysis(projectModel).Wait();
+                });
+
+                await _tripleGraph.LoadTriples(solution.Triples);
+                
+                stopWatch.Stop();
+                await Console.Error.WriteLineAsync($"Loaded {solution.Triples.Count} triples for {solution.Solution.Name} in {stopWatch.Elapsed}");
+                
                 _solutionAnalysers.TryAdd(solution.Solution, solution);
 
                 SolutionLoadedNotify(solution.Solution);
@@ -49,11 +71,8 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
                 return solution.Solution;
             }
 
-            else
-            {
-                _logger.LogWarning("Already loading a solution");
-                return null;
-            }
+            _logger.LogWarning("Already loading a solution");
+            return null!;
         }
 
         public async Task<List<SolutionModel>> SolutionsInCollection()
@@ -80,6 +99,32 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
         {
             TryGetSolutionAnalyser(projectModel.SolutionModel, out ISolutionAnalyser solutionAnalyser);
             return await solutionAnalyser.DocumentModel(projectModel, fullPath);
+        }
+
+        public async Task<List<Triple>> GetPathTriples(ProjectModel projectModel, string fullPath)
+        {
+            TryGetSolutionAnalyser(projectModel.SolutionModel, out ISolutionAnalyser solutionAnalyser);
+            var declarationTriples = solutionAnalyser
+                .Triples
+                .Where(x => x is DeclaredAtTriple)
+                .Where(x => x.NodeB is FileNode && x.NodeB.FullName == fullPath)
+                .ToList();
+
+            var typeNodesHash = declarationTriples.Select(x => x.NodeA).ToHashSet(); 
+            
+            var hasTriples = solutionAnalyser
+                .Triples
+                .Where(x => x is HasTriple)
+                .Where(x => typeNodesHash.Contains(x.NodeA))
+                .ToList();
+
+            List<Triple> triples = new List<Triple>();
+            triples.AddRange(declarationTriples);
+            triples.AddRange(hasTriples);
+            
+            Console.WriteLine(JsonSerializer.Serialize(triples));
+
+            return triples;
         }
 
         public async Task<EnhancedDocumentModel> GetEnhancedDocument(ProjectModel projectModel, string fullPath)

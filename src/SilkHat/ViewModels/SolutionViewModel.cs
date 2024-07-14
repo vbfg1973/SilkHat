@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -14,12 +13,14 @@ namespace SilkHat.ViewModels
     {
         private readonly ISolutionCollection _solutionCollection;
 
-        [ObservableProperty] private bool _isSolutionFileTreePaneOpen = true;
-        [ObservableProperty] private bool _isSolutionTabbedPaneOpen = false;
-        
-        [ObservableProperty] private SolutionModel _solutionModel;
-
         [ObservableProperty] private EnhancedDocumentModel _enhancedDocumentModel;
+
+        [ObservableProperty] private bool _isSolutionFileTreePaneOpen = true;
+        [ObservableProperty] private bool _isSolutionTabbedPaneOpen;
+
+        [ObservableProperty] private SolutionTreeNodeViewModel _selectedNode;
+
+        [ObservableProperty] private SolutionModel _solutionModel;
 
         public SolutionViewModel(SolutionModel solutionModel, ISolutionCollection solutionCollection)
         {
@@ -31,8 +32,6 @@ namespace SilkHat.ViewModels
 
         public ObservableCollection<SolutionTreeNodeViewModel> Nodes { get; } = new();
 
-        [ObservableProperty] private SolutionTreeNodeViewModel _selectedNode;
-
         [RelayCommand]
         private async Task TriggerSolutionFileTreePane()
         {
@@ -43,6 +42,16 @@ namespace SilkHat.ViewModels
         public async Task TriggerSolutionTabbedPane()
         {
             IsSolutionTabbedPaneOpen = !IsSolutionTabbedPaneOpen;
+        }
+
+        partial void OnSelectedNodeChanged(SolutionTreeNodeViewModel value)
+        {
+            if (value.Type != SolutionTreeNodeViewModel.NodeType.File) return;
+            
+            EnhancedDocumentModel =
+                _solutionCollection.GetEnhancedDocument(value.ProjectModel, value.FullPath).Result;
+
+            _solutionCollection.GetPathTriples(value.ProjectModel, value.FullPath);
         }
         
         #region Map Solution To Tree Structure
@@ -65,21 +74,14 @@ namespace SilkHat.ViewModels
         {
             solutionTreeNodeViewModel = new SolutionTreeNodeViewModel(projectStructureModel);
 
-            foreach (ProjectStructureModel child in projectStructureModel.Children.OrderBy(x => x.ProjectStructureType).ThenBy(x => x.Name))
+            foreach (ProjectStructureModel child in projectStructureModel.Children.OrderBy(x => x.ProjectStructureType)
+                         .ThenBy(x => x.Name))
             {
                 if (TryMapStructureToTreeNode(child, out SolutionTreeNodeViewModel childNode))
                     solutionTreeNodeViewModel.Children.Add(childNode);
             }
-            
-            return true;
-        }
 
-        partial void OnSelectedNodeChanged(SolutionTreeNodeViewModel value)
-        {
-            if (value.Type == SolutionTreeNodeViewModel.NodeType.File)
-            {
-                EnhancedDocumentModel = _solutionCollection.GetEnhancedDocument(value.ProjectModel, value.FullPath).Result;
-            }
+            return true;
         }
 
         #endregion
