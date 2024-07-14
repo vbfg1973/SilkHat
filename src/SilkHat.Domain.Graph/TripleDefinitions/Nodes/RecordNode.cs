@@ -1,11 +1,39 @@
-// using SilkHat.Domain.Graph.TripleDefinitions.Nodes.Abstract;
-//
-// namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
-// {
-//     public class RecordNode(string fullName, string name, string[] modifiers = null!)
-//         : TypeNode(fullName, name, modifiers)
-//     {
-//         public override string Label { get; } = "Record";
-//     }
-// }
+using SilkHat.Domain.Graph.TripleDefinitions.Nodes.Abstract;
 
+namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
+{
+    public class RecordNode : TypeNode, IEquatable<RecordNode>
+    {
+        public RecordNode(string fullName, string name, string[]? modifiers = null)
+        {
+            FullName = fullName;
+            Name = name;
+            Modifiers = EmptyOrJoined(modifiers);
+        }
+
+        public override string Label => "Record";
+        public override string FullName { get; }
+        public override string Name { get; }
+        public override string Modifiers { get; }
+
+        public bool Equals(RecordNode? other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return FullName == other.FullName && Name == other.Name && Modifiers == other.Modifiers;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((RecordNode)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(FullName, Name, Modifiers);
+        }
+    }
+}

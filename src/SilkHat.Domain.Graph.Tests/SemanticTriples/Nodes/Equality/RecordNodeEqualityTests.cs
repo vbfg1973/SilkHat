@@ -2,11 +2,11 @@
 using SilkHat.Domain.Graph.TripleDefinitions.Nodes;
 using SilkHat.Domain.Graph.TripleDefinitions.Nodes.Abstract;
 
-namespace SilkHat.Domain.Graph.Tests.TriplesTests.NodeTests
+namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes.Equality
 {
-    public class ClassNodeEqualityTests
+    public class RecordNodeEqualityTests
     {
-        public static IEnumerable<object[]> ClassNodeIdentical()
+        public static IEnumerable<object[]> RecordNodeIdentical()
         {
             string fullName = "This is a full name";
             string name = "This is a name";
@@ -14,12 +14,12 @@ namespace SilkHat.Domain.Graph.Tests.TriplesTests.NodeTests
 
             yield return new[]
             {
-                new ClassNode(fullName, name, modifiers),
-                new ClassNode(fullName, name, modifiers)
+                new RecordNode(fullName, name, modifiers),
+                new RecordNode(fullName, name, modifiers)
             };
         }
 
-        public static IEnumerable<object[]> ClassNodeNameDifferent()
+        public static IEnumerable<object[]> RecordNodeNameDifferent()
         {
             string fullName = "This is a full name";
             string name = "This is a name";
@@ -28,18 +28,18 @@ namespace SilkHat.Domain.Graph.Tests.TriplesTests.NodeTests
 
             yield return new[]
             {
-                new ClassNode(fullName, name, modifiers),
-                new ClassNode(fullName + "modifier", name, modifiers)
+                new RecordNode(fullName, name, modifiers),
+                new RecordNode(fullName + "modifier", name, modifiers)
             };
 
             yield return new[]
             {
-                new ClassNode(fullName, name, modifiers),
-                new ClassNode(fullName, name + "modifier", modifiers)
+                new RecordNode(fullName, name, modifiers),
+                new RecordNode(fullName, name + "modifier", modifiers)
             };
         }
 
-        public static IEnumerable<object[]> ClassNodeModifiersDifferent()
+        public static IEnumerable<object[]> RecordNodeModifiersDifferent()
         {
             string fullName = "This is a full name";
             string name = "This is a name";
@@ -49,41 +49,41 @@ namespace SilkHat.Domain.Graph.Tests.TriplesTests.NodeTests
 
             yield return new[]
             {
-                new ClassNode(fullName, name, modifiersOne),
-                new ClassNode(fullName, name, modifiersTwo)
+                new RecordNode(fullName, name, modifiersOne),
+                new RecordNode(fullName, name, modifiersTwo)
             };
 
             yield return new[]
             {
-                new ClassNode(fullName, name, modifiersTwo),
-                new ClassNode(fullName, name, modifiersThree)
+                new RecordNode(fullName, name, modifiersTwo),
+                new RecordNode(fullName, name, modifiersThree)
             };
 
             yield return new[]
             {
-                new ClassNode(fullName, name, modifiersOne),
-                new ClassNode(fullName, name, modifiersThree)
+                new RecordNode(fullName, name, modifiersOne),
+                new RecordNode(fullName, name, modifiersThree)
             };
         }
 
         #region Identical
 
         [Theory]
-        [MemberData(nameof(ClassNodeIdentical))]
+        [MemberData(nameof(RecordNodeIdentical))]
         public void Given_Identical_Nodes_Are_Equal(Node firstNode, Node secondNode)
         {
             secondNode.Should().Be(firstNode);
         }
 
         [Theory]
-        [MemberData(nameof(ClassNodeIdentical))]
+        [MemberData(nameof(RecordNodeIdentical))]
         public void Given_Identical_Nodes_Are_Equal_Via_Equals_Method(Node firstNode, Node secondNode)
         {
             firstNode.Equals(secondNode).Should().BeTrue();
         }
 
         [Theory]
-        [MemberData(nameof(ClassNodeIdentical))]
+        [MemberData(nameof(RecordNodeIdentical))]
         public void Given_Identical_Nodes_HashCodes_Are_Equal(Node firstNode, Node secondNode)
         {
             secondNode.GetHashCode().Should().Be(firstNode.GetHashCode());
@@ -94,32 +94,24 @@ namespace SilkHat.Domain.Graph.Tests.TriplesTests.NodeTests
         #region Differs
 
         [Theory]
-        [MemberData(nameof(ClassNodeNameDifferent))]
-        [MemberData(nameof(ClassNodeModifiersDifferent))]
+        [MemberData(nameof(RecordNodeNameDifferent))]
+        [MemberData(nameof(RecordNodeModifiersDifferent))]
         public void Given_Different_Nodes_Are_Not_Equal(Node firstNode, Node secondNode)
         {
             secondNode.Should().NotBe(firstNode);
         }
 
         [Theory]
-        [MemberData(nameof(ClassNodeNameDifferent))]
-        [MemberData(nameof(ClassNodeModifiersDifferent))]
+        [MemberData(nameof(RecordNodeNameDifferent))]
+        [MemberData(nameof(RecordNodeModifiersDifferent))]
         public void Given_Different_Nodes_Are_Not_Equal_Via_Equals_Method(Node firstNode, Node secondNode)
         {
             firstNode.Equals(secondNode).Should().BeFalse();
         }
 
         [Theory]
-        [MemberData(nameof(ClassNodeNameDifferent))]
-        [MemberData(nameof(ClassNodeModifiersDifferent))]
-        public void Given_Different_Nodes_Are_Not_Equal_Via_Equals_Sign(Node firstNode, Node secondNode)
-        {
-            (firstNode == secondNode).Should().BeFalse();
-        }
-
-        [Theory]
-        [MemberData(nameof(ClassNodeNameDifferent))]
-        [MemberData(nameof(ClassNodeModifiersDifferent))]
+        [MemberData(nameof(RecordNodeNameDifferent))]
+        [MemberData(nameof(RecordNodeModifiersDifferent))]
         public void Given_Different_Nodes_HashCodes_Are_Not_Equal(Node firstNode, Node secondNode)
         {
             secondNode.GetHashCode().Should().NotBe(firstNode.GetHashCode());

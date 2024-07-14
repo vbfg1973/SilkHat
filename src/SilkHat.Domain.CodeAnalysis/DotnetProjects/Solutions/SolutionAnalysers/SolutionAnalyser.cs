@@ -114,7 +114,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
             {
                 IList<Triple> fileSystemTriples = await fileSystemAnalyzer.GetFileSystemChain(syntaxTree.FilePath);
                 FileNode fileNode = fileSystemTriples
-                    .OfType<TripleIncludedIn>()
+                    .OfType<IncludedInTriple>()
                     .Where(x => x.NodeA is FileNode)
                     .Select(x => x.NodeA as FileNode)
                     .First()!;

@@ -48,7 +48,7 @@ namespace SilkHat.Domain.CodeAnalysis.Analysis.FileSystem
             FolderNode? prevNode = default;
             for (int i = 0; i < chain.Length; i++)
             {
-                TripleIncludedIn triple;
+                IncludedInTriple includedInTriple;
                 int rangeEnd = i + 1;
 
                 if (i < chain.Length - 1)
@@ -57,8 +57,8 @@ namespace SilkHat.Domain.CodeAnalysis.Analysis.FileSystem
 
                     if (prevNode != default)
                     {
-                        triple = new TripleIncludedIn(currNode, prevNode);
-                        triples.Add(triple);
+                        includedInTriple = new IncludedInTriple(currNode, prevNode);
+                        triples.Add(includedInTriple);
                     }
 
                     prevNode = currNode;
@@ -70,8 +70,8 @@ namespace SilkHat.Domain.CodeAnalysis.Analysis.FileSystem
 
                     if (prevNode == default) continue;
 
-                    triple = new TripleIncludedIn(currNode, prevNode);
-                    triples.Add(triple);
+                    includedInTriple = new IncludedInTriple(currNode, prevNode);
+                    triples.Add(includedInTriple);
                 }
 
                 else

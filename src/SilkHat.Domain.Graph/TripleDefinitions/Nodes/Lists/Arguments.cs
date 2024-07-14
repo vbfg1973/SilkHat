@@ -1,10 +1,12 @@
-﻿namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
+﻿namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes.Lists
 {
     public class ArgumentList : List<Argument>, IEquatable<ArgumentList> 
     {
         public bool Equals(ArgumentList? other)
         {
-            throw new NotImplementedException();
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return this.SequenceEqual(other);
         }
 
         public override bool Equals(object? obj)

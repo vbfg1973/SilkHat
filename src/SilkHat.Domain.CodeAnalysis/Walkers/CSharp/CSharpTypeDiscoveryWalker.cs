@@ -64,8 +64,8 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
         {
             TypeNode typeNode = GetTypeNode(node);
 
-            _triples.Add(new TripleDeclaredAt(typeNode, fileNode));
-            _triples.Add(new TripleBelongsTo(typeNode, _projectNode));
+            _triples.Add(new DeclaredAtTriple(typeNode, fileNode));
+            _triples.Add(new BelongsToTriple(typeNode, _projectNode));
             _triples.AddRange(node.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
             _triples.AddRange(WordTriples(typeNode));
         }

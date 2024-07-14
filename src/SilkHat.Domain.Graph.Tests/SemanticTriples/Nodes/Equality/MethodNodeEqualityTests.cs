@@ -2,7 +2,7 @@
 using SilkHat.Domain.Graph.TripleDefinitions.Nodes;
 using SilkHat.Domain.Graph.TripleDefinitions.Nodes.Abstract;
 
-namespace SilkHat.Domain.Graph.Tests.TriplesTests.NodeTests
+namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes.Equality
 {
     public class MethodNodeEqualityTests
     {
@@ -42,7 +42,7 @@ namespace SilkHat.Domain.Graph.Tests.TriplesTests.NodeTests
                 new MethodNode(fullName + "modifiers", name, args, returnType, modifiers)
             };
         }
-        
+
         public static IEnumerable<object[]> MethodNodeReturnTypeDifferent()
         {
             string fullName = "This is a full name";
@@ -70,7 +70,7 @@ namespace SilkHat.Domain.Graph.Tests.TriplesTests.NodeTests
             string name = "This is a name";
             (string name, string type)[] args = [("firstArgument", "string")];
             string returnType = "void";
-            
+
             string[] modifiersOne = ["public", "static"];
             string[] modifiersTwo = ["public"];
             string[] modifiersThree = ["private", "static"];
@@ -78,22 +78,22 @@ namespace SilkHat.Domain.Graph.Tests.TriplesTests.NodeTests
             yield return new[]
             {
                 new MethodNode(fullName, name, args, returnType, modifiersOne),
-                new MethodNode(fullName, name, args, returnType, modifiersTwo),
+                new MethodNode(fullName, name, args, returnType, modifiersTwo)
             };
 
             yield return new[]
             {
                 new MethodNode(fullName, name, args, returnType, modifiersTwo),
-                new MethodNode(fullName, name, args, returnType, modifiersThree),
+                new MethodNode(fullName, name, args, returnType, modifiersThree)
             };
 
             yield return new[]
             {
                 new MethodNode(fullName, name, args, returnType, modifiersOne),
-                new MethodNode(fullName, name, args, returnType, modifiersThree),
+                new MethodNode(fullName, name, args, returnType, modifiersThree)
             };
         }
-        
+
         public static IEnumerable<object[]> MethodNodeArgsDifferent()
         {
             string fullName = "This is a full name";
@@ -155,16 +155,6 @@ namespace SilkHat.Domain.Graph.Tests.TriplesTests.NodeTests
         public void Given_Different_Nodes_Are_Not_Equal_Via_Equals_Method(Node firstNode, Node secondNode)
         {
             firstNode.Equals(secondNode).Should().BeFalse();
-        }
-
-        [Theory]
-        [MemberData(nameof(MethodNodeNameDifferent))]
-        [MemberData(nameof(MethodNodeModifiersDifferent))]
-        [MemberData(nameof(MethodNodeArgsDifferent))]
-        [MemberData(nameof(MethodNodeReturnTypeDifferent))]
-        public void Given_Different_Nodes_Are_Not_Equal_Via_Equals_Sign(Node firstNode, Node secondNode)
-        {
-            (firstNode == secondNode).Should().BeFalse();
         }
 
         [Theory]

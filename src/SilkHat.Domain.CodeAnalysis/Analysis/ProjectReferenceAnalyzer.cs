@@ -26,30 +26,30 @@ namespace SilkHat.Domain.CodeAnalysis.Analysis
             FolderNode? folderNode = fileSystemTriples.Last().NodeB as FolderNode;
             ProjectNode projectNode = new(projectName);
 
-            list.Add(new TripleIncludedIn(projectNode, folderNode!));
+            list.Add(new IncludedInTriple(projectNode, folderNode!));
             list.AddRange(GetPackageDependencies(projectNode));
             list.AddRange(GetProjectDependencies(projectNode));
 
             return list;
         }
 
-        private IEnumerable<TripleDependsOnProject> GetProjectDependencies(ProjectNode projectNode)
+        private IEnumerable<DependsOnProjectTriple> GetProjectDependencies(ProjectNode projectNode)
         {
             foreach (string analyzerResultProjectReference in analyzerResult.ProjectReferences)
             {
                 ProjectNode node = new(GetProjectNameFromPath(analyzerResultProjectReference));
-                yield return new TripleDependsOnProject(projectNode, node);
+                yield return new DependsOnProjectTriple(projectNode, node);
             }
         }
 
-        private IEnumerable<TripleDependsOnPackage> GetPackageDependencies(ProjectNode projectNode)
+        private IEnumerable<DependsOnPackageTriple> GetPackageDependencies(ProjectNode projectNode)
         {
             foreach (KeyValuePair<string, IReadOnlyDictionary<string, string>> x in analyzerResult.PackageReferences
                          .ToList())
             {
                 string version = x.Value.Values.FirstOrDefault(x => x.Contains('.')) ?? "none";
                 PackageNode packageNode = new(x.Key, x.Key, version);
-                yield return new TripleDependsOnPackage(projectNode, packageNode);
+                yield return new DependsOnPackageTriple(projectNode, packageNode);
             }
         }
 

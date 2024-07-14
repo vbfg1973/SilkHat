@@ -50,10 +50,10 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
             foreach (string word in words.Select(w => w.ToLower()))
             {
                 WordNode wordNode = new(word, word);
-                yield return new TripleUsesWord(node, wordNode);
+                yield return new UsesWordTriple(node, wordNode);
 
                 string root = (_stemmer.GetSteamWord(word) ?? word).ToLower();
-                yield return new TripleWordDerivation(wordNode, new WordRootNode(root, root));
+                yield return new WordDerivationTriple(wordNode, new WordRootNode(root, root));
             }
         }
     }

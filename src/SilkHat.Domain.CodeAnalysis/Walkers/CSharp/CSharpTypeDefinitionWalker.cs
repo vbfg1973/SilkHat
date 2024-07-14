@@ -47,7 +47,7 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
             MethodNode methodNode = GetMethodNode(syntax);
             CognitiveComplexityNode cognitiveComplexityNode = new(walker.ComplexityScore);
 
-            _triples.Add(new TripleHasComplexity(methodNode, cognitiveComplexityNode));
+            _triples.Add(new HasComplexityTriple(methodNode, cognitiveComplexityNode));
         }
 
         private void GetHasTriple(MethodDeclarationSyntax syntax)
@@ -55,7 +55,7 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
             TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
             MethodNode methodNode = GetMethodNode(syntax);
 
-            _triples.Add(new TripleHas(typeNode, methodNode));
+            _triples.Add(new HasTriple(typeNode, methodNode));
             _triples.AddRange(WordTriples(methodNode));
         }
 
@@ -66,7 +66,7 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
                 CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, syntax)!;
             PropertyNode propertyNode = propertySymbol.CreatePropertyNode();
 
-            _triples.Add(new TripleHas(typeNode, propertyNode));
+            _triples.Add(new HasTriple(typeNode, propertyNode));
             _triples.AddRange(WordTriples(propertyNode));
         }
 
@@ -79,7 +79,7 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
             if (!methodSymbol.TryGetInterfaceMethodFromImplementation(_walkerOptions.DotnetOptions.SemanticModel,
                     out MethodNode interfaceMethodNode)) return;
 
-            _triples.Add(new TripleImplementationOf(methodNode, interfaceMethodNode));
+            _triples.Add(new ImplementationOfTriple(methodNode, interfaceMethodNode));
         }
     }
 }

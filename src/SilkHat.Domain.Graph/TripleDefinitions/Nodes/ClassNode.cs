@@ -11,7 +11,7 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             Modifiers = EmptyOrJoined(modifiers);
         }
 
-        public override string Label { get; } = "Class";
+        public override string Label =>  "Class";
         public override string FullName { get; }
         public override string Name { get; }
         public override string Modifiers { get; }

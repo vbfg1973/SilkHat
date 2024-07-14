@@ -1,4 +1,5 @@
 ﻿using SilkHat.Domain.Graph.TripleDefinitions.Nodes.Abstract;
+using SilkHat.Domain.Graph.TripleDefinitions.Nodes.Lists;
 
 namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
 {
@@ -15,7 +16,7 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             Args.AddRange(args.Select(x => new Argument(x.name, x.type)));
         }
 
-        public override string Label { get; } = "Method";
+        public override string Label =>  "Method";
         public override string FullName { get; }
         public override string Name { get; }
         public ArgumentList Args { get; }
@@ -29,7 +30,7 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
             return Label == other.Label && 
                    FullName == other.FullName && 
                    Name == other.Name && 
-                   Args.SequenceEqual(other.Args) && 
+                   Args.Equals(other.Args) && 
                    ReturnType == other.ReturnType && 
                    Modifiers == other.Modifiers;
         }

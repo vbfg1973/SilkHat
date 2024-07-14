@@ -4,9 +4,9 @@ namespace SilkHat.Domain.Graph.TripleDefinitions.Nodes
 {
     public class FolderNode(string fullName, string name) : Node, IEquatable<FolderNode>
     {
-        public override string Label { get; } = "Folder";
-        public override string FullName { get; } = fullName;
-        public override string Name { get; } = name;
+        public override string Label =>  "Folder";
+        public override string FullName =>  fullName;
+        public override string Name =>  name;
 
         public bool Equals(FolderNode? other)
         {

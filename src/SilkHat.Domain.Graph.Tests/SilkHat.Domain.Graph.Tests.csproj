@@ -10,6 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoBogus" Version="2.13.1" />
+    <PackageReference Include="Bogus" Version="35.5.1" />
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
@@ -23,10 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SilkHat.Domain.Graph\SilkHat.Domain.Graph.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="TriplesTests\" />
   </ItemGroup>
 
 </Project>

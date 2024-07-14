@@ -36,13 +36,13 @@ namespace SilkHat.Domain.CodeAnalysis.Extensions
                 switch (node)
                 {
                     case ClassNode classNode:
-                        yield return new TripleOfType(classNode, parentNode);
+                        yield return new OfTypeTriple(classNode, parentNode);
                         break;
                     case RecordNode recordNode:
-                        yield return new TripleOfType(recordNode, parentNode);
+                        yield return new OfTypeTriple(recordNode, parentNode);
                         break;
                     case InterfaceNode interfaceNode when parentNode is InterfaceNode parentInterfaceNode:
-                        yield return new TripleOfType(interfaceNode, parentInterfaceNode);
+                        yield return new OfTypeTriple(interfaceNode, parentInterfaceNode);
                         break;
                 }
             }

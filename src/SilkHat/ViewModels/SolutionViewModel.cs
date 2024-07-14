@@ -44,6 +44,16 @@ namespace SilkHat.ViewModels
             IsSolutionTabbedPaneOpen = !IsSolutionTabbedPaneOpen;
         }
 
+        partial void OnSelectedNodeChanged(SolutionTreeNodeViewModel value)
+        {
+            if (value.Type != SolutionTreeNodeViewModel.NodeType.File) return;
+            
+            EnhancedDocumentModel =
+                _solutionCollection.GetEnhancedDocument(value.ProjectModel, value.FullPath).Result;
+
+            _solutionCollection.GetPathTriples(value.ProjectModel, value.FullPath);
+        }
+        
         #region Map Solution To Tree Structure
 
         private async Task MapSolutionToTreeStructure()
@@ -72,13 +82,6 @@ namespace SilkHat.ViewModels
             }
 
             return true;
-        }
-
-        partial void OnSelectedNodeChanged(SolutionTreeNodeViewModel value)
-        {
-            if (value.Type == SolutionTreeNodeViewModel.NodeType.File)
-                EnhancedDocumentModel =
-                    _solutionCollection.GetEnhancedDocument(value.ProjectModel, value.FullPath).Result;
         }
 
         #endregion

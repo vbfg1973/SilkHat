@@ -35,7 +35,7 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
                 {
                     case ObjectCreationExpressionSyntax creation:
                         ClassNode classNode = GetTypeNodeFromInstantiation(creation);
-                        _triples.Add(new TripleConstruct(methodNode, classNode));
+                        _triples.Add(new ConstructsTriple(methodNode, classNode));
                         break;
                     case InvocationExpressionSyntax invocation:
                         AddInvokedMethodTriple(invocation, methodNode);
@@ -88,8 +88,8 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
                 invokedMethod.FullName.StartsWith("Moq", StringComparison.InvariantCultureIgnoreCase)
                ) return;
 
-            _triples.Add(new TripleInvoke(parentMethodNode, invocationNode));
-            _triples.Add(new TripleInvocationOf(invocationNode, invokedMethod));
+            _triples.Add(new InvokeTriple(parentMethodNode, invocationNode));
+            _triples.Add(new InvocationOfTriple(invocationNode, invokedMethod));
         }
     }
 }
