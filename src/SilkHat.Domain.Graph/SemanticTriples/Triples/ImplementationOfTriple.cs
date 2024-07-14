@@ -13,13 +13,13 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Triples
             NodeA = nodeA;
             NodeB = nodeB;
         }
-        
+
         public ImplementationOfTriple(PropertyNode nodeA, PropertyNode nodeB)
         {
             NodeA = nodeA;
             NodeB = nodeB;
         }
-        
+
         public override CodeNode NodeA { get; }
         public override CodeNode NodeB { get; }
         public override Relationship Relationship { get; } = new ImplementsRelationship();
@@ -35,7 +35,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Triples
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((ImplementationOfTriple)obj);
         }
 

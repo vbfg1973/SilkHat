@@ -6,7 +6,8 @@ using SilkHat.Domain.Graph.SemanticTriples.Triples.Abstract;
 
 namespace SilkHat.Domain.Graph.SemanticTriples.Triples
 {
-    public class HasComplexityTriple(MethodNode nodeA, CognitiveComplexityNode nodeB) : Triple, IEquatable<HasComplexityTriple>
+    public class HasComplexityTriple(MethodNode nodeA, CognitiveComplexityNode nodeB)
+        : Triple, IEquatable<HasComplexityTriple>
     {
         public override Node NodeA { get; } = nodeA;
         public override Node NodeB { get; } = nodeB;
@@ -23,7 +24,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Triples
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((HasComplexityTriple)obj);
         }
 
@@ -33,4 +34,3 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Triples
         }
     }
 }
-

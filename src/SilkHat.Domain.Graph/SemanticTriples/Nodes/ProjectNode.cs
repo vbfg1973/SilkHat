@@ -9,14 +9,14 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
             FullName = name;
             Name = name;
         }
-        
+
         public ProjectNode(string fullName, string name)
         {
             FullName = fullName;
             Name = name;
         }
-        
-        public override string Label =>  "Project";
+
+        public override string Label => "Project";
         public override string FullName { get; }
         public override string Name { get; }
 
@@ -31,7 +31,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((ProjectNode)obj);
         }
 
@@ -41,4 +41,3 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
         }
     }
 }
-

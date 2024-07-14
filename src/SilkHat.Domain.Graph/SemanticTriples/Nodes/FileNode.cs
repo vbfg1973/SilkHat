@@ -4,9 +4,9 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
 {
     public class FileNode(string fullName, string name) : Node, IEquatable<FileNode>
     {
-        public override string Label =>  "File";
-        public override string FullName =>  fullName;
-        public override string Name =>  name;
+        public override string Label => "File";
+        public override string FullName => fullName;
+        public override string Name => name;
 
         public bool Equals(FileNode? other)
         {
