@@ -1,11 +1,15 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
+using SilkHat.Domain.Graph.GraphEngine.GraphAnalysers.Models;
 
 namespace SilkHat.ViewModels
 {
@@ -21,6 +25,8 @@ namespace SilkHat.ViewModels
         [ObservableProperty] private SolutionTreeNodeViewModel _selectedNode;
 
         [ObservableProperty] private SolutionModel _solutionModel;
+
+        public ObservableCollection<TypeDefinition> TypeDefinitions = new();
 
         public SolutionViewModel(SolutionModel solutionModel, ISolutionCollection solutionCollection)
         {
@@ -51,7 +57,11 @@ namespace SilkHat.ViewModels
             EnhancedDocumentModel =
                 _solutionCollection.GetEnhancedDocument(value.ProjectModel, value.FullPath).Result;
 
-            _solutionCollection.GetPathTriples(value.ProjectModel, value.FullPath);
+            List<TypeDefinition> typeDefinitions = _solutionCollection.GetPathStructure(value.ProjectModel, value.FullPath).Result;
+            
+            TypeDefinitions = new ObservableCollection<TypeDefinition>(typeDefinitions);
+            
+            Console.WriteLine(JsonSerializer.Serialize(typeDefinitions));
         }
         
         #region Map Solution To Tree Structure

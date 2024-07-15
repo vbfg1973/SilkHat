@@ -10,4 +10,8 @@
     <PackageReference Include="QuikGraph" Version="2.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="GraphEngine\GraphAnalysers\Extensions\" />
+  </ItemGroup>
+
 </Project>
