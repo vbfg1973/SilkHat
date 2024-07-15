@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.AST;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
 using SilkHat.Domain.Graph.GraphEngine;
 using SilkHat.Domain.Graph.GraphEngine.Abstract;
@@ -13,6 +14,7 @@ namespace SilkHat.Domain.CodeAnalysis
         {
             serviceCollection.AddTransient<ISolutionAnalyserFactory, SolutionAnalyserFactory>();
             serviceCollection.AddTransient<IProjectStructureBuilder, ProjectStructureBuilder>();
+            serviceCollection.AddTransient<ISyntaxStructureBuilder, SyntaxStructureBuilder>();
             serviceCollection.AddSingleton<ITripleGraph, TripleGraph>();
             serviceCollection.AddSingleton<ITripleGraphAnalyserFactory, TripleGraphAnalyserFactory>();
             serviceCollection.AddSingleton<ISolutionCollection, SolutionCollection>();

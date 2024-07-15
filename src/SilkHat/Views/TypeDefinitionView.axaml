@@ -7,25 +7,27 @@
              x:DataType="viewModels:TypeDefinitionViewModel"
              x:Class="SilkHat.Views.TypeDefinitionView">
 
-    <StackPanel Orientation="Vertical">
-        <TextBlock Text="{Binding TypeNode.Name}" />
-        
-        <TextBlock Text="Methods" />
-        <ListBox ItemsSource="{Binding MethodNodes}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock FontSize="11" Text="{Binding Name}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        
-        <TextBlock Text="Properties" />
-        <ListBox ItemsSource="{Binding PropertyNodes}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock FontSize="11" Text="{Binding Name}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </StackPanel>
+        <StackPanel Orientation="Vertical" Background="Transparent">
+
+            <TextBlock Text="{Binding TypeNode.Name}" />
+
+            <TextBlock Text="Methods" />
+            <ListBox ItemsSource="{Binding MethodNodes}" Background="Transparent">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock FontSize="11" Text="{Binding Name}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <TextBlock Text="Properties" />
+            <ListBox ItemsSource="{Binding PropertyNodes}" Background="Transparent">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock FontSize="11" Text="{Binding Name}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+        </StackPanel>
 </UserControl>

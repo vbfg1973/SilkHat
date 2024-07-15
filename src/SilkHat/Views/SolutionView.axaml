@@ -74,13 +74,28 @@
                                 <PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
                             </Button>
 
-                            <ListBox ItemsSource="{Binding TypeDefinitions}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <views:TypeDefinitionView />
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                            <TabControl>
+                                <TabItem>
+                                    <TabItem.Header>
+                                        <TextBlock FontSize="12" VerticalAlignment="Center">Code Structure</TextBlock>
+                                    </TabItem.Header>
+
+                                    <ListBox ItemsSource="{Binding TypeDefinitions}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <views:TypeDefinitionView />
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </TabItem>
+
+                                <TabItem>
+                                    <TabItem.Header>
+                                        <TextBlock FontSize="12" VerticalAlignment="Center">AST</TextBlock>
+                                    </TabItem.Header>
+                                </TabItem>
+
+                            </TabControl>
 
                         </StackPanel>
                     </SplitView.Pane>

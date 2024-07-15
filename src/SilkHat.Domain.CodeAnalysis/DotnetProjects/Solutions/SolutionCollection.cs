@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using QuikGraph;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.AST;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
 using SilkHat.Domain.Graph.GraphEngine;
@@ -23,6 +24,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
         Task<List<SolutionModel>> SolutionsInCollection();
         Task<List<ProjectModel>> ProjectsInSolution(SolutionModel solutionModel);
         Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel);
+        Task<SyntaxStructure> SyntaxStructure(ProjectModel projectModel, string fullPath);
         Task<DocumentModel> GetDocument(ProjectModel projectModel, string fullPath);
         Task<List<TypeDefinition>> GetPathStructure(ProjectModel projectModel, string fullPath);
         Task<EnhancedDocumentModel> GetEnhancedDocument(ProjectModel projectModel, string fullPath);
@@ -38,7 +40,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
 
         private readonly ConcurrentDictionary<SolutionModel, ISolutionAnalyser> _solutionAnalysers = new();
 
-        public SolutionCollection(ISolutionAnalyserFactory solutionAnalyserFactory, ITripleGraph tripleGraph, ITripleGraphAnalyserFactory tripleGraphAnalyserFactory, ILoggerFactory loggerFactory)
+        public SolutionCollection(ISolutionAnalyserFactory solutionAnalyserFactory, ITripleGraph tripleGraph, ITripleGraphAnalyserFactory tripleGraphAnalyserFactory,  ILoggerFactory loggerFactory)
         {
             _solutionAnalyserFactory = solutionAnalyserFactory;
             _tripleGraph = tripleGraph;
@@ -98,6 +100,12 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
         {
             TryGetSolutionAnalyser(projectModel.SolutionModel, out ISolutionAnalyser solutionAnalyser);
             return await solutionAnalyser.ProjectStructure(projectModel);
+        }
+
+        public async Task<SyntaxStructure> SyntaxStructure(ProjectModel projectModel, string fullPath)
+        {
+            TryGetSolutionAnalyser(projectModel.SolutionModel, out ISolutionAnalyser solutionAnalyser);
+            return await solutionAnalyser.SyntaxStructure(projectModel, fullPath);
         }
 
         public async Task<DocumentModel> GetDocument(ProjectModel projectModel, string fullPath)

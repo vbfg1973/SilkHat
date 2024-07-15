@@ -68,9 +68,8 @@ namespace SilkHat.ViewModels
                 TypeDefinitions.Add(new TypeDefinitionViewModel(t));
             }
 
-            Console.WriteLine(TypeDefinitions.Count);
-
-            Console.WriteLine(JsonSerializer.Serialize(TypeDefinitions));
+            var syntaxStructure = _solutionCollection.SyntaxStructure(value.ProjectModel, value.FullPath).Result;
+            Console.WriteLine(JsonSerializer.Serialize(syntaxStructure));
         }
 
         private void OnTypeDefinitionsChanged(object sender, NotifyCollectionChangedEventArgs e)
