@@ -48,7 +48,7 @@
 
                 <SplitView IsPaneOpen="{Binding IsSolutionTabbedPaneOpen}"
                            PanePlacement="Right"
-                           OpenPaneLength="300"
+                           OpenPaneLength="600"
                            DisplayMode="CompactInline"
                            CompactPaneLength="48"
                            Background="#1e1e1e"
@@ -77,6 +77,27 @@
                             <TabControl>
                                 <TabItem>
                                     <TabItem.Header>
+                                        <TextBlock FontSize="12" VerticalAlignment="Center">Abstract Syntax Tree</TextBlock>
+                                    </TabItem.Header>
+
+                                    <ScrollViewer>
+                                        <StackPanel>
+                                            <TreeView ItemsSource="{Binding SyntaxStructure.Children}"
+                                                      HorizontalAlignment="Left"
+                                                      Margin="5"
+                                                      SelectionMode="Single">
+                                                <TreeView.ItemTemplate>
+                                                    <TreeDataTemplate ItemsSource="{Binding Children}">
+                                                        <TextBlock Text="{Binding Name}" FontSize="11" />
+                                                    </TreeDataTemplate>
+                                                </TreeView.ItemTemplate>
+                                            </TreeView>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </TabItem>
+
+                                <TabItem>
+                                    <TabItem.Header>
                                         <TextBlock FontSize="12" VerticalAlignment="Center">Code Structure</TextBlock>
                                     </TabItem.Header>
 
@@ -87,12 +108,6 @@
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
-                                </TabItem>
-
-                                <TabItem>
-                                    <TabItem.Header>
-                                        <TextBlock FontSize="12" VerticalAlignment="Center">AST</TextBlock>
-                                    </TabItem.Header>
                                 </TabItem>
 
                             </TabControl>

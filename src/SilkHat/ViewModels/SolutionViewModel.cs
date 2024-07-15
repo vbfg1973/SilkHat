@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.AST;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
 using SilkHat.Domain.Graph.GraphEngine.GraphAnalysers.Models;
@@ -24,15 +26,13 @@ namespace SilkHat.ViewModels
         [ObservableProperty] private bool _isSolutionTabbedPaneOpen;
         [ObservableProperty] private SolutionTreeNodeViewModel _selectedNode;
         [ObservableProperty] private SolutionModel _solutionModel;
+        [ObservableProperty] private SyntaxStructureViewModel _syntaxStructure;
 
         public SolutionViewModel(SolutionModel solutionModel, ISolutionCollection solutionCollection)
         {
             _solutionCollection = solutionCollection;
             SolutionModel = solutionModel;
 
-            TypeDefinitions.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler 
-                (OnTypeDefinitionsChanged);
-            
             MapSolutionToTreeStructure().Wait();
         }
 
@@ -58,25 +58,25 @@ namespace SilkHat.ViewModels
             EnhancedDocumentModel =
                 _solutionCollection.GetEnhancedDocument(value.ProjectModel, value.FullPath).Result;
 
+            PopulateTypeDefinitions(value).Wait();
+
+            SyntaxStructure = new SyntaxStructureViewModel(_solutionCollection.SyntaxStructure(value.ProjectModel, value.FullPath).Result);
+            Console.WriteLine(JsonSerializer.Serialize(SyntaxStructure));
+        }
+
+        private async Task PopulateTypeDefinitions(SolutionTreeNodeViewModel value)
+        {
             List<TypeDefinition> typeDefinitions =
-                _solutionCollection.GetPathStructure(value.ProjectModel, value.FullPath).Result;
+                await _solutionCollection.GetPathStructure(value.ProjectModel, value.FullPath);
 
             TypeDefinitions.Clear();
 
-            foreach (var t in typeDefinitions)
+            foreach (TypeDefinition t in typeDefinitions)
             {
                 TypeDefinitions.Add(new TypeDefinitionViewModel(t));
             }
-
-            var syntaxStructure = _solutionCollection.SyntaxStructure(value.ProjectModel, value.FullPath).Result;
-            Console.WriteLine(JsonSerializer.Serialize(syntaxStructure));
         }
 
-        private void OnTypeDefinitionsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            Console.WriteLine(e.Action);
-        }
-        
         #region Map Solution To Tree Structure
 
         private async Task MapSolutionToTreeStructure()
