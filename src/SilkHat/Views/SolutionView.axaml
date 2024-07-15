@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SilkHat.ViewModels"
              xmlns:views="clr-namespace:SilkHat.Views"
+             xmlns:avaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:SolutionViewModel"
              x:Class="SilkHat.Views.SolutionView">
@@ -56,10 +57,16 @@
 
                     <SplitView.Content>
                         <ScrollViewer>
-                            <TextBlock Text="{Binding EnhancedDocumentModel.SourceText}"
-                                       FontFamily="Consolas"
-                                       TextWrapping="Wrap"
-                                       FontSize="12" />
+                            <avaloniaEdit:TextEditor Name="Editor"
+                                                     Document="{Binding TextDocument}"
+                                                     ShowLineNumbers="True"
+                                                     IsReadOnly="True"
+                                                     Margin="30"
+                                                     HorizontalScrollBarVisibility="Auto"
+                                                     VerticalScrollBarVisibility="Visible"
+                                                     FontWeight="Light"
+                                                     FontSize="14"
+                                                     FontFamily="Cascadia Code,Consolas,Menlo,Monospace" />
                         </ScrollViewer>
                     </SplitView.Content>
 
