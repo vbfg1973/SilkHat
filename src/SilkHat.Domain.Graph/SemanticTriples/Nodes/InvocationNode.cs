@@ -1,8 +1,9 @@
-﻿using SilkHat.Domain.Graph.SemanticTriples.Nodes.Abstract;
+﻿using SilkHat.Domain.Common.Locations;
+using SilkHat.Domain.Graph.SemanticTriples.Nodes.Abstract;
 
 namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
 {
-    public class InvocationNode(MethodNode source, MethodNode target, int location) : Node, IEquatable<InvocationNode>
+    public class InvocationNode(MethodNode source, MethodNode target, Location location) : Node, IEquatable<InvocationNode>
     {
         public MethodNode Source { get; } = source;
         public MethodNode Target { get; } = target;
@@ -10,7 +11,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
         public override string FullName { get; } = $"{source.FullName} -> {target.FullName}";
         public override string Name { get; } = $"{source.Name} -> {target.Name}";
 
-        public int Location { get; } = location;
+        public Location Location { get; } = location;
 
         public bool Equals(InvocationNode? other)
         {

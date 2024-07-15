@@ -1,11 +1,12 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
 using SilkHat.Domain.CodeAnalysis.Abstract;
 using SilkHat.Domain.CodeAnalysis.Extensions;
+using SilkHat.Domain.Common.Locations;
 using SilkHat.Domain.Graph.SemanticTriples.Nodes;
 using SilkHat.Domain.Graph.SemanticTriples.Triples;
 using SilkHat.Domain.Graph.SemanticTriples.Triples.Abstract;
+using Location = Microsoft.CodeAnalysis.Location;
 
 namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
 {
@@ -20,7 +21,7 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
 
         public IEnumerable<Triple> Walk()
         {
-           base.Visit(_declarationSyntax);
+            base.Visit(_declarationSyntax);
 
             return _triples;
         }
@@ -59,21 +60,17 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
                 .GetSymbolInfo(invocation)
                 .Symbol;
 
-            if (symbol is not IMethodSymbol invokedMethodSymbol)
-            {
-                return;
-            }
+            if (symbol is not IMethodSymbol invokedMethodSymbol) return;
 
 
             if (!invokedMethodSymbol.TryCreateMethodNode(_walkerOptions.DotnetOptions.SemanticModel,
                     out MethodNode? invokedMethod))
-            {
                 return;
-            }
 
-            int location = invocation.GetLocation().SourceSpan.Start;
+            Location loc = invocation.GetLocation();
 
             string invocationNodeName = parentMethodNode.FullName + "_" + invokedMethod!.FullName;
+            Common.Locations.Location location = new(new LocationPosition(loc.SourceSpan.Start, 0), new LocationPosition(loc.SourceSpan.End, 0));
             InvocationNode invocationNode = new(parentMethodNode, invokedMethod, location);
 
             // Ignore dotnet's core methods

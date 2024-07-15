@@ -1,13 +1,17 @@
 ﻿using Annytab.Stemmer;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SilkHat.Domain.CodeAnalysis.Abstract;
 using SilkHat.Domain.CodeAnalysis.Extensions;
 using SilkHat.Domain.Common;
+using SilkHat.Domain.Common.Locations;
+using SilkHat.Domain.Graph.SemanticTriples;
 using SilkHat.Domain.Graph.SemanticTriples.Nodes;
 using SilkHat.Domain.Graph.SemanticTriples.Nodes.Abstract;
 using SilkHat.Domain.Graph.SemanticTriples.Triples;
 using SilkHat.Domain.Graph.SemanticTriples.Triples.Abstract;
+using Location = SilkHat.Domain.Common.Locations.Location;
 
 namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
 {
@@ -55,6 +59,26 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
                 string root = (_stemmer.GetSteamWord(word) ?? word).ToLower();
                 yield return new WordDerivationTriple(wordNode, new WordRootNode(root, root));
             }
+        }
+
+        protected HasLocationTriple? GetHasLocationTripleFromSyntaxNode(Node node, SyntaxNode syntaxNode)
+        {
+            string filePath = syntaxNode.SyntaxTree.FilePath;
+
+            if (string.IsNullOrEmpty(filePath)) return null;
+            
+            Location location = GetLocationFromSyntaxNode(syntaxNode);
+            return new HasLocationTriple(node, new LocationNode(filePath, location));
+        }
+        
+        protected Location GetLocationFromSyntaxNode(SyntaxNode syntaxNode)
+        {
+            Microsoft.CodeAnalysis.Location location = syntaxNode.GetLocation();
+
+            LocationPosition startLocationPosition = new LocationPosition(location.SourceSpan.Start, 0);
+            LocationPosition endLocationPosition = new LocationPosition(location.SourceSpan.End, 0);
+
+            return new Location(startLocationPosition, endLocationPosition);
         }
     }
 }
