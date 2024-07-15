@@ -4,12 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-
+using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
-using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.AST;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
 using SilkHat.Domain.Graph.GraphEngine.GraphAnalysers.Models;
@@ -27,6 +25,7 @@ namespace SilkHat.ViewModels
         [ObservableProperty] private SolutionTreeNodeViewModel _selectedNode;
         [ObservableProperty] private SolutionModel _solutionModel;
         [ObservableProperty] private SyntaxStructureViewModel _syntaxStructure;
+        [ObservableProperty] private TextDocument _textDocument = new();
 
         public SolutionViewModel(SolutionModel solutionModel, ISolutionCollection solutionCollection)
         {
@@ -58,10 +57,14 @@ namespace SilkHat.ViewModels
             EnhancedDocumentModel =
                 _solutionCollection.GetEnhancedDocument(value.ProjectModel, value.FullPath).Result;
 
+            TextDocument.Text = EnhancedDocumentModel.SourceText;
+
             PopulateTypeDefinitions(value).Wait();
 
-            SyntaxStructure = new SyntaxStructureViewModel(_solutionCollection.SyntaxStructure(value.ProjectModel, value.FullPath).Result);
-            Console.WriteLine(JsonSerializer.Serialize(SyntaxStructure));
+            SyntaxStructure =
+                new SyntaxStructureViewModel(_solutionCollection.SyntaxStructure(value.ProjectModel, value.FullPath)
+                    .Result);
+            // Console.WriteLine(JsonSerializer.Serialize(SyntaxStructure));
         }
 
         private async Task PopulateTypeDefinitions(SolutionTreeNodeViewModel value)
