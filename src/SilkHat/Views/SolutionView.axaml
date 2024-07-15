@@ -82,9 +82,10 @@
                                             <TextBlock FontSize="12" VerticalAlignment="Center">Abstract Syntax Tree</TextBlock>
                                         </TabItem.Header>
 
-                                        <StackPanel>
+                                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
                                             <TreeView ItemsSource="{Binding SyntaxStructure.Children}"
-                                                      HorizontalAlignment="Left"
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Stretch"
                                                       Margin="5"
                                                       SelectionMode="Single">
                                                 <TreeView.ItemTemplate>
