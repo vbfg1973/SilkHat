@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SilkHat.ViewModels"
+             xmlns:views="clr-namespace:SilkHat.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:SolutionViewModel"
              x:Class="SilkHat.Views.SolutionView">
@@ -72,6 +73,15 @@
                             <Button Command="{Binding TriggerSolutionTabbedPaneCommand}" HorizontalAlignment="Right">
                                 <PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
                             </Button>
+
+                            <ListBox ItemsSource="{Binding TypeDefinitions}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <views:TypeDefinitionView />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
                         </StackPanel>
                     </SplitView.Pane>
                 </SplitView>
