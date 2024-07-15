@@ -48,7 +48,7 @@
 
                 <SplitView IsPaneOpen="{Binding IsSolutionTabbedPaneOpen}"
                            PanePlacement="Right"
-                           OpenPaneLength="600"
+                           OpenPaneLength="400"
                            DisplayMode="CompactInline"
                            CompactPaneLength="48"
                            Background="#1e1e1e"
@@ -64,23 +64,24 @@
                     </SplitView.Content>
 
                     <SplitView.Pane>
-                        <StackPanel Orientation="Vertical"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Top"
-                                    Spacing="5"
-                                    Margin="5">
+                        <ScrollViewer>
+                            <StackPanel Orientation="Vertical"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Top"
+                                        Spacing="5"
+                                        Margin="5">
 
-                            <Button Command="{Binding TriggerSolutionTabbedPaneCommand}" HorizontalAlignment="Right">
-                                <PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
-                            </Button>
+                                <Button Command="{Binding TriggerSolutionTabbedPaneCommand}"
+                                        HorizontalAlignment="Right">
+                                    <PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
+                                </Button>
 
-                            <TabControl>
-                                <TabItem>
-                                    <TabItem.Header>
-                                        <TextBlock FontSize="12" VerticalAlignment="Center">Abstract Syntax Tree</TextBlock>
-                                    </TabItem.Header>
+                                <TabControl>
+                                    <TabItem>
+                                        <TabItem.Header>
+                                            <TextBlock FontSize="12" VerticalAlignment="Center">Abstract Syntax Tree</TextBlock>
+                                        </TabItem.Header>
 
-                                    <ScrollViewer>
                                         <StackPanel>
                                             <TreeView ItemsSource="{Binding SyntaxStructure.Children}"
                                                       HorizontalAlignment="Left"
@@ -93,26 +94,26 @@
                                                 </TreeView.ItemTemplate>
                                             </TreeView>
                                         </StackPanel>
-                                    </ScrollViewer>
-                                </TabItem>
+                                    </TabItem>
 
-                                <TabItem>
-                                    <TabItem.Header>
-                                        <TextBlock FontSize="12" VerticalAlignment="Center">Code Structure</TextBlock>
-                                    </TabItem.Header>
+                                    <TabItem>
+                                        <TabItem.Header>
+                                            <TextBlock FontSize="12" VerticalAlignment="Center">Code Structure</TextBlock>
+                                        </TabItem.Header>
 
-                                    <ListBox ItemsSource="{Binding TypeDefinitions}">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <views:TypeDefinitionView />
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                </TabItem>
+                                        <ListBox ItemsSource="{Binding TypeDefinitions}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <views:TypeDefinitionView />
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </TabItem>
 
-                            </TabControl>
+                                </TabControl>
 
-                        </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
                     </SplitView.Pane>
                 </SplitView>
 
