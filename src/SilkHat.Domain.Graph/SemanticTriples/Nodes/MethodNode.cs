@@ -14,7 +14,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
             ReturnType = returnType;
             Modifiers = EmptyOrJoined(modifiers);
 
-            Args.AddRange(args.Select(x => new Argument(x.name, x.type)));
+            Args.AddRange(args.Select(x => new Argument(x.type, x.name)));
         }
 
         public override string Label => "Method";

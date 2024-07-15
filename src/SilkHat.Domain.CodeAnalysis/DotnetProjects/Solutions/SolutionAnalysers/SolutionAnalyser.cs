@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.Text;
 using Microsoft.Extensions.Logging;
 using SilkHat.Domain.CodeAnalysis.Abstract;
 using SilkHat.Domain.CodeAnalysis.Analysis.FileSystem;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.AST;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
 using SilkHat.Domain.CodeAnalysis.Walkers.CSharp;
@@ -27,10 +28,11 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
         SolutionModel Solution { get; }
         List<ProjectModel> Projects { get; }
         ConcurrentBag<Triple> Triples { get; }
-        
+
         List<DocumentModel> ProjectDocuments(ProjectModel projectModel);
 
         Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel);
+        Task<SyntaxStructure> SyntaxStructure(ProjectModel projectModel, string fullPath);
         Task<EnhancedDocumentModel> EnhancedDocumentModel(ProjectModel projectModel, string fullPath);
         Task<DocumentModel> DocumentModel(ProjectModel projectModel, string fullPath);
 
@@ -42,18 +44,22 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
 
     public class SolutionAnalyser : ISolutionAnalyser
     {
+        private readonly ConcurrentDictionary<string, Compilation> _compilations = new();
         private readonly ILogger<SolutionAnalyser> _logger;
         private readonly IProjectStructureBuilder _projectStructureBuilder;
         private readonly SolutionAnalyserOptions _solutionAnalyserOptions;
-        private readonly ConcurrentDictionary<string, Compilation> _compilations = new();
+        private readonly ISyntaxStructureBuilder _syntaxStructureBuilder;
         private List<Project> _projects;
         private Solution _solution;
 
         public SolutionAnalyser(SolutionAnalyserOptions solutionAnalyserOptions,
-            IProjectStructureBuilder projectStructureBuilder, ILogger<SolutionAnalyser> logger)
+            IProjectStructureBuilder projectStructureBuilder,
+            ISyntaxStructureBuilder syntaxStructureBuilder,
+            ILogger<SolutionAnalyser> logger)
         {
             _solutionAnalyserOptions = solutionAnalyserOptions;
             _projectStructureBuilder = projectStructureBuilder;
+            _syntaxStructureBuilder = syntaxStructureBuilder;
             _logger = logger;
         }
 
@@ -61,6 +67,15 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
         {
             Project? project = GetProject(projectModel);
             return project != null ? MapDocumentModels(project).ToList() : [];
+        }
+
+        public async Task<SyntaxStructure> SyntaxStructure(ProjectModel projectModel, string fullPath)
+        {
+            Project? project = GetProject(projectModel);
+            Document? document = project!.Documents.SingleOrDefault(x => x.FilePath == fullPath);
+            document!.TryGetText(out SourceText? sourceText);
+
+            return _syntaxStructureBuilder.SyntaxStructure(sourceText!.ToString())!;
         }
 
         public async Task<EnhancedDocumentModel> EnhancedDocumentModel(ProjectModel projectModel, string fullPath)
@@ -84,11 +99,6 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
         public async Task<ProjectStructureModel> ProjectStructure(ProjectModel projectModel)
         {
             return await _projectStructureBuilder.ProjectStructure(projectModel, ProjectDocuments(projectModel));
-        }
-
-        private Project? GetProject(ProjectModel projectModel)
-        {
-            return _solution.Projects.FirstOrDefault(x => x.AssemblyName == projectModel.AssemblyName);
         }
 
         #region Analysis
@@ -137,6 +147,11 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers
         }
 
         #endregion
+
+        private Project? GetProject(ProjectModel projectModel)
+        {
+            return _solution.Projects.FirstOrDefault(x => x.AssemblyName == projectModel.AssemblyName);
+        }
 
 
         #region Properties

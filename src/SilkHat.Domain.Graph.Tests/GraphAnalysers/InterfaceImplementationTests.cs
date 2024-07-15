@@ -23,7 +23,7 @@ namespace SilkHat.Domain.Graph.Tests.GraphAnalysers
             graph.ContainsNode(triple.NodeB);
 
             TripleGraphAnalyserFactory tripleFactory = new TripleGraphAnalyserFactory(graph);
-            InterfaceImplementations analyser = tripleFactory.CreateTripleGraphAnalyzer<InterfaceImplementations>();
+            InterfaceImplementationsGraphAnalyzer analyser = tripleFactory.CreateTripleGraphAnalyzer<InterfaceImplementationsGraphAnalyzer>();
             List<ClassNode> implementations = analyser
                 .FindImplementationsOfInterface("TestNamespace.ITestClass")
                 .ToList();

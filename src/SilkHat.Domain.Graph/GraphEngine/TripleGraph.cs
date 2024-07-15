@@ -2,13 +2,14 @@
 using QuikGraph;
 using SilkHat.Domain.Graph.GraphEngine.Abstract;
 using SilkHat.Domain.Graph.SemanticTriples.Nodes.Abstract;
+using SilkHat.Domain.Graph.SemanticTriples.Relationships.Abstract;
 using SilkHat.Domain.Graph.SemanticTriples.Triples.Abstract;
 
 namespace SilkHat.Domain.Graph.GraphEngine
 {
     public class TripleGraph : ITripleGraph
     {
-        private readonly AdjacencyGraph<Node, TaggedEdge<Node, string>> _adjacencyGraph = new();
+        private readonly AdjacencyGraph<Node, TaggedEdge<Node, Relationship>> _adjacencyGraph = new();
         private readonly ConcurrentDictionary<Node, Node> _nodes = new();
         private readonly ConcurrentDictionary<int, Node> _nodesByHashCode = new();
 
@@ -20,7 +21,7 @@ namespace SilkHat.Domain.Graph.GraphEngine
                 TryAddNode(triple.NodeB, out Node? nodeB);
                 string relationshipType = triple.Relationship.Type;
 
-                TaggedEdge<Node, string> edge = new(nodeA!, nodeB!, relationshipType);
+                TaggedEdge<Node, Relationship> edge = new(nodeA!, nodeB!, triple.Relationship);
 
                 _adjacencyGraph.AddVertex(nodeA!);
                 _adjacencyGraph.AddVertex(nodeB!);

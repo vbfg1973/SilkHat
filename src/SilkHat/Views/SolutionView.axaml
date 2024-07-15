@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SilkHat.ViewModels"
+             xmlns:views="clr-namespace:SilkHat.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:SolutionViewModel"
              x:Class="SilkHat.Views.SolutionView">
@@ -47,7 +48,7 @@
 
                 <SplitView IsPaneOpen="{Binding IsSolutionTabbedPaneOpen}"
                            PanePlacement="Right"
-                           OpenPaneLength="300"
+                           OpenPaneLength="400"
                            DisplayMode="CompactInline"
                            CompactPaneLength="48"
                            Background="#1e1e1e"
@@ -63,16 +64,57 @@
                     </SplitView.Content>
 
                     <SplitView.Pane>
-                        <StackPanel Orientation="Vertical"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Top"
-                                    Spacing="5"
-                                    Margin="5">
+                        <ScrollViewer>
+                            <StackPanel Orientation="Vertical"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Top"
+                                        Spacing="5"
+                                        Margin="5">
 
-                            <Button Command="{Binding TriggerSolutionTabbedPaneCommand}" HorizontalAlignment="Right">
-                                <PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
-                            </Button>
-                        </StackPanel>
+                                <Button Command="{Binding TriggerSolutionTabbedPaneCommand}"
+                                        HorizontalAlignment="Right">
+                                    <PathIcon Height="11" Data="{StaticResource LineHorizontal3Regular}" />
+                                </Button>
+
+                                <TabControl>
+                                    <TabItem>
+                                        <TabItem.Header>
+                                            <TextBlock FontSize="12" VerticalAlignment="Center">Abstract Syntax Tree</TextBlock>
+                                        </TabItem.Header>
+
+                                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                                            <TreeView ItemsSource="{Binding SyntaxStructure.Children}"
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Stretch"
+                                                      Margin="5"
+                                                      SelectionMode="Single">
+                                                <TreeView.ItemTemplate>
+                                                    <TreeDataTemplate ItemsSource="{Binding Children}">
+                                                        <TextBlock Text="{Binding Name}" FontSize="11" />
+                                                    </TreeDataTemplate>
+                                                </TreeView.ItemTemplate>
+                                            </TreeView>
+                                        </StackPanel>
+                                    </TabItem>
+
+                                    <TabItem>
+                                        <TabItem.Header>
+                                            <TextBlock FontSize="12" VerticalAlignment="Center">Code Structure</TextBlock>
+                                        </TabItem.Header>
+
+                                        <ListBox ItemsSource="{Binding TypeDefinitions}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <views:TypeDefinitionView />
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </TabItem>
+
+                                </TabControl>
+
+                            </StackPanel>
+                        </ScrollViewer>
                     </SplitView.Pane>
                 </SplitView>
 

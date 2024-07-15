@@ -1,11 +1,18 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions;
+using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.AST;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.Models;
 using SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions.SolutionAnalysers.ProjectStructure;
+using SilkHat.Domain.Graph.GraphEngine.GraphAnalysers.Models;
 
 namespace SilkHat.ViewModels
 {
@@ -17,10 +24,9 @@ namespace SilkHat.ViewModels
 
         [ObservableProperty] private bool _isSolutionFileTreePaneOpen = true;
         [ObservableProperty] private bool _isSolutionTabbedPaneOpen;
-
         [ObservableProperty] private SolutionTreeNodeViewModel _selectedNode;
-
         [ObservableProperty] private SolutionModel _solutionModel;
+        [ObservableProperty] private SyntaxStructureViewModel _syntaxStructure;
 
         public SolutionViewModel(SolutionModel solutionModel, ISolutionCollection solutionCollection)
         {
@@ -30,6 +36,7 @@ namespace SilkHat.ViewModels
             MapSolutionToTreeStructure().Wait();
         }
 
+        public ObservableCollection<TypeDefinitionViewModel> TypeDefinitions { get; set; } = new();
         public ObservableCollection<SolutionTreeNodeViewModel> Nodes { get; } = new();
 
         [RelayCommand]
@@ -47,13 +54,29 @@ namespace SilkHat.ViewModels
         partial void OnSelectedNodeChanged(SolutionTreeNodeViewModel value)
         {
             if (value.Type != SolutionTreeNodeViewModel.NodeType.File) return;
-            
+
             EnhancedDocumentModel =
                 _solutionCollection.GetEnhancedDocument(value.ProjectModel, value.FullPath).Result;
 
-            _solutionCollection.GetPathTriples(value.ProjectModel, value.FullPath);
+            PopulateTypeDefinitions(value).Wait();
+
+            SyntaxStructure = new SyntaxStructureViewModel(_solutionCollection.SyntaxStructure(value.ProjectModel, value.FullPath).Result);
+            Console.WriteLine(JsonSerializer.Serialize(SyntaxStructure));
         }
-        
+
+        private async Task PopulateTypeDefinitions(SolutionTreeNodeViewModel value)
+        {
+            List<TypeDefinition> typeDefinitions =
+                await _solutionCollection.GetPathStructure(value.ProjectModel, value.FullPath);
+
+            TypeDefinitions.Clear();
+
+            foreach (TypeDefinition t in typeDefinitions)
+            {
+                TypeDefinitions.Add(new TypeDefinitionViewModel(t));
+            }
+        }
+
         #region Map Solution To Tree Structure
 
         private async Task MapSolutionToTreeStructure()
