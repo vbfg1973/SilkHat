@@ -13,7 +13,10 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return FullName == other.FullName && Name == other.Name && Version == other.Version;
+            return Label == other.Label &&
+                   FullName == other.FullName && 
+                   Name == other.Name && 
+                   Version == other.Version;
         }
 
         public override bool Equals(object? obj)
@@ -26,7 +29,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(FullName, Name, Version);
+            return HashCode.Combine(Label, FullName, Name, Version);
         }
     }
 }
