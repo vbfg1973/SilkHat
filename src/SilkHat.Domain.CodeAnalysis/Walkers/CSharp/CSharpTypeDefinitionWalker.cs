@@ -54,7 +54,6 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
         {
             TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
             MethodNode methodNode = GetMethodNode(syntax);
-            Console.WriteLine(syntax.SyntaxTree.FilePath);
             
             HasLocationTriple? hasLocationTriple = GetHasLocationTripleFromSyntaxNode(methodNode, syntax);
             if (hasLocationTriple != null)

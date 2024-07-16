@@ -64,7 +64,6 @@ namespace SilkHat.ViewModels
             SyntaxStructure =
                 new SyntaxStructureViewModel(_solutionCollection.SyntaxStructure(value.ProjectModel, value.FullPath)
                     .Result);
-            // Console.WriteLine(JsonSerializer.Serialize(SyntaxStructure));
         }
 
         private async Task PopulateTypeDefinitions(SolutionTreeNodeViewModel value)

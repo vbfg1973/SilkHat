@@ -1,7 +1,4 @@
-﻿using System.Text.Json;
-using QuikGraph;
-using SilkHat.Domain.Common.Locations;
-using SilkHat.Domain.Graph.GraphEngine.Abstract;
+﻿using SilkHat.Domain.Graph.GraphEngine.Abstract;
 using SilkHat.Domain.Graph.GraphEngine.GraphAnalysers.Models;
 using SilkHat.Domain.Graph.SemanticTriples;
 using SilkHat.Domain.Graph.SemanticTriples.Nodes;
@@ -19,52 +16,65 @@ namespace SilkHat.Domain.Graph.GraphEngine.GraphAnalysers
                 .OfType<FileNode>()
                 .SingleOrDefault(x => x.FullName == fullPath);
 
-            return fileNode != null ? TypeDefinitions(fileNode) : [];
+            return fileNode != null 
+                ? TypeDefinitions(fileNode) 
+                : [];
         }
 
         private IEnumerable<TypeDefinition> TypeDefinitions(FileNode fileNode)
         {
-            var typesDeclaredIn = AdjacencyGraph!.Edges.Where(x => x.Target.Equals(fileNode)).Select(x => x.Source as TypeNode).ToList();
-            
-            foreach (var declaredType in typesDeclaredIn.Where(x => x != null))
+            List<TypeNode?> typesDeclaredInFile = GetTypesDeclaredInFile(fileNode)
+                .ToList();
+
+            foreach (TypeNode? declaredType in typesDeclaredInFile.Where(x => x != null))
             {
-                var methods = GetTypeMethods(declaredType!).Select(x =>
-                {
-                    var locationNode = GetLocationNodes(x).First();
-                    return new NodeWithLocation<MethodNode>(x, locationNode);
-                }).ToList();
-                
-                var properties = GetTypeProperties(declaredType!).Select(x =>
-                {
-                    var locationNode = GetLocationNodes(x).First();
-                    return new NodeWithLocation<PropertyNode>(x, locationNode);
-                }).ToList();
-                
-                var td = new TypeDefinition(
-                    declaredType!, 
-                    methods,
-                    properties);
-
-                Console.WriteLine(JsonSerializer.Serialize(td));
-
-                yield return td;
+                yield return new TypeDefinition(
+                    declaredType!,
+                    GetMethodsFromTypeWithLocations(declaredType),
+                    GetPropertiesFromTypeWithLocations(declaredType));
             }
+        }
+
+        private IEnumerable<TypeNode?> GetTypesDeclaredInFile(FileNode fileNode)
+        {
+            return AdjacencyGraph!
+                .Edges
+                .Where(x => x.Target.Equals(fileNode))
+                .Select(x => x.Source as TypeNode);
+        }
+
+        private IEnumerable<NodeWithLocation<PropertyNode>> GetPropertiesFromTypeWithLocations(TypeNode? declaredType)
+        {
+            return GetTypeProperties(declaredType!).Select(x =>
+            {
+                LocationNode locationNode = GetLocationNodes(x).First();
+                return new NodeWithLocation<PropertyNode>(x, locationNode);
+            });
+        }
+
+        private IEnumerable<NodeWithLocation<MethodNode>> GetMethodsFromTypeWithLocations(TypeNode? declaredType)
+        {
+            return GetTypeMethods(declaredType!).Select(x =>
+            {
+                LocationNode locationNode = GetLocationNodes(x).First();
+                return new NodeWithLocation<MethodNode>(x, locationNode);
+            });
         }
 
         private IEnumerable<LocationNode> GetLocationNodes(CodeNode codeNode)
         {
             return AdjacencyGraph!.Edges
                 .Where(x => x.Source.Equals(codeNode) && x.Tag is HasLocationRelationship)
-                .Select(x => x.Target as LocationNode)!;  
+                .Select(x => x.Target as LocationNode)!;
         }
-        
+
         private IEnumerable<PropertyNode> GetTypeProperties(TypeNode typeNode)
         {
             return AdjacencyGraph!.Edges
                 .Where(x => x.Source.Equals(typeNode) && x.Tag is HasRelationship && x.Target is PropertyNode)
-                .Select(x => x.Target as PropertyNode)!;            
+                .Select(x => x.Target as PropertyNode)!;
         }
-        
+
         private IEnumerable<MethodNode> GetTypeMethods(TypeNode typeNode)
         {
             return AdjacencyGraph!.Edges
