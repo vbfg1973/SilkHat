@@ -25,32 +25,32 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
             return _triples;
         }
 
-        public override void VisitClassDeclaration(ClassDeclarationSyntax node)
+        public override void VisitClassDeclaration(ClassDeclarationSyntax syntax)
         {
-            GetTypeDeclarationTriples(node);
+            GetTypeDeclarationTriples(syntax);
 
-            SubWalkers(node);
+            SubWalkers(syntax);
 
-            base.VisitClassDeclaration(node);
+            base.VisitClassDeclaration(syntax);
         }
 
 
-        public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
+        public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax syntax)
         {
-            GetTypeDeclarationTriples(node);
+            GetTypeDeclarationTriples(syntax);
 
-            SubWalkers(node);
+            SubWalkers(syntax);
 
-            base.VisitInterfaceDeclaration(node);
+            base.VisitInterfaceDeclaration(syntax);
         }
 
-        public override void VisitRecordDeclaration(RecordDeclarationSyntax node)
+        public override void VisitRecordDeclaration(RecordDeclarationSyntax syntax)
         {
-            GetTypeDeclarationTriples(node);
+            GetTypeDeclarationTriples(syntax);
 
-            SubWalkers(node);
+            SubWalkers(syntax);
 
-            base.VisitRecordDeclaration(node);
+            base.VisitRecordDeclaration(syntax);
         }
 
         // public override void VisitStructDeclaration(StructDeclarationSyntax node)
@@ -60,24 +60,30 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
         //     base.VisitStructDeclaration(node);
         // }
 
-        private void GetTypeDeclarationTriples(TypeDeclarationSyntax node)
+        private void GetTypeDeclarationTriples(TypeDeclarationSyntax syntax)
         {
-            TypeNode typeNode = GetTypeNode(node);
+            TypeNode typeNode = GetTypeNode(syntax);
 
+            HasLocationTriple? hasLocationTriple = GetHasLocationTripleFromSyntaxNode(typeNode, syntax);
+            if (hasLocationTriple != null)
+            {
+                _triples.Add(hasLocationTriple);
+            }
+            
             _triples.Add(new DeclaredAtTriple(typeNode, fileNode));
             _triples.Add(new BelongsToTriple(typeNode, _projectNode));
-            _triples.AddRange(node.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
+            _triples.AddRange(syntax.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
             _triples.AddRange(WordTriples(typeNode));
         }
 
-        private void SubWalkers(TypeDeclarationSyntax node)
+        private void SubWalkers(TypeDeclarationSyntax syntax)
         {
             if (!_walkerOptions.DescendIntoSubWalkers) return;
 
-            CSharpTypeDefinitionWalker typeDefinitionWalker = new(node, _walkerOptions);
+            CSharpTypeDefinitionWalker typeDefinitionWalker = new(syntax, _walkerOptions);
             _triples.AddRange(typeDefinitionWalker.Walk());
 
-            CSharpMethodInvocationWalker methodInvocationWalker = new(node, _walkerOptions);
+            CSharpMethodInvocationWalker methodInvocationWalker = new(syntax, _walkerOptions);
             _triples.AddRange(methodInvocationWalker.Walk());
         }
     }

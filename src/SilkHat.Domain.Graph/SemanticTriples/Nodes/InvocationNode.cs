@@ -1,22 +1,23 @@
-﻿using SilkHat.Domain.Graph.SemanticTriples.Nodes.Abstract;
+﻿using SilkHat.Domain.Common.Locations;
+using SilkHat.Domain.Graph.SemanticTriples.Nodes.Abstract;
 
 namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
 {
-    public class InvocationNode(MethodNode source, MethodNode target, int location) : Node, IEquatable<InvocationNode>
+    public class InvocationNode(MethodNode source, MethodNode target, Location location) : Node, IEquatable<InvocationNode>
     {
         public MethodNode Source { get; } = source;
         public MethodNode Target { get; } = target;
         public override string Label => "Invocation";
         public override string FullName { get; } = $"{source.FullName} -> {target.FullName}";
         public override string Name { get; } = $"{source.Name} -> {target.Name}";
-
-        public int Location { get; } = location;
+        public Location Location { get; } = location;
 
         public bool Equals(InvocationNode? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return FullName == other.FullName &&
+            return Label == other.Label && 
+                   FullName == other.FullName &&
                    Name == other.Name &&
                    Location == other.Location &&
                    Source == other.Source &&
@@ -33,7 +34,7 @@ namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(FullName, Name, Location, Source, Target);
+            return HashCode.Combine(Label, FullName, Name, Location, Source, Target);
         }
     }
 }

@@ -54,7 +54,13 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
         {
             TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
             MethodNode methodNode = GetMethodNode(syntax);
-
+            
+            HasLocationTriple? hasLocationTriple = GetHasLocationTripleFromSyntaxNode(methodNode, syntax);
+            if (hasLocationTriple != null)
+            {
+                _triples.Add(hasLocationTriple);
+            }
+            
             _triples.Add(new HasTriple(typeNode, methodNode));
             _triples.AddRange(WordTriples(methodNode));
         }
@@ -62,10 +68,15 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
         private void GetHasTriple(PropertyDeclarationSyntax syntax)
         {
             TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
-            IPropertySymbol propertySymbol =
-                CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, syntax)!;
+            IPropertySymbol propertySymbol = CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, syntax)!;
             PropertyNode propertyNode = propertySymbol.CreatePropertyNode();
 
+            HasLocationTriple? hasLocationTriple = GetHasLocationTripleFromSyntaxNode(propertyNode, syntax);
+            if (hasLocationTriple != null)
+            {
+                _triples.Add(hasLocationTriple);
+            }
+            
             _triples.Add(new HasTriple(typeNode, propertyNode));
             _triples.AddRange(WordTriples(propertyNode));
         }
@@ -73,8 +84,7 @@ namespace SilkHat.Domain.CodeAnalysis.Walkers.CSharp
         private void GetImplementationOfTriples(MethodDeclarationSyntax syntax)
         {
             MethodNode methodNode = GetMethodNode(syntax);
-            IMethodSymbol methodSymbol =
-                CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, syntax)!;
+            IMethodSymbol methodSymbol = CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, syntax)!;
 
             if (!methodSymbol.TryGetInterfaceMethodFromImplementation(_walkerOptions.DotnetOptions.SemanticModel,
                     out MethodNode interfaceMethodNode)) return;

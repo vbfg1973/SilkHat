@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using SilkHat.Domain.Common.Locations;
 using SilkHat.Domain.Graph.SemanticTriples.Nodes;
 using SilkHat.Domain.Graph.SemanticTriples.Nodes.Abstract;
 
@@ -17,9 +18,9 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes.Equality
             yield return new[]
             {
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1),
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1)),
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1)
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1))
             };
         }
 
@@ -34,33 +35,33 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes.Equality
             yield return new[]
             {
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1),
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1)),
                 new InvocationNode(CreateMethodNode(fullName + "modified", name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1)
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1))
             };
 
             yield return new[]
             {
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1),
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1)),
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName + "modified", name, args, returnType, modifiers), 1)
+                    CreateMethodNode(fullName + "modified", name, args, returnType, modifiers), GetLocation(1))
             };
 
             yield return new[]
             {
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1),
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1)),
                 new InvocationNode(CreateMethodNode(fullName, name + "modified", args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1)
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1))
             };
 
             yield return new[]
             {
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1),
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1)),
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name + "modified", args, returnType, modifiers), 1)
+                    CreateMethodNode(fullName, name + "modified", args, returnType, modifiers), GetLocation(1))
             };
         }
 
@@ -76,19 +77,19 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes.Equality
             yield return new[]
             {
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1),
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1)),
 
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, new[] { "public", "void" }),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1)
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1))
             };
 
             yield return new[]
             {
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1),
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1)),
 
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, new[] { "public", "void" }), 1)
+                    CreateMethodNode(fullName, name, args, returnType, new[] { "public", "void" }), GetLocation(1))
             };
         }
 
@@ -103,19 +104,19 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes.Equality
             yield return new[]
             {
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1),
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1)),
 
                 new InvocationNode(CreateMethodNode(fullName, name, args, "bool", modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1)
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1))
             };
 
             yield return new[]
             {
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1),
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1)),
 
                 new InvocationNode(CreateMethodNode(fullName, name, args, "int", modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1)
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1))
             };
         }
 
@@ -130,19 +131,19 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes.Equality
             yield return new[]
             {
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1),
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1)),
 
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 2)
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(2))
             };
 
             yield return new[]
             {
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 2),
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(2)),
 
                 new InvocationNode(CreateMethodNode(fullName, name, args, returnType, modifiers),
-                    CreateMethodNode(fullName, name, args, returnType, modifiers), 1)
+                    CreateMethodNode(fullName, name, args, returnType, modifiers), GetLocation(1))
             };
         }
 
@@ -150,6 +151,11 @@ namespace SilkHat.Domain.Graph.Tests.SemanticTriples.Nodes.Equality
             string returnType, string[] modifiers)
         {
             return new MethodNode(fullName, name, args, returnType, modifiers);
+        }
+
+        private static Location GetLocation(int loc)
+        {
+            return new Location(new LocationPosition(loc, 0), new LocationPosition(loc + 10, 0));
         }
 
         #region Identical
