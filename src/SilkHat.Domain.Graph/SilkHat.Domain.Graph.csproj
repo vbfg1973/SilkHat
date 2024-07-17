@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GraphEngine\GraphAnalysers\Extensions\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SilkHat.Domain.Common\SilkHat.Domain.Common.csproj" />
   </ItemGroup>
 

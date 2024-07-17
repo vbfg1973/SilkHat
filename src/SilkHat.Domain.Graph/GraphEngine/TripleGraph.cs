@@ -1,5 +1,7 @@
 ﻿using System.Collections.Concurrent;
+using CsvHelper.Configuration;
 using QuikGraph;
+using SilkHat.Domain.Common;
 using SilkHat.Domain.Graph.GraphEngine.Abstract;
 using SilkHat.Domain.Graph.SemanticTriples.Nodes.Abstract;
 using SilkHat.Domain.Graph.SemanticTriples.Relationships.Abstract;
@@ -7,15 +9,32 @@ using SilkHat.Domain.Graph.SemanticTriples.Triples.Abstract;
 
 namespace SilkHat.Domain.Graph.GraphEngine
 {
+    public sealed class GraphClassMap : ClassMap<TaggedEdge<Node, Relationship>>
+    {
+        public GraphClassMap()
+        {
+            Map(m => m.Source.FullName).Name("SourceName").Index(0);
+            Map(m => m.Source.Label).Name("SourceLabel").Index(1);
+            Map(m => m.Tag!.Type).Name("Relationship").Index(2);
+            Map(m => m.Target.FullName).Name("TargetName").Index(3);
+            Map(m => m.Target.Label).Name("TargetLabel").Index(4);
+        }
+    }
+    
     public class TripleGraph : ITripleGraph
     {
         private readonly AdjacencyGraph<Node, TaggedEdge<Node, Relationship>> _adjacencyGraph = new();
         private readonly ConcurrentDictionary<Node, Node> _nodes = new();
         private readonly ConcurrentDictionary<int, Node> _nodesByHashCode = new();
 
+        public async Task SaveTriples(string fileName)
+        {
+            await CsvUtilities.WriteCsvAsync(fileName, _adjacencyGraph.Edges, new GraphClassMap());
+        }
+        
         public async Task LoadTriples(IEnumerable<Triple> triples)
         {
-            foreach (Triple triple in triples)
+            foreach (Triple triple in triples.Distinct())
             {
                 TryAddNode(triple.NodeA, out Node? nodeA);
                 TryAddNode(triple.NodeB, out Node? nodeB);

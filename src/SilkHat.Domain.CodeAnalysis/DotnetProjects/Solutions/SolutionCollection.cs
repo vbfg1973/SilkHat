@@ -67,6 +67,7 @@ namespace SilkHat.Domain.CodeAnalysis.DotnetProjects.Solutions
                 });
 
                 await _tripleGraph.LoadTriples(solution.Triples);
+                await _tripleGraph.SaveTriples($"{solution.Solution.Name}.csv");
                 
                 stopWatch.Stop();
                 await Console.Error.WriteLineAsync($"Loaded {solution.Triples.Count} triples for {solution.Solution.Name} in {stopWatch.Elapsed}");
