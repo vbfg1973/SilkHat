@@ -15,7 +15,7 @@ namespace SilkHat.Domain.CodeAnalysis
             serviceCollection.AddTransient<ISolutionAnalyserFactory, SolutionAnalyserFactory>();
             serviceCollection.AddTransient<IProjectStructureBuilder, ProjectStructureBuilder>();
             serviceCollection.AddTransient<ISyntaxStructureBuilder, SyntaxStructureBuilder>();
-            serviceCollection.AddSingleton<ITripleGraph, TripleGraph>();
+            serviceCollection.AddSingleton<ITripleGraph, TripleGraphService>();
             serviceCollection.AddSingleton<ITripleGraphAnalyserFactory, TripleGraphAnalyserFactory>();
             serviceCollection.AddSingleton<ISolutionCollection, SolutionCollection>();
 

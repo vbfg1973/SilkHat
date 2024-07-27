@@ -4,4 +4,6 @@
     {
         public abstract string Modifiers { get; }
     }
+    
+    public abstract class MemberNode : CodeNode { }
 }

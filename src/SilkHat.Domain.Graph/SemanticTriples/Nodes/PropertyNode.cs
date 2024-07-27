@@ -2,7 +2,7 @@
 
 namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
 {
-    public class PropertyNode : CodeNode, IEquatable<PropertyNode>
+    public class PropertyNode : MemberNode, IEquatable<PropertyNode>
     {
         public PropertyNode(string fullName, string name, string returnType, string[]? modifiers = null)
         {

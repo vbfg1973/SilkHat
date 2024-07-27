@@ -3,7 +3,7 @@ using SilkHat.Domain.Graph.SemanticTriples.Nodes.Lists;
 
 namespace SilkHat.Domain.Graph.SemanticTriples.Nodes
 {
-    public class MethodNode : CodeNode, IEquatable<MethodNode>
+    public class MethodNode : MemberNode, IEquatable<MethodNode>
     {
         public MethodNode(string fullName, string name, (string name, string type)[] args, string returnType,
             string[]? modifiers = null)

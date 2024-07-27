@@ -16,13 +16,13 @@ namespace SilkHat.Domain.Graph.Tests.GraphAnalysers
                 new ClassNode("TestNamespace.TestClass", "TestClass", new[] { "public" })
             );
 
-            TripleGraph graph = new();
-            await graph.LoadTriples(new[] { triple });
+            TripleGraphService graphService = new();
+            await graphService.LoadTriples(new[] { triple });
 
-            graph.ContainsNode(triple.NodeA);
-            graph.ContainsNode(triple.NodeB);
+            graphService.ContainsNode(triple.NodeA);
+            graphService.ContainsNode(triple.NodeB);
 
-            TripleGraphAnalyserFactory tripleFactory = new TripleGraphAnalyserFactory(graph);
+            TripleGraphAnalyserFactory tripleFactory = new TripleGraphAnalyserFactory(graphService);
             InterfaceImplementationsGraphAnalyzer analyser = tripleFactory.CreateTripleGraphAnalyzer<InterfaceImplementationsGraphAnalyzer>();
             List<ClassNode> implementations = analyser
                 .FindImplementationsOfInterface("TestNamespace.ITestClass")
